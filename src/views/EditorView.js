@@ -2,7 +2,7 @@ import React, { createRef, useEffect, useLayoutEffect, useState } from "react";
 import Grid from "@mui/material/Grid";
 import Dock from "../components/Dock";
 import Canvas from "../components/Canvas";
-import drawEllipse from "../util/drawEllipse";
+import DrawEllipse from "../util/drawEllipse";
 
 function useWindowSize() {
   const [size, setSize] = useState([0, 0]);
@@ -32,7 +32,14 @@ export default function EditorView(props) {
           const coordinates = data.position.split(", ");
           const x = parseInt(coordinates[0]);
           const y = parseInt(coordinates[1]);
-          shapes.push(drawEllipse(x, y, data.radiusX, data.radiusY));
+          shapes.push(
+            <DrawEllipse
+              x={x}
+              y={y}
+              radiusX={data.radiusX}
+              radiusY={data.radiusY}
+            />
+          );
           break;
       }
     });
