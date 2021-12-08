@@ -2,6 +2,7 @@ import React, { createRef, useEffect, useLayoutEffect, useState } from "react";
 import Grid from "@mui/material/Grid";
 import Dock from "../components/Dock";
 import Canvas from "../components/Canvas";
+import drawEllipse from "../util/drawEllipse";
 
 function useWindowSize() {
   const [size, setSize] = useState([0, 0]);
@@ -29,21 +30,9 @@ export default function EditorView(props) {
       switch (data.shape) {
         case "circle":
           const coordinates = data.position.split(", ");
-          shapes.push(
-            <svg
-              key={idx}
-              viewBox={`0 0 ${windowWidth} ${windowHeight}`}
-              xmlns='http://www.w3.org/2000/svg'
-            >
-              <ellipse
-                cx={coordinates[0]}
-                cy={coordinates[1]}
-                rx={data.radiusX}
-                ry={data.radiusY}
-                style={{ fill: "#FFFFFF", stroke: "#000000" }}
-              />
-            </svg>
-          );
+          const x = parseInt(coordinates[0]);
+          const y = parseInt(coordinates[1]);
+          shapes.push(drawEllipse(x, y, data.radiusX, data.radiusY));
           break;
       }
     });
@@ -78,7 +67,14 @@ export default function EditorView(props) {
 
   return (
     <Grid container>
-      <Canvas ref={canvasRef}>{drawing}</Canvas>
+      <Canvas ref={canvasRef}>
+        <svg
+          viewBox={`0 0 ${windowWidth} ${windowHeight}`}
+          xmlns='http://www.w3.org/2000/svg'
+        >
+          {drawing}
+        </svg>
+      </Canvas>
       <Dock
         updateDrawData={updateDrawData}
         updateReferenceData={updateReferenceData}
