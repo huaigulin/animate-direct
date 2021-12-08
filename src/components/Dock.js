@@ -104,8 +104,11 @@ export default function Dock(props) {
                     const id = `circle-${uuidv4()}`;
                     updateDrawData(true, {
                       id,
-                      postion: "width/2, height/2",
-                      diameter: "60",
+                      shape: "circle",
+                      position: `${window.innerWidth / 2}, ${
+                        window.innerHeight / 2
+                      }`,
+                      radius: 30,
                       code: "circle(width/2, height/2, 60);",
                     });
                     handleShapesClose();
