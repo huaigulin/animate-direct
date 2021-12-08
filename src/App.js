@@ -1,5 +1,7 @@
+import EditorView from "./views/EditorView";
+
 function App() {
-  return <div></div>;
+  return <EditorView />;
 }
 
 export default App;
