@@ -19,35 +19,36 @@ function useWindowSize() {
 export default function EditorView(props) {
   const canvasRef = createRef();
   const [windowWidth, windowHeight] = useWindowSize();
-  const [ctx, setCtx] = useState();
   const [drawData, setDrawData] = useState([]);
   const [referenceData, setReferenceData] = useState([]);
+  const [drawing, setDrawing] = useState();
 
   useEffect(() => {
-    setCtx(canvasRef.current.getContext("2d"));
-  }, []);
-
-  useEffect(() => {
-    drawData.forEach((data) => {
+    const shapes = [];
+    drawData.forEach((data, idx) => {
       switch (data.shape) {
         case "circle":
           const coordinates = data.position.split(", ");
-          ctx.ellipse(
-            coordinates[0],
-            coordinates[1],
-            data.radiusX,
-            data.radiusY,
-            0,
-            0,
-            2 * Math.PI
+          shapes.push(
+            <svg
+              key={idx}
+              viewBox={`0 0 ${windowWidth} ${windowHeight}`}
+              xmlns='http://www.w3.org/2000/svg'
+            >
+              <ellipse
+                cx={coordinates[0]}
+                cy={coordinates[1]}
+                rx={data.radiusX}
+                ry={data.radiusY}
+                style={{ fill: "#FFFFFF", stroke: "#000000" }}
+              />
+            </svg>
           );
-          ctx.fillStyle = "#FFFFFF";
-          ctx.fill();
-          ctx.stroke();
           break;
       }
     });
-  }, [drawData, ctx, windowWidth, windowHeight]);
+    setDrawing(shapes);
+  }, [drawData, windowWidth, windowHeight]);
 
   /**
    * Updates the data used by p5 draw() function
@@ -77,7 +78,7 @@ export default function EditorView(props) {
 
   return (
     <Grid container>
-      <Canvas ref={canvasRef} />
+      <Canvas ref={canvasRef}>{drawing}</Canvas>
       <Dock
         updateDrawData={updateDrawData}
         updateReferenceData={updateReferenceData}

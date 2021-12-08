@@ -17,12 +17,12 @@ const Canvas = forwardRef((props, ref) => {
   const [width, height] = useWindowSize();
 
   return (
-    <canvas
+    <div
       ref={ref}
-      width={width}
-      height={height}
-      style={{ backgroundColor: "#C8C8C8" }}
-    />
+      style={{ width: width, height: height, backgroundColor: "#C8C8C8" }}
+    >
+      {props.children}
+    </div>
   );
 });
 
