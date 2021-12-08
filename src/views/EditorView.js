@@ -35,8 +35,8 @@ export default function EditorView(props) {
           ctx.ellipse(
             coordinates[0],
             coordinates[1],
-            data.radius,
-            data.radius,
+            data.radiusX,
+            data.radiusY,
             0,
             0,
             2 * Math.PI

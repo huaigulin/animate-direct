@@ -108,7 +108,8 @@ export default function Dock(props) {
                       position: `${window.innerWidth / 2}, ${
                         window.innerHeight / 2
                       }`,
-                      radius: 30,
+                      radiusX: 60,
+                      radiusY: 30,
                       code: "circle(width/2, height/2, 60);",
                     });
                     handleShapesClose();
@@ -124,7 +125,7 @@ export default function Dock(props) {
                     </SvgIcon>
                   </ListItemIcon>
                   <ListItemText>
-                    <span style={{ fontSize: 16 }}>Circle</span>
+                    <span style={{ fontSize: 16 }}>Ellipse</span>
                   </ListItemText>
                 </MenuItem>
                 <MenuItem>
