@@ -81,6 +81,7 @@ const DrawEllipse = ({ x, y, radiusX, radiusY }) => {
           setControlX7(
             Math.abs(event.clientX + (controlX3 - event.clientX) / 2)
           );
+          setRectX(controlX3 - event.clientX < 0 ? controlX3 : event.clientX);
           return controlX3;
         });
         setControlY6((controlY6) => {
@@ -94,10 +95,9 @@ const DrawEllipse = ({ x, y, radiusX, radiusY }) => {
           setControlY5(
             Math.abs(event.clientY + (controlY6 - event.clientY) / 2)
           );
+          setRectY(controlY6 - event.clientY < 0 ? controlY6 : event.clientY);
           return controlY6;
         });
-        setRectX(controlX3 - event.clientX < 0 ? controlX3 : event.clientX);
-        setRectY(controlY6 - event.clientY < 0 ? controlY6 : event.clientY);
         setControlX1(event.clientX);
         setControlY1(event.clientY);
         setControlY2(event.clientY);
