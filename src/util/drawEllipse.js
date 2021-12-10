@@ -151,7 +151,16 @@ const DrawEllipse = ({ x, y, radiusX, radiusY }) => {
     setZooming4((zooming4) => {
       if (zooming4) {
         setControlX4(e.clientX);
-        setControlY4(e.clientY);
+        setControlX1(e.clientX);
+        setControlX6(e.clientX);
+        setControlX3((controlX3) => {
+          setControlX2(Math.abs((controlX3 - e.clientX) / 2 + e.clientX));
+          setControlX7(Math.abs((controlX3 - e.clientX) / 2 + e.clientX));
+          setEllipseX(Math.abs((controlX3 - e.clientX) / 2 + e.clientX));
+          setRadiusXCont(Math.abs((controlX3 - e.clientX) / 2));
+          setRectX((controlX3 - e.clientX) / 2 < 0 ? controlX3 : e.clientX);
+          return controlX3;
+        });
         return true;
       } else {
         return false;
