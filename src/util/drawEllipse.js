@@ -111,8 +111,23 @@ const DrawEllipse = ({ x, y, radiusX, radiusY }) => {
     });
     setZooming2((zooming2) => {
       if (zooming2) {
-        setControlX2(event.clientX);
         setControlY2(event.clientY);
+        setControlY1(event.clientY);
+        setControlY3(event.clientY);
+        setControlY6((controlY6) => {
+          setControlY4(
+            Math.abs(event.clientY + (controlY6 - event.clientY) / 2)
+          );
+          setControlY5(
+            Math.abs(event.clientY + (controlY6 - event.clientY) / 2)
+          );
+          setRectY(controlY6 - event.clientY < 0 ? controlY6 : event.clientY);
+          setRadiusYCont(Math.abs((controlY6 - event.clientY) / 2));
+          setEllipseY(
+            Math.abs(event.clientY + (controlY6 - event.clientY) / 2)
+          );
+          return controlY6;
+        });
         return true;
       } else {
         return false;
@@ -174,10 +189,19 @@ const DrawEllipse = ({ x, y, radiusX, radiusY }) => {
     });
   };
 
+  const clearMouseMove = () => {
+    setZooming2(false);
+    setZooming4(false);
+    setZooming5(false);
+    setZooming7(false);
+  };
+
   useEffect(() => {
     document.addEventListener("mousemove", onMouseMove);
+    document.addEventListener("mouseup", clearMouseMove);
     return () => {
       document.removeEventListener("mousemove", onMouseMove);
+      document.removeEventListener("mouseup", clearMouseMove);
     };
   }, []);
 
