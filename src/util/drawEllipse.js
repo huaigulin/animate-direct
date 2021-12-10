@@ -137,6 +137,42 @@ const DrawEllipse = ({ x, y, radiusX, radiusY }) => {
       if (zooming3) {
         setControlX3(event.clientX);
         setControlY3(event.clientY);
+        setControlY1(event.clientY);
+        setControlY2(event.clientY);
+        setControlX1((controlX1) => {
+          setControlX2(
+            Math.abs(event.clientX - (event.clientX - controlX1) / 2)
+          );
+          setRadiusXCont(Math.abs((event.clientX - controlX1) / 2));
+          setEllipseX(
+            Math.abs(event.clientX - (event.clientX - controlX1) / 2)
+          );
+          setControlX7(
+            Math.abs(event.clientX - (event.clientX - controlX1) / 2)
+          );
+          setRectX(
+            (event.clientX - controlX1) / 2 < 0 ? event.clientX : controlX1
+          );
+          return controlX1;
+        });
+        setControlY6((controlY6) => {
+          setRadiusYCont(Math.abs((controlY6 - event.clientY) / 2));
+          setEllipseY(
+            Math.abs(event.clientY + (controlY6 - event.clientY) / 2)
+          );
+          setControlY4(
+            Math.abs(event.clientY + (controlY6 - event.clientY) / 2)
+          );
+          setControlY5(
+            Math.abs(event.clientY + (controlY6 - event.clientY) / 2)
+          );
+          setRectY(
+            (controlY6 - event.clientY) / 2 < 0 ? controlY6 : event.clientY
+          );
+          return controlY6;
+        });
+        setControlX5(event.clientX);
+        setControlX8(event.clientX);
         return true;
       } else {
         return false;
