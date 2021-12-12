@@ -8,7 +8,7 @@ import {
   rotate as rotateDispatch,
 } from "../redux/slices/drawEllipseSlice";
 
-const DrawEllipse = ({ x, y, radiusX, radiusY }) => {
+const DrawEllipse = ({ x, y, radiusX, radiusY, deg }) => {
   const [ellipseX, setEllipseX] = useState(x);
   const [ellipseY, setEllipseY] = useState(y);
   const [prevEllipseX, setPrevEllipseX] = useState();
@@ -561,6 +561,15 @@ const DrawEllipse = ({ x, y, radiusX, radiusY }) => {
     document.addEventListener("mouseup", clearMouseMove);
     document.addEventListener("keydown", onKeyDown);
     document.addEventListener("keyup", onKeyUp);
+    dispatch(
+      newDrawDispatch({
+        x,
+        y,
+        rx: radiusX,
+        ry: radiusY,
+        deg,
+      })
+    );
     return () => {
       document.removeEventListener("mousemove", onMouseMove);
       document.removeEventListener("mouseup", clearMouseMove);

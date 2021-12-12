@@ -110,7 +110,8 @@ export default function Dock(props) {
                       }`,
                       radiusX: 60,
                       radiusY: 30,
-                      code: "circle(width/2, height/2, 60);",
+                      deg: 0,
+                      code: "circle(width/2, height/2, 60, 30, 0);",
                     });
                     handleShapesClose();
                   }}

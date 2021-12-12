@@ -30,6 +30,7 @@ export default function EditorView(props) {
   const [referenceData, setReferenceData] = useState([]);
   const [drawing, setDrawing] = useState();
   const [msgOpen, setMsgOpen] = useState(false);
+  const [msgSeverity, setMsgSeverity] = useState();
   const [msg, setMsg] = useState();
   const ellipseStats = useSelector((state) => state.drawEllipse);
 
@@ -59,6 +60,7 @@ export default function EditorView(props) {
               y={y}
               radiusX={data.radiusX}
               radiusY={data.radiusY}
+              deg={data.deg}
             />
           );
           break;
@@ -85,9 +87,14 @@ export default function EditorView(props) {
     ) {
       switch (mode) {
         case "new":
+          setMsgSeverity("success");
+          setMsg(
+            `Draw ellipse at x ${x}, y ${y} with radiusX ${rx}, radiusY ${ry}, rotation ${deg}`
+          );
           break;
         case "move":
-          setMsg(`Move ellipse by (${xDiff}, ${yDiff}) to (${x}, ${y})`);
+          setMsgSeverity("info");
+          setMsg(`Move ellipse by x ${xDiff}, y ${yDiff} to (${x}, ${y})`);
           break;
       }
       setMsgOpen(true);
@@ -131,7 +138,7 @@ export default function EditorView(props) {
         >
           <Alert
             onClose={handleMsgClose}
-            severity='info'
+            severity={msgSeverity}
             sx={{ width: "100%" }}
           >
             {msg}
