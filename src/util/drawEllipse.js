@@ -271,28 +271,127 @@ const DrawEllipse = ({ x, y, radiusX, radiusY }) => {
     });
     setZooming3((zooming3) => {
       if (zooming3) {
-        setControlX3(e.clientX);
-        setControlY3(e.clientY);
-        setControlY1(e.clientY);
-        setControlY2(e.clientY);
-        setControlX1((controlX1) => {
-          setControlX2(Math.abs(e.clientX - (e.clientX - controlX1) / 2));
-          setRadiusXCont(Math.abs((e.clientX - controlX1) / 2));
-          setEllipseX(Math.abs(e.clientX - (e.clientX - controlX1) / 2));
-          setControlX7(Math.abs(e.clientX - (e.clientX - controlX1) / 2));
-          setRectX(e.clientX - controlX1 < 0 ? e.clientX : controlX1);
-          return controlX1;
+        setKeepRatio((keepRatio) => {
+          if (keepRatio) {
+            setControlX6((controlX6) => {
+              setControlY6((controlY6) => {
+                const compX = Math.abs(e.clientX - controlX6);
+                const compY = Math.abs(controlY6 - e.clientY);
+                setRatioXY((ratioXY) => {
+                  let newRadiusX;
+                  let newRadiusY;
+                  if (compX < compY) {
+                    newRadiusX = compX / 2;
+                    newRadiusY = compX / 2 / ratioXY;
+                  } else {
+                    newRadiusY = compY / 2;
+                    newRadiusX = (compY / 2) * ratioXY;
+                  }
+                  setRadiusYCont(newRadiusY);
+                  setRadiusXCont(newRadiusX);
+                  setEllipseX(
+                    e.clientX > controlX6
+                      ? controlX6 + newRadiusX
+                      : controlX6 - newRadiusX
+                  );
+                  setEllipseY(
+                    e.clientY < controlY6
+                      ? controlY6 - newRadiusY
+                      : controlY6 + newRadiusY
+                  );
+                  setRectX(
+                    e.clientX > controlX6
+                      ? controlX6
+                      : controlX6 - 2 * newRadiusX
+                  );
+                  setRectY(
+                    e.clientY < controlY6
+                      ? controlY6 - 2 * newRadiusY
+                      : controlY6
+                  );
+                  setControlY1(
+                    e.clientY < controlY6
+                      ? controlY6 - 2 * newRadiusY
+                      : controlY6 + 2 * newRadiusY
+                  );
+                  setControlX2(
+                    e.clientX > controlX6
+                      ? controlX6 + newRadiusX
+                      : controlX6 - newRadiusX
+                  );
+                  setControlY2(
+                    e.clientY < controlY6
+                      ? controlY6 - 2 * newRadiusY
+                      : controlY6 + 2 * newRadiusY
+                  );
+                  setControlX3(
+                    e.clientX > controlX6
+                      ? controlX6 + 2 * newRadiusX
+                      : controlX6 - 2 * newRadiusX
+                  );
+                  setControlY3(
+                    e.clientY < controlY6
+                      ? controlY6 - 2 * newRadiusY
+                      : controlY6 + 2 * newRadiusY
+                  );
+                  setControlY4(
+                    e.clientY < controlY6
+                      ? controlY6 - newRadiusY
+                      : controlY6 + newRadiusY
+                  );
+                  setControlX5(
+                    e.clientX > controlX6
+                      ? controlX6 + 2 * newRadiusX
+                      : controlX6 - 2 * newRadiusX
+                  );
+                  setControlY5(
+                    e.clientY < controlY6
+                      ? controlY6 - newRadiusY
+                      : controlY6 + newRadiusY
+                  );
+                  setControlX7(
+                    e.clientX > controlX6
+                      ? controlX6 + newRadiusX
+                      : controlX6 - newRadiusX
+                  );
+                  setControlX8(
+                    e.clientX > controlX6
+                      ? controlX6 + 2 * newRadiusX
+                      : controlX6 - 2 * newRadiusX
+                  );
+                  return ratioXY;
+                });
+                return controlY6;
+              });
+              return controlX6;
+            });
+            return true;
+          } else {
+            setControlX3(e.clientX);
+            setControlY3(e.clientY);
+            setControlY1(e.clientY);
+            setControlY2(e.clientY);
+            setControlX1((controlX1) => {
+              setControlX2(Math.abs(e.clientX - (e.clientX - controlX1) / 2));
+              setRadiusXCont(Math.abs((e.clientX - controlX1) / 2));
+              setEllipseX(Math.abs(e.clientX - (e.clientX - controlX1) / 2));
+              setControlX7(Math.abs(e.clientX - (e.clientX - controlX1) / 2));
+              setRectX(e.clientX - controlX1 < 0 ? e.clientX : controlX1);
+              return controlX1;
+            });
+            setControlY6((controlY6) => {
+              setRadiusYCont(Math.abs((controlY6 - e.clientY) / 2));
+              setEllipseY(Math.abs(e.clientY + (controlY6 - e.clientY) / 2));
+              setControlY4(Math.abs(e.clientY + (controlY6 - e.clientY) / 2));
+              setControlY5(Math.abs(e.clientY + (controlY6 - e.clientY) / 2));
+              setRectY(controlY6 - e.clientY < 0 ? controlY6 : e.clientY);
+              return controlY6;
+            });
+            setControlX5(e.clientX);
+            setControlX8(e.clientX);
+            return false;
+          }
         });
-        setControlY6((controlY6) => {
-          setRadiusYCont(Math.abs((controlY6 - e.clientY) / 2));
-          setEllipseY(Math.abs(e.clientY + (controlY6 - e.clientY) / 2));
-          setControlY4(Math.abs(e.clientY + (controlY6 - e.clientY) / 2));
-          setControlY5(Math.abs(e.clientY + (controlY6 - e.clientY) / 2));
-          setRectY(controlY6 - e.clientY < 0 ? controlY6 : e.clientY);
-          return controlY6;
-        });
-        setControlX5(e.clientX);
-        setControlX8(e.clientX);
         return true;
       } else {
         return false;
