@@ -1,11 +1,13 @@
 import React, { useEffect, useRef, useState, Fragment } from "react";
+import { Tooltip } from "@mui/material";
 import { blue } from "@mui/material/colors";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import {
   newDraw as newDrawDispatch,
   move as moveDispatch,
   zoom as zoomDispatch,
   rotate as rotateDispatch,
+  liveUpdate as liveUpdateDispatch,
 } from "../redux/slices/drawEllipseSlice";
 
 const usePrevious = (value) => {
@@ -27,6 +29,7 @@ const DrawEllipse = ({ x, y, radiusX, radiusY, deg }) => {
   const [radiusYCont, setRadiusYCont] = useState(radiusY);
   const [prevRadiusX, setPrevRadiusX] = useState();
   const [prevRadiusY, setPrevRadiusY] = useState();
+  const [degCont, setDegCont] = useState(deg);
   const [rectX, setRectX] = useState(x - radiusX);
   const [rectY, setRectY] = useState(y - radiusY);
   const [controlX1, setControlX1] = useState(x - radiusX);
@@ -66,6 +69,9 @@ const DrawEllipse = ({ x, y, radiusX, radiusY, deg }) => {
   const prevZooming7 = usePrevious(zooming7);
   const prevZooming8 = usePrevious(zooming8);
   const dispatch = useDispatch();
+  const ellipseStats = useSelector((state) => state.drawEllipse);
+  const [tooltipOpen, setTooltipOpen] = useState(false);
+  const [tooltipContent, setTooltipContent] = useState();
 
   /**
    * The callback function for listening mouse move on the whole screen
@@ -604,7 +610,10 @@ const DrawEllipse = ({ x, y, radiusX, radiusY, deg }) => {
   }, [radiusXCont, radiusYCont]);
 
   useEffect(() => {
-    if (!dragging && prevDragging)
+    if (!dragging && prevDragging) {
+      // close tooltip
+      setTooltipOpen(false);
+      // dispatch state to show snackbar info
       dispatch(
         moveDispatch({
           x: ellipseX,
@@ -613,7 +622,28 @@ const DrawEllipse = ({ x, y, radiusX, radiusY, deg }) => {
           yDiff: ellipseY - prevEllipseY,
         })
       );
+    }
   }, [dragging, prevDragging, ellipseX, ellipseY]);
+
+  useEffect(() => {
+    if (dragging) {
+      dispatch(
+        liveUpdateDispatch({
+          mode: "liveMove",
+          x: ellipseX,
+          y: ellipseY,
+          xDiff: ellipseX - prevEllipseX,
+          yDiff: ellipseY - prevEllipseY,
+          rx: radiusXCont,
+          ry: radiusYCont,
+          deg: degCont,
+          rxDiff: 0,
+          ryDiff: 0,
+          degDiff: 0,
+        })
+      );
+    }
+  }, [dragging, ellipseX, ellipseY]);
 
   useEffect(() => {
     if (
@@ -626,6 +656,9 @@ const DrawEllipse = ({ x, y, radiusX, radiusY, deg }) => {
       (!zooming7 && prevZooming7) ||
       (!zooming8 && prevZooming8)
     ) {
+      // close tooltip
+      setTooltipOpen(false);
+      // dispatch state to show snackbar info
       dispatch(
         zoomDispatch({
           x: ellipseX,
@@ -662,6 +695,84 @@ const DrawEllipse = ({ x, y, radiusX, radiusY, deg }) => {
     radiusYCont,
   ]);
 
+  useEffect(() => {
+    if (
+      zooming1 ||
+      zooming2 ||
+      zooming3 ||
+      zooming4 ||
+      zooming5 ||
+      zooming6 ||
+      zooming7 ||
+      zooming8
+    ) {
+      dispatch(
+        liveUpdateDispatch({
+          mode: "liveZoom",
+          x: ellipseX,
+          y: ellipseY,
+          xDiff: ellipseX - prevEllipseX,
+          yDiff: ellipseY - prevEllipseY,
+          rx: radiusXCont,
+          ry: radiusYCont,
+          rxDiff: radiusXCont - prevRadiusX,
+          ryDiff: radiusYCont - prevRadiusY,
+          deg: degCont,
+          degDiff: 0,
+        })
+      );
+    }
+  }, [
+    zooming1,
+    zooming2,
+    zooming3,
+    zooming4,
+    zooming5,
+    zooming6,
+    zooming7,
+    zooming8,
+    ellipseX,
+    ellipseY,
+    radiusXCont,
+    radiusYCont,
+  ]);
+
+  useEffect(() => {
+    const { mode, x, y, rx, ry, deg, xDiff, yDiff, rxDiff, ryDiff, degDiff } =
+      ellipseStats;
+    if (
+      x ||
+      y ||
+      rx ||
+      ry ||
+      deg ||
+      xDiff ||
+      yDiff ||
+      rxDiff ||
+      ryDiff ||
+      degDiff
+    ) {
+      switch (mode) {
+        case "liveMove":
+          setTooltipContent(
+            <span>
+              xDiff: {+xDiff.toFixed(2)}, yDiff: {+yDiff.toFixed(2)}
+            </span>
+          );
+          setTooltipOpen(true);
+          break;
+        case "liveZoom":
+          setTooltipContent(
+            <span>
+              rx: {+rx.toFixed(2)}, ry: {+ry.toFixed(2)}
+            </span>
+          );
+          setTooltipOpen(true);
+          break;
+      }
+    }
+  }, [ellipseStats]);
+
   return (
     <Fragment>
       <ellipse
@@ -671,21 +782,23 @@ const DrawEllipse = ({ x, y, radiusX, radiusY, deg }) => {
         ry={radiusYCont}
         style={{ fill: "#FFFFFF", stroke: "#000000" }}
       />
-      <rect
-        x={rectX}
-        y={rectY}
-        width={radiusXCont * 2}
-        height={radiusYCont * 2}
-        style={{ fill: "transparent", stroke: blue[400], cursor: "grab" }}
-        onMouseDown={(e) => {
-          setDragging(true);
-          setPrevEllipseX(ellipseX);
-          setPrevEllipseY(ellipseY);
-        }}
-        onMouseUp={(e) => {
-          setDragging(false);
-        }}
-      />
+      <Tooltip open={tooltipOpen} title={tooltipContent}>
+        <rect
+          x={rectX}
+          y={rectY}
+          width={radiusXCont * 2}
+          height={radiusYCont * 2}
+          style={{ fill: "transparent", stroke: blue[400], cursor: "grab" }}
+          onMouseDown={(e) => {
+            setDragging(true);
+            setPrevEllipseX(ellipseX);
+            setPrevEllipseY(ellipseY);
+          }}
+          onMouseUp={(e) => {
+            setDragging(false);
+          }}
+        />
+      </Tooltip>
       <circle
         cx={controlX1}
         cy={controlY1}

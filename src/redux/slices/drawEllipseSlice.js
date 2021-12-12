@@ -46,8 +46,22 @@ export const drawEllipseSlice = createSlice({
       state.mode = "rotate";
       state.degDiff = payload.degDiff;
     },
+    liveUpdate: (state, { payload }) => {
+      state.mode = payload.mode;
+      state.x = payload.x;
+      state.y = payload.y;
+      state.rx = payload.rx;
+      state.ry = payload.ry;
+      state.deg = payload.deg;
+      state.xDiff = payload.xDiff;
+      state.yDiff = payload.yDiff;
+      state.rxDiff = payload.rxDiff;
+      state.ryDiff = payload.ryDiff;
+      state.degDiff = payload.degDiff;
+    },
   },
 });
 
-export const { newDraw, move, zoom, rotate } = drawEllipseSlice.actions;
+export const { newDraw, move, zoom, rotate, liveUpdate } =
+  drawEllipseSlice.actions;
 export default drawEllipseSlice.reducer;
