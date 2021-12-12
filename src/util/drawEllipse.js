@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState, Fragment } from "react";
 import { Tooltip } from "@mui/material";
-import { blue } from "@mui/material/colors";
+import { blue, pink } from "@mui/material/colors";
 import { useDispatch, useSelector } from "react-redux";
 import {
   newDraw as newDrawDispatch,
@@ -788,6 +788,40 @@ const DrawEllipse = ({ x, y, radiusX, radiusY, deg }) => {
         ry={radiusYCont}
         style={{ fill: "#FFFFFF", stroke: "#000000" }}
       />
+      {radiusXCont.toFixed() === radiusYCont.toFixed() &&
+        (zooming1 ||
+          zooming2 ||
+          zooming3 ||
+          zooming4 ||
+          zooming5 ||
+          zooming6 ||
+          zooming7 ||
+          zooming8) && (
+          <line
+            x1={ellipseX}
+            y1={ellipseY}
+            x2={controlX2}
+            y2={controlY2}
+            stroke={pink[400]}
+          />
+        )}
+      {radiusXCont.toFixed() === radiusYCont.toFixed() &&
+        (zooming1 ||
+          zooming2 ||
+          zooming3 ||
+          zooming4 ||
+          zooming5 ||
+          zooming6 ||
+          zooming7 ||
+          zooming8) && (
+          <line
+            x1={ellipseX}
+            y1={ellipseY}
+            x2={controlX5}
+            y2={controlY5}
+            stroke={pink[400]}
+          />
+        )}
       <Tooltip open={tooltipOpen} title={tooltipContent}>
         <rect
           x={rectX}
