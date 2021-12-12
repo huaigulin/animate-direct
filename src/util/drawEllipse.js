@@ -24,7 +24,9 @@ const DrawEllipse = ({ x, y, radiusX, radiusY }) => {
   const [controlY7, setControlY7] = useState(y + radiusY);
   const [controlX8, setControlX8] = useState(x + radiusX);
   const [controlY8, setControlY8] = useState(y + radiusY);
+  const [ratioXY, setRatioXY] = useState(0);
   const [dragging, setDragging] = useState(false);
+  const [keepRatio, setKeepRatio] = useState(false);
   const [zooming1, setZooming1] = useState(false);
   const [zooming2, setZooming2] = useState(false);
   const [zooming3, setZooming3] = useState(false);
@@ -74,28 +76,129 @@ const DrawEllipse = ({ x, y, radiusX, radiusY }) => {
     });
     setZooming1((zooming1) => {
       if (zooming1) {
-        setControlX3((controlX3) => {
-          setEllipseX(Math.abs(e.clientX + (controlX3 - e.clientX) / 2));
-          setRadiusXCont(Math.abs((controlX3 - e.clientX) / 2));
-          setControlX2(Math.abs(e.clientX + (controlX3 - e.clientX) / 2));
-          setControlX7(Math.abs(e.clientX + (controlX3 - e.clientX) / 2));
-          setRectX(controlX3 - e.clientX < 0 ? controlX3 : e.clientX);
-          return controlX3;
+        setKeepRatio((keepRatio) => {
+          if (keepRatio) {
+            // When shift key is down, keep aspect ratio of circle
+            setControlX8((controlX8) => {
+              setControlY8((controlY8) => {
+                const compX = Math.abs(controlX8 - e.clientX);
+                const compY = Math.abs(controlY8 - e.clientY);
+                setRatioXY((ratioXY) => {
+                  let newRadiusX;
+                  let newRadiusY;
+                  if (compX < compY) {
+                    newRadiusX = compX / 2;
+                    newRadiusY = compX / 2 / ratioXY;
+                  } else {
+                    newRadiusY = compY / 2;
+                    newRadiusX = (compY / 2) * ratioXY;
+                  }
+                  setRadiusYCont(newRadiusY);
+                  setRadiusXCont(newRadiusX);
+                  setEllipseX(
+                    e.clientX > controlX8
+                      ? controlX8 + newRadiusX
+                      : controlX8 - newRadiusX
+                  );
+                  setEllipseY(
+                    e.clientY > controlY8
+                      ? controlY8 + newRadiusY
+                      : controlY8 - newRadiusY
+                  );
+                  setRectX(
+                    e.clientX > controlX8
+                      ? controlX8
+                      : controlX8 - 2 * newRadiusX
+                  );
+                  setRectY(
+                    e.clientY > controlY8
+                      ? controlY8
+                      : controlY8 - 2 * newRadiusY
+                  );
+                  setControlX1(
+                    e.clientX > controlX8
+                      ? controlX8 + 2 * newRadiusX
+                      : controlX8 - 2 * newRadiusX
+                  );
+                  setControlX4(
+                    e.clientX > controlX8
+                      ? controlX8 + 2 * newRadiusX
+                      : controlX8 - 2 * newRadiusX
+                  );
+                  setControlX6(
+                    e.clientX > controlX8
+                      ? controlX8 + 2 * newRadiusX
+                      : controlX8 - 2 * newRadiusX
+                  );
+                  setControlY1(
+                    e.clientY > controlY8
+                      ? controlY8 + 2 * newRadiusY
+                      : controlY8 - 2 * newRadiusY
+                  );
+                  setControlX2(
+                    e.clientX > controlX8
+                      ? controlX8 + newRadiusX
+                      : controlX8 - newRadiusX
+                  );
+                  setControlX7(
+                    e.clientX > controlX8
+                      ? controlX8 + newRadiusX
+                      : controlX8 - newRadiusX
+                  );
+                  setControlY2(
+                    e.clientY > controlY8
+                      ? controlY8 + 2 * newRadiusY
+                      : controlY8 - 2 * newRadiusY
+                  );
+                  setControlY3(
+                    e.clientY > controlY8
+                      ? controlY8 + 2 * newRadiusY
+                      : controlY8 - 2 * newRadiusY
+                  );
+                  setControlY4(
+                    e.clientY > controlY8
+                      ? controlY8 + newRadiusY
+                      : controlY8 - newRadiusY
+                  );
+                  setControlY5(
+                    e.clientY > controlY8
+                      ? controlY8 + newRadiusY
+                      : controlY8 - newRadiusY
+                  );
+                  return ratioXY;
+                });
+                return controlY8;
+              });
+              return controlX8;
+            });
+            return true;
+          } else {
+            // Just change the shape
+            setControlX3((controlX3) => {
+              setEllipseX(Math.abs(e.clientX + (controlX3 - e.clientX) / 2));
+              setRadiusXCont(Math.abs((controlX3 - e.clientX) / 2));
+              setControlX2(Math.abs(e.clientX + (controlX3 - e.clientX) / 2));
+              setControlX7(Math.abs(e.clientX + (controlX3 - e.clientX) / 2));
+              setRectX(controlX3 - e.clientX < 0 ? controlX3 : e.clientX);
+              return controlX3;
+            });
+            setControlY6((controlY6) => {
+              setEllipseY(Math.abs(e.clientY + (controlY6 - e.clientY) / 2));
+              setRadiusYCont(Math.abs((controlY6 - e.clientY) / 2));
+              setControlY4(Math.abs(e.clientY + (controlY6 - e.clientY) / 2));
+              setControlY5(Math.abs(e.clientY + (controlY6 - e.clientY) / 2));
+              setRectY(controlY6 - e.clientY < 0 ? controlY6 : e.clientY);
+              return controlY6;
+            });
+            setControlX1(e.clientX);
+            setControlY1(e.clientY);
+            setControlY2(e.clientY);
+            setControlY3(e.clientY);
+            setControlX4(e.clientX);
+            setControlX6(e.clientX);
+            return false;
+          }
         });
-        setControlY6((controlY6) => {
-          setEllipseY(Math.abs(e.clientY + (controlY6 - e.clientY) / 2));
-          setRadiusYCont(Math.abs((controlY6 - e.clientY) / 2));
-          setControlY4(Math.abs(e.clientY + (controlY6 - e.clientY) / 2));
-          setControlY5(Math.abs(e.clientY + (controlY6 - e.clientY) / 2));
-          setRectY(controlY6 - e.clientY < 0 ? controlY6 : e.clientY);
-          return controlY6;
-        });
-        setControlX1(e.clientX);
-        setControlY1(e.clientY);
-        setControlY2(e.clientY);
-        setControlY3(e.clientY);
-        setControlX4(e.clientX);
-        setControlX6(e.clientX);
         return true;
       } else {
         return false;
@@ -264,22 +367,55 @@ const DrawEllipse = ({ x, y, radiusX, radiusY }) => {
 
   /**
    * The callback function to stop zooming once mouse is up. This one is necessary for control point 2, 4, 5, and 7 because mouse might move out of the control point during zooming
+   * This is also necessary for all points when shift key is down
    */
   const clearMouseMove = () => {
+    setZooming1(false);
     setZooming2(false);
+    setZooming3(false);
     setZooming4(false);
     setZooming5(false);
+    setZooming6(false);
     setZooming7(false);
+    setZooming8(false);
+  };
+
+  /**
+   * Callback for listening to keydown event
+   * @param {object} event
+   */
+  const onKeyDown = (event) => {
+    if (event.key === "Shift") {
+      setKeepRatio(true);
+    }
+  };
+
+  /**
+   * Callback for listening to keyup event
+   * @param {object} event
+   */
+  const onKeyUp = (event) => {
+    if (event.key === "Shift") {
+      setKeepRatio(false);
+    }
   };
 
   useEffect(() => {
     document.addEventListener("mousemove", onMouseMove);
     document.addEventListener("mouseup", clearMouseMove);
+    document.addEventListener("keydown", onKeyDown);
+    document.addEventListener("keyup", onKeyUp);
     return () => {
       document.removeEventListener("mousemove", onMouseMove);
       document.removeEventListener("mouseup", clearMouseMove);
+      document.removeEventListener("keydown", onKeyDown);
+      document.removeEventListener("keyup", onKeyUp);
     };
   }, []);
+
+  useEffect(() => {
+    if (radiusYCont > 0) setRatioXY(radiusXCont / radiusYCont);
+  }, [radiusXCont, radiusYCont]);
 
   return (
     <Fragment>
