@@ -1,4 +1,4 @@
-import React, { useEffect, useState, Fragment } from "react";
+import React, { useEffect, useRef, useState, Fragment } from "react";
 import { blue } from "@mui/material/colors";
 import { useDispatch } from "react-redux";
 import {
@@ -7,6 +7,16 @@ import {
   zoom as zoomDispatch,
   rotate as rotateDispatch,
 } from "../redux/slices/drawEllipseSlice";
+
+const usePrevious = (value) => {
+  const ref = useRef();
+
+  useEffect(() => {
+    ref.current = value;
+  }, [value]);
+
+  return ref.current;
+};
 
 const DrawEllipse = ({ x, y, radiusX, radiusY, deg }) => {
   const [ellipseX, setEllipseX] = useState(x);
@@ -37,6 +47,7 @@ const DrawEllipse = ({ x, y, radiusX, radiusY, deg }) => {
   const [controlY8, setControlY8] = useState(y + radiusY);
   const [ratioXY, setRatioXY] = useState(0);
   const [dragging, setDragging] = useState(false);
+  const prevDragging = usePrevious(dragging);
   const [keepRatio, setKeepRatio] = useState(false);
   const [zooming1, setZooming1] = useState(false);
   const [zooming2, setZooming2] = useState(false);
@@ -46,6 +57,14 @@ const DrawEllipse = ({ x, y, radiusX, radiusY, deg }) => {
   const [zooming6, setZooming6] = useState(false);
   const [zooming7, setZooming7] = useState(false);
   const [zooming8, setZooming8] = useState(false);
+  const prevZooming1 = usePrevious(zooming1);
+  const prevZooming2 = usePrevious(zooming2);
+  const prevZooming3 = usePrevious(zooming3);
+  const prevZooming4 = usePrevious(zooming4);
+  const prevZooming5 = usePrevious(zooming5);
+  const prevZooming6 = usePrevious(zooming6);
+  const prevZooming7 = usePrevious(zooming7);
+  const prevZooming8 = usePrevious(zooming8);
   const dispatch = useDispatch();
 
   /**
@@ -585,7 +604,7 @@ const DrawEllipse = ({ x, y, radiusX, radiusY, deg }) => {
   }, [radiusXCont, radiusYCont]);
 
   useEffect(() => {
-    if (dragging)
+    if (!dragging && prevDragging)
       dispatch(
         moveDispatch({
           x: ellipseX,
@@ -594,18 +613,18 @@ const DrawEllipse = ({ x, y, radiusX, radiusY, deg }) => {
           yDiff: ellipseY - prevEllipseY,
         })
       );
-  }, [dragging, ellipseX, ellipseY]);
+  }, [dragging, prevDragging, ellipseX, ellipseY]);
 
   useEffect(() => {
     if (
-      zooming1 ||
-      zooming2 ||
-      zooming3 ||
-      zooming4 ||
-      zooming5 ||
-      zooming6 ||
-      zooming7 ||
-      zooming8
+      (!zooming1 && prevZooming1) ||
+      (!zooming2 && prevZooming2) ||
+      (!zooming3 && prevZooming3) ||
+      (!zooming4 && prevZooming4) ||
+      (!zooming5 && prevZooming5) ||
+      (!zooming6 && prevZooming6) ||
+      (!zooming7 && prevZooming7) ||
+      (!zooming8 && prevZooming8)
     ) {
       dispatch(
         zoomDispatch({
@@ -629,6 +648,14 @@ const DrawEllipse = ({ x, y, radiusX, radiusY, deg }) => {
     zooming6,
     zooming7,
     zooming8,
+    prevZooming1,
+    prevZooming2,
+    prevZooming3,
+    prevZooming4,
+    prevZooming5,
+    prevZooming6,
+    prevZooming7,
+    prevZooming8,
     ellipseX,
     ellipseY,
     radiusXCont,
