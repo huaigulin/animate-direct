@@ -97,6 +97,7 @@ export default function EditorView(props) {
               <i>{+ry.toFixed(2)}</i>, rotation <i>{deg}</i>
             </span>
           );
+          setMsgOpen(true);
           break;
         case "move":
           setMsgSeverity("info");
@@ -109,6 +110,7 @@ export default function EditorView(props) {
               </i>
             </span>
           );
+          setMsgOpen(true);
           break;
         case "zoom":
           setMsgSeverity("info");
@@ -123,8 +125,16 @@ export default function EditorView(props) {
               </i>
             </span>
           );
+          setMsgOpen(true);
+          break;
+        case "liveMove":
+          // make sure snackbar does not show up when dragging is still in progress
+          setMsgOpen(false);
+          break;
+        case "liveZoom":
+          setMsgOpen(false);
+          break;
       }
-      setMsgOpen(true);
     }
   }, [ellipseStats]);
 
