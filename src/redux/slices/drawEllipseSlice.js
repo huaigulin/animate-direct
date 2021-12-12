@@ -37,6 +37,8 @@ export const drawEllipseSlice = createSlice({
       state.y = payload.y;
       state.xDiff = payload.xDiff;
       state.yDiff = payload.yDiff;
+      state.rx = payload.rx;
+      state.ry = payload.ry;
       state.rxDiff = payload.rxDiff;
       state.ryDiff = payload.ryDiff;
     },

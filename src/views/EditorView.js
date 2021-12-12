@@ -70,7 +70,6 @@ export default function EditorView(props) {
   }, [drawData, windowWidth, windowHeight]);
 
   useEffect(() => {
-    console.log(ellipseStats);
     const { mode, x, y, rx, ry, deg, xDiff, yDiff, rxDiff, ryDiff, degDiff } =
       ellipseStats;
     if (
@@ -89,13 +88,41 @@ export default function EditorView(props) {
         case "new":
           setMsgSeverity("success");
           setMsg(
-            `Draw ellipse at x ${x}, y ${y} with radiusX ${rx}, radiusY ${ry}, rotation ${deg}`
+            <span>
+              Draw ellipse at{" "}
+              <i>
+                ({+x.toFixed(2)}, {+y.toFixed(2)})
+              </i>{" "}
+              with radiusX <i>{+rx.toFixed(2)}</i>, radiusY{" "}
+              <i>{+ry.toFixed(2)}</i>, rotation <i>{deg}</i>
+            </span>
           );
           break;
         case "move":
           setMsgSeverity("info");
-          setMsg(`Move ellipse by x ${xDiff}, y ${yDiff} to (${x}, ${y})`);
+          setMsg(
+            <span>
+              Move ellipse by x <i>{+xDiff.toFixed(2)}</i>, y{" "}
+              <i>{+yDiff.toFixed(2)}</i> to{" "}
+              <i>
+                ({+x.toFixed(2)}, {+y.toFixed(2)})
+              </i>
+            </span>
+          );
           break;
+        case "zoom":
+          setMsgSeverity("info");
+          setMsg(
+            <span>
+              Change ellipse size by radiusX <i>{+rxDiff.toFixed(2)}</i>,
+              radiusY <i>{+ryDiff.toFixed(2)}</i> with new radiusX{" "}
+              <i>{+rx.toFixed(2)}</i>, new radiusY <i>{+ry.toFixed(2)}</i>, new
+              coordinates{" "}
+              <i>
+                ({+x.toFixed(2)}, {+y.toFixed(2)})
+              </i>
+            </span>
+          );
       }
       setMsgOpen(true);
     }
@@ -135,6 +162,13 @@ export default function EditorView(props) {
           autoHideDuration={6000}
           onClose={handleMsgClose}
           anchorOrigin={{ vertical: "top", horizontal: "center" }}
+          key={
+            ellipseStats.mode +
+            ellipseStats.x +
+            ellipseStats.y +
+            ellipseStats.rx +
+            ellipseStats.ry
+          }
         >
           <Alert
             onClose={handleMsgClose}

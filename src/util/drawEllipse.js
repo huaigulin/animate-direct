@@ -15,6 +15,8 @@ const DrawEllipse = ({ x, y, radiusX, radiusY, deg }) => {
   const [prevEllipseY, setPrevEllipseY] = useState();
   const [radiusXCont, setRadiusXCont] = useState(radiusX);
   const [radiusYCont, setRadiusYCont] = useState(radiusY);
+  const [prevRadiusX, setPrevRadiusX] = useState();
+  const [prevRadiusY, setPrevRadiusY] = useState();
   const [rectX, setRectX] = useState(x - radiusX);
   const [rectY, setRectY] = useState(y - radiusY);
   const [controlX1, setControlX1] = useState(x - radiusX);
@@ -594,29 +596,44 @@ const DrawEllipse = ({ x, y, radiusX, radiusY, deg }) => {
       );
   }, [dragging, ellipseX, ellipseY]);
 
-  // useEffect(() => {
-  //   if (
-  //     zooming1 ||
-  //     zooming2 ||
-  //     zooming3 ||
-  //     zooming4 ||
-  //     zooming5 ||
-  //     zooming6 ||
-  //     zooming7 ||
-  //     zooming8
-  //   ) {
-  //     setMsgOpen(true);
-  //   }
-  // }, [
-  //   zooming1,
-  //   zooming2,
-  //   zooming3,
-  //   zooming4,
-  //   zooming5,
-  //   zooming6,
-  //   zooming7,
-  //   zooming8,
-  // ]);
+  useEffect(() => {
+    if (
+      zooming1 ||
+      zooming2 ||
+      zooming3 ||
+      zooming4 ||
+      zooming5 ||
+      zooming6 ||
+      zooming7 ||
+      zooming8
+    ) {
+      dispatch(
+        zoomDispatch({
+          x: ellipseX,
+          y: ellipseY,
+          xDiff: ellipseX - prevEllipseX,
+          yDiff: ellipseY - prevEllipseY,
+          rx: radiusXCont,
+          ry: radiusYCont,
+          rxDiff: radiusXCont - prevRadiusX,
+          ryDiff: radiusYCont - prevRadiusY,
+        })
+      );
+    }
+  }, [
+    zooming1,
+    zooming2,
+    zooming3,
+    zooming4,
+    zooming5,
+    zooming6,
+    zooming7,
+    zooming8,
+    ellipseX,
+    ellipseY,
+    radiusXCont,
+    radiusYCont,
+  ]);
 
   return (
     <Fragment>
@@ -649,6 +666,10 @@ const DrawEllipse = ({ x, y, radiusX, radiusY, deg }) => {
         style={{ fill: blue[400], cursor: "nwse-resize" }}
         onMouseDown={(e) => {
           setZooming1(true);
+          setPrevEllipseX(ellipseX);
+          setPrevEllipseY(ellipseY);
+          setPrevRadiusX(radiusXCont);
+          setPrevRadiusY(radiusYCont);
         }}
         onMouseUp={(e) => {
           setZooming1(false);
@@ -661,6 +682,10 @@ const DrawEllipse = ({ x, y, radiusX, radiusY, deg }) => {
         style={{ fill: blue[400], cursor: "ns-resize" }}
         onMouseDown={(e) => {
           setZooming2(true);
+          setPrevEllipseX(ellipseX);
+          setPrevEllipseY(ellipseY);
+          setPrevRadiusX(radiusXCont);
+          setPrevRadiusY(radiusYCont);
         }}
         onMouseUp={(e) => {
           setZooming2(false);
@@ -673,6 +698,10 @@ const DrawEllipse = ({ x, y, radiusX, radiusY, deg }) => {
         style={{ fill: blue[400], cursor: "nesw-resize" }}
         onMouseDown={(e) => {
           setZooming3(true);
+          setPrevEllipseX(ellipseX);
+          setPrevEllipseY(ellipseY);
+          setPrevRadiusX(radiusXCont);
+          setPrevRadiusY(radiusYCont);
         }}
         onMouseUp={(e) => {
           setZooming3(false);
@@ -685,6 +714,10 @@ const DrawEllipse = ({ x, y, radiusX, radiusY, deg }) => {
         style={{ fill: blue[400], cursor: "ew-resize" }}
         onMouseDown={(e) => {
           setZooming4(true);
+          setPrevEllipseX(ellipseX);
+          setPrevEllipseY(ellipseY);
+          setPrevRadiusX(radiusXCont);
+          setPrevRadiusY(radiusYCont);
         }}
         onMouseUp={(e) => {
           setZooming4(false);
@@ -697,6 +730,10 @@ const DrawEllipse = ({ x, y, radiusX, radiusY, deg }) => {
         style={{ fill: blue[400], cursor: "ew-resize" }}
         onMouseDown={(e) => {
           setZooming5(true);
+          setPrevEllipseX(ellipseX);
+          setPrevEllipseY(ellipseY);
+          setPrevRadiusX(radiusXCont);
+          setPrevRadiusY(radiusYCont);
         }}
         onMouseUp={(e) => {
           setZooming5(false);
@@ -709,6 +746,10 @@ const DrawEllipse = ({ x, y, radiusX, radiusY, deg }) => {
         style={{ fill: blue[400], cursor: "nesw-resize" }}
         onMouseDown={(e) => {
           setZooming6(true);
+          setPrevEllipseX(ellipseX);
+          setPrevEllipseY(ellipseY);
+          setPrevRadiusX(radiusXCont);
+          setPrevRadiusY(radiusYCont);
         }}
         onMouseUp={(e) => {
           setZooming6(false);
@@ -721,6 +762,10 @@ const DrawEllipse = ({ x, y, radiusX, radiusY, deg }) => {
         style={{ fill: blue[400], cursor: "ns-resize" }}
         onMouseDown={(e) => {
           setZooming7(true);
+          setPrevEllipseX(ellipseX);
+          setPrevEllipseY(ellipseY);
+          setPrevRadiusX(radiusXCont);
+          setPrevRadiusY(radiusYCont);
         }}
         onMouseUp={(e) => {
           setZooming7(false);
@@ -733,6 +778,10 @@ const DrawEllipse = ({ x, y, radiusX, radiusY, deg }) => {
         style={{ fill: blue[400], cursor: "nwse-resize" }}
         onMouseDown={(e) => {
           setZooming8(true);
+          setPrevEllipseX(ellipseX);
+          setPrevEllipseY(ellipseY);
+          setPrevRadiusX(radiusXCont);
+          setPrevRadiusY(radiusYCont);
         }}
         onMouseUp={(e) => {
           setZooming8(false);
