@@ -1,9 +1,18 @@
 import React, { useEffect, useState, Fragment } from "react";
 import { blue } from "@mui/material/colors";
+import { useDispatch } from "react-redux";
+import {
+  newDraw as newDrawDispatch,
+  move as moveDispatch,
+  zoom as zoomDispatch,
+  rotate as rotateDispatch,
+} from "../redux/slices/drawEllipseSlice";
 
 const DrawEllipse = ({ x, y, radiusX, radiusY }) => {
   const [ellipseX, setEllipseX] = useState(x);
   const [ellipseY, setEllipseY] = useState(y);
+  const [prevEllipseX, setPrevEllipseX] = useState();
+  const [prevEllipseY, setPrevEllipseY] = useState();
   const [radiusXCont, setRadiusXCont] = useState(radiusX);
   const [radiusYCont, setRadiusYCont] = useState(radiusY);
   const [rectX, setRectX] = useState(x - radiusX);
@@ -35,6 +44,7 @@ const DrawEllipse = ({ x, y, radiusX, radiusY }) => {
   const [zooming6, setZooming6] = useState(false);
   const [zooming7, setZooming7] = useState(false);
   const [zooming8, setZooming8] = useState(false);
+  const dispatch = useDispatch();
 
   /**
    * The callback function for listening mouse move on the whole screen
@@ -563,6 +573,42 @@ const DrawEllipse = ({ x, y, radiusX, radiusY }) => {
     if (radiusYCont > 0) setRatioXY(radiusXCont / radiusYCont);
   }, [radiusXCont, radiusYCont]);
 
+  useEffect(() => {
+    if (dragging)
+      dispatch(
+        moveDispatch({
+          x: ellipseX,
+          y: ellipseY,
+          xDiff: ellipseX - prevEllipseX,
+          yDiff: ellipseY - prevEllipseY,
+        })
+      );
+  }, [dragging, ellipseX, ellipseY]);
+
+  // useEffect(() => {
+  //   if (
+  //     zooming1 ||
+  //     zooming2 ||
+  //     zooming3 ||
+  //     zooming4 ||
+  //     zooming5 ||
+  //     zooming6 ||
+  //     zooming7 ||
+  //     zooming8
+  //   ) {
+  //     setMsgOpen(true);
+  //   }
+  // }, [
+  //   zooming1,
+  //   zooming2,
+  //   zooming3,
+  //   zooming4,
+  //   zooming5,
+  //   zooming6,
+  //   zooming7,
+  //   zooming8,
+  // ]);
+
   return (
     <Fragment>
       <ellipse
@@ -580,6 +626,8 @@ const DrawEllipse = ({ x, y, radiusX, radiusY }) => {
         style={{ fill: "transparent", stroke: blue[400], cursor: "grab" }}
         onMouseDown={(e) => {
           setDragging(true);
+          setPrevEllipseX(ellipseX);
+          setPrevEllipseY(ellipseY);
         }}
         onMouseUp={(e) => {
           setDragging(false);
