@@ -584,10 +584,12 @@ const DrawEllipse = ({ x, y, radiusX, radiusY, deg }) => {
   };
 
   useEffect(() => {
+    // register event listeners
     document.addEventListener("mousemove", onMouseMove);
     document.addEventListener("mouseup", clearMouseMove);
     document.addEventListener("keydown", onKeyDown);
     document.addEventListener("keyup", onKeyUp);
+    // dispatch state to show snackbar info
     dispatch(
       newDrawDispatch({
         x,
@@ -606,6 +608,7 @@ const DrawEllipse = ({ x, y, radiusX, radiusY, deg }) => {
   }, []);
 
   useEffect(() => {
+    // update ratio x : y
     if (radiusYCont > 0) setRatioXY(radiusXCont / radiusYCont);
   }, [radiusXCont, radiusYCont]);
 
@@ -626,6 +629,7 @@ const DrawEllipse = ({ x, y, radiusX, radiusY, deg }) => {
   }, [dragging, prevDragging, ellipseX, ellipseY]);
 
   useEffect(() => {
+    // dispatch state for tooltip
     if (dragging) {
       dispatch(
         liveUpdateDispatch({
@@ -706,6 +710,7 @@ const DrawEllipse = ({ x, y, radiusX, radiusY, deg }) => {
       zooming7 ||
       zooming8
     ) {
+      // dispatch state for tooltip
       dispatch(
         liveUpdateDispatch({
           mode: "liveZoom",
@@ -738,6 +743,7 @@ const DrawEllipse = ({ x, y, radiusX, radiusY, deg }) => {
   ]);
 
   useEffect(() => {
+    // subscribe to tooltip data changes
     const { mode, x, y, rx, ry, deg, xDiff, yDiff, rxDiff, ryDiff, degDiff } =
       ellipseStats;
     if (
@@ -764,7 +770,7 @@ const DrawEllipse = ({ x, y, radiusX, radiusY, deg }) => {
         case "liveZoom":
           setTooltipContent(
             <span>
-              rx: {+rx.toFixed(2)}, ry: {+ry.toFixed(2)}
+              rX: {+rx.toFixed(2)}, rY: {+ry.toFixed(2)}
             </span>
           );
           setTooltipOpen(true);
