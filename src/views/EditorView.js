@@ -183,7 +183,7 @@ export default function EditorView(props) {
           <Alert
             onClose={handleMsgClose}
             severity={msgSeverity}
-            sx={{ width: "100%" }}
+            sx={{ width: "100%", alignItems: "center" }}
           >
             {msg}
           </Alert>
