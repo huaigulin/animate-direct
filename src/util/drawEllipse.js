@@ -436,16 +436,63 @@ const DrawEllipse = ({ x, y, radiusX, radiusY, deg }) => {
     });
     setZooming4((zooming4) => {
       if (zooming4) {
-        setControlX4(e.clientX);
-        setControlX1(e.clientX);
-        setControlX6(e.clientX);
-        setControlX3((controlX3) => {
-          setControlX2(Math.abs((controlX3 - e.clientX) / 2 + e.clientX));
-          setControlX7(Math.abs((controlX3 - e.clientX) / 2 + e.clientX));
-          setEllipseX(Math.abs((controlX3 - e.clientX) / 2 + e.clientX));
-          setRadiusXCont(Math.abs((controlX3 - e.clientX) / 2));
-          setRectX(controlX3 - e.clientX < 0 ? controlX3 : e.clientX);
-          return controlX3;
+        setKeepRatio((keepRatio) => {
+          if (keepRatio) {
+            setControlX5((controlX5) => {
+              setControlY5((controlY5) => {
+                const compX = Math.abs(controlX5 - e.clientX);
+                setRatioXY((ratioXY) => {
+                  const newRadiusX = compX / 2;
+                  const newRadiusY = compX / 2 / ratioXY;
+                  setRadiusXCont(newRadiusX);
+                  setRadiusYCont(newRadiusY);
+                  setControlX1(e.clientX);
+                  setControlY1(controlY5 - newRadiusY);
+                  setControlX2(
+                    e.clientX < controlX5
+                      ? controlX5 - newRadiusX
+                      : controlX5 + newRadiusX
+                  );
+                  setControlY2(controlY5 - newRadiusY);
+                  setControlY3(controlY5 - newRadiusY);
+                  setControlX4(e.clientX);
+                  setControlX6(e.clientX);
+                  setControlY6(controlY5 + newRadiusY);
+                  setControlX7(
+                    e.clientX < controlX5
+                      ? controlX5 - newRadiusX
+                      : controlX5 + newRadiusX
+                  );
+                  setControlY7(controlY5 + newRadiusY);
+                  setControlY8(controlY5 + newRadiusY);
+                  setEllipseX(
+                    e.clientX < controlX5
+                      ? controlX5 - newRadiusX
+                      : controlX5 + newRadiusX
+                  );
+                  setRectX(e.clientX < controlX5 ? e.clientX : controlX5);
+                  setRectY(controlY5 - newRadiusY);
+                  return ratioXY;
+                });
+                return controlY5;
+              });
+              return controlX5;
+            });
+            return true;
+          } else {
+            setControlX4(e.clientX);
+            setControlX1(e.clientX);
+            setControlX6(e.clientX);
+            setControlX3((controlX3) => {
+              setControlX2(Math.abs((controlX3 - e.clientX) / 2 + e.clientX));
+              setControlX7(Math.abs((controlX3 - e.clientX) / 2 + e.clientX));
+              setEllipseX(Math.abs((controlX3 - e.clientX) / 2 + e.clientX));
+              setRadiusXCont(Math.abs((controlX3 - e.clientX) / 2));
+              setRectX(controlX3 - e.clientX < 0 ? controlX3 : e.clientX);
+              return controlX3;
+            });
+            return false;
+          }
         });
         return true;
       } else {
