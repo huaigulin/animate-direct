@@ -572,7 +572,6 @@ const DrawEllipse = ({ x, y, radiusX, radiusY, deg }) => {
               setControlY3((controlY3) => {
                 const compX = Math.abs(controlX3 - e.clientX);
                 const compY = Math.abs(e.clientY - controlY3);
-                console.log(compX, compY);
                 setRatioXY((ratioXY) => {
                   let newRadiusX;
                   let newRadiusY;
@@ -695,16 +694,79 @@ const DrawEllipse = ({ x, y, radiusX, radiusY, deg }) => {
     });
     setZooming7((zooming7) => {
       if (zooming7) {
-        setControlY7(e.clientY);
-        setControlY6(e.clientY);
-        setControlY8(e.clientY);
-        setControlY1((controlY1) => {
-          setControlY4(Math.abs(e.clientY - (e.clientY - controlY1) / 2));
-          setControlY5(Math.abs(e.clientY - (e.clientY - controlY1) / 2));
-          setEllipseY(Math.abs(e.clientY - (e.clientY - controlY1) / 2));
-          setRectY(e.clientY - controlY1 < 0 ? e.clientY : controlY1);
-          setRadiusYCont(Math.abs((e.clientY - controlY1) / 2));
-          return controlY1;
+        setKeepRatio((keepRatio) => {
+          if (keepRatio) {
+            setControlX2((controlX2) => {
+              setControlY2((controlY2) => {
+                const compY = Math.abs(e.clientY - controlY2);
+                setRatioXY((ratioXY) => {
+                  const newRadiusY = compY / 2;
+                  const newRadiusX = (compY / 2) * ratioXY;
+                  setRadiusYCont(newRadiusY);
+                  setRadiusXCont(newRadiusX);
+                  setEllipseY(
+                    e.clientY > controlY2
+                      ? controlY2 + newRadiusY
+                      : controlY2 - newRadiusY
+                  );
+                  setControlX1(controlX2 - newRadiusX);
+                  setControlX3(controlX2 + newRadiusX);
+                  setControlX4(controlX2 - newRadiusX);
+                  setControlY4(
+                    e.clientY > controlY2
+                      ? controlY2 + newRadiusY
+                      : controlY2 - newRadiusY
+                  );
+                  setControlX5(controlX2 + newRadiusX);
+                  setControlY5(
+                    e.clientY > controlY2
+                      ? controlY2 + newRadiusY
+                      : controlY2 - newRadiusY
+                  );
+                  setControlX6(controlX2 - newRadiusX);
+                  setControlY6(
+                    e.clientY > controlY2
+                      ? controlY2 + 2 * newRadiusY
+                      : controlY2 - 2 * newRadiusY
+                  );
+                  setControlY7(
+                    e.clientY > controlY2
+                      ? controlY2 + 2 * newRadiusY
+                      : controlY2 - 2 * newRadiusY
+                  );
+                  setControlX8(controlX2 + newRadiusX);
+                  setControlY8(
+                    e.clientY > controlY2
+                      ? controlY2 + 2 * newRadiusY
+                      : controlY2 - 2 * newRadiusY
+                  );
+                  setRectX(controlX2 - newRadiusX);
+                  setRectY(
+                    e.clientY > controlY2
+                      ? controlY2
+                      : controlY2 - 2 * newRadiusY
+                  );
+                  return ratioXY;
+                });
+                return controlY2;
+              });
+              return controlX2;
+            });
+            return true;
+          } else {
+            setControlY7(e.clientY);
+            setControlY6(e.clientY);
+            setControlY8(e.clientY);
+            setControlY1((controlY1) => {
+              setControlY4(Math.abs(e.clientY - (e.clientY - controlY1) / 2));
+              setControlY5(Math.abs(e.clientY - (e.clientY - controlY1) / 2));
+              setEllipseY(Math.abs(e.clientY - (e.clientY - controlY1) / 2));
+              setRectY(e.clientY - controlY1 < 0 ? e.clientY : controlY1);
+              setRadiusYCont(Math.abs((e.clientY - controlY1) / 2));
+              return controlY1;
+            });
+            return false;
+          }
         });
         return true;
       } else {
