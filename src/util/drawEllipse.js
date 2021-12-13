@@ -71,7 +71,7 @@ const DrawEllipse = ({ x, y, radiusX, radiusY, deg }) => {
   const dispatch = useDispatch();
   const ellipseStats = useSelector((state) => state.drawEllipse);
   const [tooltipOpen, setTooltipOpen] = useState(false);
-  const [tooltipContent, setTooltipContent] = useState();
+  const [tooltipContent, setTooltipContent] = useState("");
 
   /**
    * The callback function for listening mouse move on the whole screen
