@@ -20,7 +20,7 @@ const usePrevious = (value) => {
   return ref.current;
 };
 
-const DrawEllipse = ({ x, y, radiusX, radiusY, deg }) => {
+const DrawEllipse = ({ id, x, y, radiusX, radiusY, deg }) => {
   const [ellipseX, setEllipseX] = useState(x);
   const [ellipseY, setEllipseY] = useState(y);
   const [prevEllipseX, setPrevEllipseX] = useState();
@@ -947,6 +947,7 @@ const DrawEllipse = ({ x, y, radiusX, radiusY, deg }) => {
     // dispatch state to show snackbar info
     dispatch(
       newDrawDispatch({
+        id,
         x,
         y,
         rx: radiusX,
@@ -974,6 +975,7 @@ const DrawEllipse = ({ x, y, radiusX, radiusY, deg }) => {
       // dispatch state to show snackbar info
       dispatch(
         moveDispatch({
+          id,
           x: ellipseX,
           y: ellipseY,
           xDiff: ellipseX - prevEllipseX,
@@ -984,10 +986,11 @@ const DrawEllipse = ({ x, y, radiusX, radiusY, deg }) => {
   }, [dragging, prevDragging, ellipseX, ellipseY]);
 
   useEffect(() => {
-    // dispatch state for tooltip
+    // dispatch shape data when dragging
     if (dragging) {
       dispatch(
         liveUpdateDispatch({
+          id,
           mode: "liveMove",
           x: ellipseX,
           y: ellipseY,
@@ -1020,6 +1023,7 @@ const DrawEllipse = ({ x, y, radiusX, radiusY, deg }) => {
       // dispatch state to show snackbar info
       dispatch(
         zoomDispatch({
+          id,
           x: ellipseX,
           y: ellipseY,
           xDiff: ellipseX - prevEllipseX,
@@ -1065,9 +1069,10 @@ const DrawEllipse = ({ x, y, radiusX, radiusY, deg }) => {
       zooming7 ||
       zooming8
     ) {
-      // dispatch state for tooltip
+      // dispatch shape data when zooming
       dispatch(
         liveUpdateDispatch({
+          id,
           mode: "liveZoom",
           x: ellipseX,
           y: ellipseY,

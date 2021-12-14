@@ -3,6 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 export const drawEllipseSlice = createSlice({
   name: "drawCircle",
   initialState: {
+    id: null,
     mode: "new",
     x: 0,
     y: 0,
@@ -17,6 +18,7 @@ export const drawEllipseSlice = createSlice({
   },
   reducers: {
     newDraw: (state, { payload }) => {
+      state.id = payload.id;
       state.mode = "new";
       state.x = payload.x;
       state.y = payload.y;
@@ -25,6 +27,7 @@ export const drawEllipseSlice = createSlice({
       state.deg = payload.deg;
     },
     move: (state, { payload }) => {
+      state.id = payload.id;
       state.mode = "move";
       state.x = payload.x;
       state.y = payload.y;
@@ -32,6 +35,7 @@ export const drawEllipseSlice = createSlice({
       state.yDiff = payload.yDiff;
     },
     zoom: (state, { payload }) => {
+      state.id = payload.id;
       state.mode = "zoom";
       state.x = payload.x;
       state.y = payload.y;
@@ -43,10 +47,12 @@ export const drawEllipseSlice = createSlice({
       state.ryDiff = payload.ryDiff;
     },
     rotate: (state, { payload }) => {
+      state.id = payload.id;
       state.mode = "rotate";
       state.degDiff = payload.degDiff;
     },
     liveUpdate: (state, { payload }) => {
+      state.id = payload.id;
       state.mode = payload.mode;
       state.x = payload.x;
       state.y = payload.y;

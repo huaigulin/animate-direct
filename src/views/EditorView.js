@@ -2,10 +2,15 @@ import React, { createRef, useEffect, useLayoutEffect, useState } from "react";
 import Grid from "@mui/material/Grid";
 import { Alert as MuiAlert, Snackbar } from "@mui/material";
 import { useSelector } from "react-redux";
+import { v4 as uuidv4 } from "uuid";
 import Dock from "../components/Dock";
 import Canvas from "../components/Canvas";
 import DrawEllipse from "../util/drawEllipse";
 
+/**
+ * Custom hook to monitor window height and width
+ * @returns [windowWidth, windowHeight]
+ */
 function useWindowSize() {
   const [size, setSize] = useState([0, 0]);
   useLayoutEffect(() => {
@@ -25,13 +30,20 @@ const Alert = React.forwardRef(function Alert(props, ref) {
 
 export default function EditorView(props) {
   const canvasRef = createRef();
+  // Window width and height states
   const [windowWidth, windowHeight] = useWindowSize();
+  // Drawing data and reference data
   const [drawData, setDrawData] = useState([]);
   const [referenceData, setReferenceData] = useState([]);
+  // The actual shapes that goes into the <svg /> tag
   const [drawing, setDrawing] = useState();
+  // Snackbar properties
   const [msgOpen, setMsgOpen] = useState(false);
   const [msgSeverity, setMsgSeverity] = useState();
   const [msg, setMsg] = useState();
+  // If true, shows the animation control dock
+  const [showAnimateControl, setShowAnimateControl] = useState(false);
+  // The data from drawEllipse reducer, which is the shape data of ellipse
   const ellipseStats = useSelector((state) => state.drawEllipse);
 
   /**
@@ -56,6 +68,8 @@ export default function EditorView(props) {
           const y = parseInt(coordinates[1]);
           shapes.push(
             <DrawEllipse
+              key={uuidv4()}
+              id={data.id}
               x={x}
               y={y}
               radiusX={data.radiusX}
@@ -86,6 +100,7 @@ export default function EditorView(props) {
     ) {
       switch (mode) {
         case "new":
+          console.log(ellipseStats);
           setMsgSeverity("success");
           setMsg(
             <span>
@@ -100,6 +115,7 @@ export default function EditorView(props) {
           setMsgOpen(true);
           break;
         case "move":
+          console.log(ellipseStats);
           setMsgSeverity("info");
           setMsg(
             <span>
@@ -113,6 +129,7 @@ export default function EditorView(props) {
           setMsgOpen(true);
           break;
         case "zoom":
+          console.log(ellipseStats);
           setMsgSeverity("info");
           setMsg(
             <span>
@@ -128,10 +145,12 @@ export default function EditorView(props) {
           setMsgOpen(true);
           break;
         case "liveMove":
+          console.log(ellipseStats);
           // make sure snackbar does not show up when dragging is still in progress
           setMsgOpen(false);
           break;
         case "liveZoom":
+          console.log(ellipseStats);
           setMsgOpen(false);
           break;
       }
@@ -163,6 +182,8 @@ export default function EditorView(props) {
       setReferenceData([data]);
     }
   };
+
+  const showAnimate = () => {};
 
   return (
     <Grid container>
