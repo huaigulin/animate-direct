@@ -101,17 +101,17 @@ export default function Dock(props) {
                 </MenuItem>
                 <MenuItem
                   onClick={() => {
-                    const id = `circle-${uuidv4()}`;
+                    const id = `ellipse-${uuidv4()}`;
                     updateDrawData(true, {
                       id,
-                      shape: "circle",
+                      shape: "ellipse",
                       position: `${window.innerWidth / 2}, ${
                         window.innerHeight / 2
                       }`,
                       radiusX: 60,
                       radiusY: 30,
                       deg: 0,
-                      code: "circle(width/2, height/2, 60, 30, 0);",
+                      code: "ellipse(width/2, height/2, 60, 30, 0);",
                     });
                     handleShapesClose();
                   }}

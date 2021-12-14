@@ -59,10 +59,11 @@ export default function EditorView(props) {
   };
 
   useEffect(() => {
+    // loops through drawData state and draws on canvas
     const shapes = [];
     drawData.forEach((data, idx) => {
       switch (data.shape) {
-        case "circle":
+        case "ellipse":
           const coordinates = data.position.split(", ");
           const x = parseInt(coordinates[0]);
           const y = parseInt(coordinates[1]);
@@ -101,6 +102,7 @@ export default function EditorView(props) {
       switch (mode) {
         case "new":
           console.log(ellipseStats);
+          // open the snackbar to display msg
           setMsgSeverity("success");
           setMsg(
             <span>
@@ -116,6 +118,7 @@ export default function EditorView(props) {
           break;
         case "move":
           console.log(ellipseStats);
+          // open the snackbar to display msg
           setMsgSeverity("info");
           setMsg(
             <span>
@@ -127,6 +130,20 @@ export default function EditorView(props) {
             </span>
           );
           setMsgOpen(true);
+          // update draw data when move finishes
+          updateDrawData(
+            true,
+            {
+              id: ellipseStats.id,
+              shape: "ellipse",
+              position: `${x}, ${y}`,
+              radiusX: rx,
+              radiusY: ry,
+              deg: deg,
+              code: `ellipse(${x}, ${y}, ${rx}, ${ry}, ${deg})`,
+            },
+            ellipseStats.id
+          );
           break;
         case "zoom":
           console.log(ellipseStats);
@@ -143,6 +160,20 @@ export default function EditorView(props) {
             </span>
           );
           setMsgOpen(true);
+          // update draw data when zoom finishes
+          updateDrawData(
+            true,
+            {
+              id: ellipseStats.id,
+              shape: "ellipse",
+              position: `${x}, ${y}`,
+              radiusX: rx,
+              radiusY: ry,
+              deg: deg,
+              code: `ellipse(${x}, ${y}, ${rx}, ${ry}, ${deg})`,
+            },
+            ellipseStats.id
+          );
           break;
         case "liveMove":
           console.log(ellipseStats);
@@ -158,15 +189,31 @@ export default function EditorView(props) {
   }, [ellipseStats]);
 
   /**
-   * Updates the data used by p5 draw() function
+   * Updates the draw data
    * @param {boolean} appendMode if true append to current data, else replace it
    * @param {object} data must contain "id" and "code" properties
+   * @param {string} replaceId the shape to replace with this draw, appendMode has to be true
    */
-  const updateDrawData = (appendMode, data) => {
+  const updateDrawData = (appendMode, data, replaceId) => {
     if (appendMode) {
-      setDrawData([...drawData, data]);
+      if (replaceId) {
+        const newDrawData = [];
+        drawData.forEach((shape) => {
+          if (shape.id === replaceId) {
+            newDrawData.push(data);
+          } else {
+            newDrawData.push(shape);
+          }
+        });
+        setDrawData([...newDrawData]);
+        console.log("<-------Draw data updated!--------->");
+      } else {
+        setDrawData([...drawData, data]);
+        console.log("<-------Draw data updated!--------->");
+      }
     } else {
       setDrawData([data]);
+      console.log("<-------Draw data updated!--------->");
     }
   };
 
