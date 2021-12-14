@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useLayoutEffect } from "react";
+import React, { useState, useLayoutEffect } from "react";
 import { styled } from "@mui/material/styles";
 import {
   AppBar,
@@ -6,7 +6,6 @@ import {
   Button,
   Divider,
   FormControl,
-  FormHelperText,
   Grid,
   IconButton,
   MenuItem,
@@ -18,6 +17,9 @@ import {
 import { makeStyles } from "@mui/styles";
 import { tooltipClasses } from "@mui/material/Tooltip";
 import CancelOutlinedIcon from "@mui/icons-material/CancelOutlined";
+import SpaceBarIcon from "@mui/icons-material/SpaceBar";
+import { useDispatch } from "react-redux";
+import { changeMode } from "../redux/slices/animateModeSlice";
 
 const LargeTextTooltip = styled(({ className, ...props }) => (
   <Tooltip {...props} classes={{ popper: className }} />
@@ -58,6 +60,7 @@ const useStyles = makeStyles({
 
 export default function AnimateControl() {
   const classes = useStyles();
+  const dispatch = useDispatch();
   // Window width and height states
   const [windowWidth, windowHeight] = useWindowSize();
   // How fast the animation performance should be recorded
@@ -85,7 +88,12 @@ export default function AnimateControl() {
           <Grid container spacing={2} alignItems='center'>
             <Grid item>
               <LargeTextTooltip title='Cancel' placement='top'>
-                <IconButton size='large'>
+                <IconButton
+                  size='small'
+                  onClick={() => {
+                    dispatch(changeMode({ mode: "no" }));
+                  }}
+                >
                   <CancelOutlinedIcon />
                 </IconButton>
               </LargeTextTooltip>
@@ -130,12 +138,19 @@ export default function AnimateControl() {
                 </FormControl>
               </LargeTextTooltip>
             </Grid>
+            <Grid item style={{ height: 64 }}>
+              <Divider orientation='vertical' />
+            </Grid>
             <Grid item>
               <Button
                 variant='contained'
                 classes={{ root: classes.buttonBase }}
+                endIcon={<SpaceBarIcon />}
+                onClick={() => {
+                  dispatch(changeMode({ mode: "yes" }));
+                }}
               >
-                <Typography>Start Recording (Space Key)</Typography>
+                <Typography>Record</Typography>
               </Button>
             </Grid>
           </Grid>

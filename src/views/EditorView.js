@@ -42,10 +42,9 @@ export default function EditorView(props) {
   const [msgOpen, setMsgOpen] = useState(false);
   const [msgSeverity, setMsgSeverity] = useState();
   const [msg, setMsg] = useState();
-  // If true, shows the animation control dock
-  const [showAnimateControl, setShowAnimateControl] = useState(false);
   // The data from drawEllipse reducer, which is the shape data of ellipse
   const ellipseStats = useSelector((state) => state.drawEllipse);
+  const animateMode = useSelector((state) => state.animateMode);
 
   /**
    * Callback to handle close msg bar
@@ -122,6 +121,10 @@ export default function EditorView(props) {
             />
           );
           break;
+        default:
+          console.log(
+            "<!!!!!!!!!!!!!!!!!!! Unhandled drawData !!!!!!!!!!!!!!!!!>"
+          );
       }
     });
     setDrawing(shapes);
@@ -227,6 +230,11 @@ export default function EditorView(props) {
           console.log(ellipseStats);
           setMsgOpen(false);
           break;
+        default:
+          console.log(
+            "<!!!!!!!!!!!!!!!!!!! Unhandled ellipseStats !!!!!!!!!!!!!!!!!>"
+          );
+          console.log(ellipseStats);
       }
     }
   }, [ellipseStats]);
@@ -261,12 +269,11 @@ export default function EditorView(props) {
         >
           {drawing}
         </svg>
-        <AnimateControl />
+        {animateMode.mode === "ready" ? <AnimateControl /> : null}
       </Canvas>
       <Dock
         updateDrawData={updateDrawData}
         updateReferenceData={updateReferenceData}
-        setShowAnimateControl={setShowAnimateControl}
       />
     </Grid>
   );

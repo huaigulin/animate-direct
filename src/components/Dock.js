@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { styled } from "@mui/material/styles";
 import {
   AppBar,
@@ -13,7 +13,6 @@ import {
   SvgIcon,
   Toolbar,
   Tooltip,
-  Typography,
 } from "@mui/material";
 import { tooltipClasses } from "@mui/material/Tooltip";
 import BrushIcon from "@mui/icons-material/Brush";
@@ -22,6 +21,8 @@ import TextFieldsIcon from "@mui/icons-material/TextFields";
 import MouseIcon from "@mui/icons-material/Mouse";
 import KeyboardIcon from "@mui/icons-material/Keyboard";
 import { v4 as uuidv4 } from "uuid";
+import { useDispatch } from "react-redux";
+import { changeMode } from "../redux/slices/animateModeSlice";
 
 const LargeTextTooltip = styled(({ className, ...props }) => (
   <Tooltip {...props} classes={{ popper: className }} />
@@ -32,7 +33,8 @@ const LargeTextTooltip = styled(({ className, ...props }) => (
 }));
 
 export default function Dock(props) {
-  const { updateDrawData, updateReferenceData, setShowAnimateControl } = props;
+  const { updateDrawData, updateReferenceData } = props;
+  const dispatch = useDispatch();
   const [shapesMenuAnchorEl, setShapesMenuAnchorEl] = useState(null);
   const shapesMenuOpen = Boolean(shapesMenuAnchorEl);
   const handleShapesClick = (event) => {
@@ -203,7 +205,7 @@ export default function Dock(props) {
                 <IconButton
                   size='large'
                   onClick={() => {
-                    setShowAnimateControl(true);
+                    dispatch(changeMode({ mode: "ready" }));
                   }}
                 >
                   <SvgIcon fontSize='large'>
