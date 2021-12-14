@@ -32,7 +32,7 @@ const LargeTextTooltip = styled(({ className, ...props }) => (
 }));
 
 export default function Dock(props) {
-  const { updateDrawData, updateReferenceData } = props;
+  const { updateDrawData, updateReferenceData, setShowAnimateControl } = props;
   const [shapesMenuAnchorEl, setShapesMenuAnchorEl] = useState(null);
   const shapesMenuOpen = Boolean(shapesMenuAnchorEl);
   const handleShapesClick = (event) => {
@@ -200,7 +200,12 @@ export default function Dock(props) {
             </Grid>
             <Grid item>
               <LargeTextTooltip title='Animate' placement='left'>
-                <IconButton size='large'>
+                <IconButton
+                  size='large'
+                  onClick={() => {
+                    setShowAnimateControl(true);
+                  }}
+                >
                   <SvgIcon fontSize='large'>
                     <path
                       d='M21.3,8.2c-0.6-0.9-1.6-2.1-2.7-2c-0.2-0.3-0.8-1.3-1.4-2.3c-0.6-1.1-1.8-2.1-2.2-1.4c-0.1,0.1-0.1,0.6,0.5,1.8

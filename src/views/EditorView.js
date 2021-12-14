@@ -6,6 +6,7 @@ import { v4 as uuidv4 } from "uuid";
 import Dock from "../components/Dock";
 import Canvas from "../components/Canvas";
 import DrawEllipse from "../util/drawEllipse";
+import AnimateControl from "../components/AnimateControl";
 
 /**
  * Custom hook to monitor window height and width
@@ -56,6 +57,48 @@ export default function EditorView(props) {
       return;
     }
     setMsgOpen(false);
+  };
+
+  /**
+   * Updates the draw data
+   * @param {boolean} appendMode if true append to current data, else replace it
+   * @param {object} data must contain "id" and "code" properties
+   * @param {string} replaceId the shape to replace with this draw, appendMode has to be true
+   */
+  const updateDrawData = (appendMode, data, replaceId) => {
+    if (appendMode) {
+      if (replaceId) {
+        const newDrawData = [];
+        drawData.forEach((shape) => {
+          if (shape.id === replaceId) {
+            newDrawData.push(data);
+          } else {
+            newDrawData.push(shape);
+          }
+        });
+        setDrawData([...newDrawData]);
+        console.log("<-------Draw data updated!--------->");
+      } else {
+        setDrawData([...drawData, data]);
+        console.log("<-------Draw data updated!--------->");
+      }
+    } else {
+      setDrawData([data]);
+      console.log("<-------Draw data updated!--------->");
+    }
+  };
+
+  /**
+   * Updates the data that are shown on canvas but are not included in final output
+   * @param {boolean} appendMode if true append to current data, else replace it
+   * @param {object} data must contain "id" and "code" properties
+   */
+  const updateReferenceData = (appendMode, data) => {
+    if (appendMode) {
+      setReferenceData([...referenceData, data]);
+    } else {
+      setReferenceData([data]);
+    }
   };
 
   useEffect(() => {
@@ -188,50 +231,6 @@ export default function EditorView(props) {
     }
   }, [ellipseStats]);
 
-  /**
-   * Updates the draw data
-   * @param {boolean} appendMode if true append to current data, else replace it
-   * @param {object} data must contain "id" and "code" properties
-   * @param {string} replaceId the shape to replace with this draw, appendMode has to be true
-   */
-  const updateDrawData = (appendMode, data, replaceId) => {
-    if (appendMode) {
-      if (replaceId) {
-        const newDrawData = [];
-        drawData.forEach((shape) => {
-          if (shape.id === replaceId) {
-            newDrawData.push(data);
-          } else {
-            newDrawData.push(shape);
-          }
-        });
-        setDrawData([...newDrawData]);
-        console.log("<-------Draw data updated!--------->");
-      } else {
-        setDrawData([...drawData, data]);
-        console.log("<-------Draw data updated!--------->");
-      }
-    } else {
-      setDrawData([data]);
-      console.log("<-------Draw data updated!--------->");
-    }
-  };
-
-  /**
-   * Updates the data that are shown on canvas but are not included in final output
-   * @param {boolean} appendMode if true append to current data, else replace it
-   * @param {object} data must contain "id" and "code" properties
-   */
-  const updateReferenceData = (appendMode, data) => {
-    if (appendMode) {
-      setReferenceData([...referenceData, data]);
-    } else {
-      setReferenceData([data]);
-    }
-  };
-
-  const showAnimate = () => {};
-
   return (
     <Grid container>
       <Canvas ref={canvasRef}>
@@ -262,10 +261,12 @@ export default function EditorView(props) {
         >
           {drawing}
         </svg>
+        <AnimateControl />
       </Canvas>
       <Dock
         updateDrawData={updateDrawData}
         updateReferenceData={updateReferenceData}
+        setShowAnimateControl={setShowAnimateControl}
       />
     </Grid>
   );
