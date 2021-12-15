@@ -3,11 +3,13 @@ import { createSlice } from "@reduxjs/toolkit";
 export const animateModeSlice = createSlice({
   name: "animateMode",
   initialState: {
-    mode: "no", // yes, no, ready
+    mode: null, // properties, record
+    status: null, // for record mode only: yes, ready
   },
   reducers: {
     changeMode: (state, { payload }) => {
       state.mode = payload.mode;
+      state.status = payload.status;
     },
   },
 });

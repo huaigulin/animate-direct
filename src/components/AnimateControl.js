@@ -91,7 +91,7 @@ export default function AnimateControl() {
                 <IconButton
                   size='small'
                   onClick={() => {
-                    dispatch(changeMode({ mode: "no" }));
+                    dispatch(changeMode({ mode: null, status: null }));
                   }}
                 >
                   <CancelOutlinedIcon />
@@ -147,7 +147,7 @@ export default function AnimateControl() {
                 classes={{ root: classes.buttonBase }}
                 endIcon={<SpaceBarIcon />}
                 onClick={() => {
-                  dispatch(changeMode({ mode: "yes" }));
+                  dispatch(changeMode({ mode: "record", status: "yes" }));
                 }}
               >
                 <Typography>Record</Typography>

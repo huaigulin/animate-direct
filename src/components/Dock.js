@@ -23,6 +23,7 @@ import KeyboardIcon from "@mui/icons-material/Keyboard";
 import { v4 as uuidv4 } from "uuid";
 import { useDispatch } from "react-redux";
 import { changeMode } from "../redux/slices/animateModeSlice";
+import { newDraw as newDrawDispatch } from "../redux/slices/drawEllipseSlice";
 
 const LargeTextTooltip = styled(({ className, ...props }) => (
   <Tooltip {...props} classes={{ popper: className }} />
@@ -35,6 +36,7 @@ const LargeTextTooltip = styled(({ className, ...props }) => (
 export default function Dock(props) {
   const { updateDrawData, updateReferenceData } = props;
   const dispatch = useDispatch();
+  // Shapes menu states and functions
   const [shapesMenuAnchorEl, setShapesMenuAnchorEl] = useState(null);
   const shapesMenuOpen = Boolean(shapesMenuAnchorEl);
   const handleShapesClick = (event) => {
@@ -42,6 +44,15 @@ export default function Dock(props) {
   };
   const handleShapesClose = () => {
     setShapesMenuAnchorEl(null);
+  };
+  // Animate menu states and functions
+  const [animateMenuAnchorEl, setAnimateMenuAnchorEl] = useState(null);
+  const animateMenuOpen = Boolean(animateMenuAnchorEl);
+  const handleAnimateClick = (event) => {
+    setAnimateMenuAnchorEl(event.currentTarget);
+  };
+  const handleAnimateClose = () => {
+    setAnimateMenuAnchorEl(null);
   };
 
   return (
@@ -115,6 +126,17 @@ export default function Dock(props) {
                       deg: 0,
                       code: "ellipse(width/2, height/2, 60, 30, 0);",
                     });
+                    // dispatch state to show snackbar info
+                    dispatch(
+                      newDrawDispatch({
+                        id,
+                        x: window.innerWidth / 2,
+                        y: window.innerHeight / 2,
+                        rx: 60,
+                        ry: 30,
+                        deg: 0,
+                      })
+                    );
                     handleShapesClose();
                   }}
                 >
@@ -203,10 +225,9 @@ export default function Dock(props) {
             <Grid item>
               <LargeTextTooltip title='Animate' placement='left'>
                 <IconButton
+                  id='animate-button'
                   size='large'
-                  onClick={() => {
-                    dispatch(changeMode({ mode: "ready" }));
-                  }}
+                  onClick={handleAnimateClick}
                 >
                   <SvgIcon fontSize='large'>
                     <path
@@ -222,6 +243,42 @@ export default function Dock(props) {
                   </SvgIcon>
                 </IconButton>
               </LargeTextTooltip>
+              <Menu
+                id='animate-menu'
+                anchorEl={animateMenuAnchorEl}
+                open={animateMenuOpen}
+                onClose={handleAnimateClose}
+                MenuListProps={{ "aria-labelledby": "animate-button" }}
+                anchorOrigin={{
+                  vertical: "top",
+                  horizontal: "left",
+                }}
+                transformOrigin={{
+                  vertical: "top",
+                  horizontal: "right",
+                }}
+              >
+                <MenuItem
+                  onClick={() => {
+                    dispatch(changeMode({ mode: "properties" }));
+                    handleAnimateClose();
+                  }}
+                >
+                  <ListItemText>
+                    <span style={{ fontSize: 16 }}>Properties Mode</span>
+                  </ListItemText>
+                </MenuItem>
+                <MenuItem
+                  onClick={() => {
+                    dispatch(changeMode({ mode: "record", status: "ready" }));
+                    handleAnimateClose();
+                  }}
+                >
+                  <ListItemText>
+                    <span style={{ fontSize: 16 }}>Free Mode</span>
+                  </ListItemText>
+                </MenuItem>
+              </Menu>
             </Grid>
           </Grid>
         </Toolbar>

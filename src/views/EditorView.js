@@ -269,7 +269,9 @@ export default function EditorView(props) {
         >
           {drawing}
         </svg>
-        {animateMode.mode === "ready" ? <AnimateControl /> : null}
+        {animateMode.mode === "record" && animateMode.status === "ready" ? (
+          <AnimateControl />
+        ) : null}
       </Canvas>
       <Dock
         updateDrawData={updateDrawData}
