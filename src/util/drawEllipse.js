@@ -944,17 +944,6 @@ const DrawEllipse = ({ id, x, y, radiusX, radiusY, deg }) => {
     document.addEventListener("mouseup", clearMouseMove);
     document.addEventListener("keydown", onKeyDown);
     document.addEventListener("keyup", onKeyUp);
-    // dispatch state to show snackbar info
-    dispatch(
-      newDrawDispatch({
-        id,
-        x,
-        y,
-        rx: radiusX,
-        ry: radiusY,
-        deg,
-      })
-    );
     return () => {
       document.removeEventListener("mousemove", onMouseMove);
       document.removeEventListener("mouseup", clearMouseMove);
