@@ -7,6 +7,7 @@ import Dock from "../components/Dock";
 import Canvas from "../components/Canvas";
 import DrawEllipse from "../util/drawEllipse";
 import AnimateControl from "../components/AnimateControl";
+import PropertyDisplay from "../components/PropertyDisplay";
 
 /**
  * Custom hook to monitor window height and width
@@ -82,7 +83,7 @@ export default function EditorView(props) {
         console.log("<-------Draw data updated!--------->");
       }
     } else {
-      setDrawData([data]);
+      setDrawData(data);
       console.log("<-------Draw data updated!--------->");
     }
   };
@@ -269,6 +270,9 @@ export default function EditorView(props) {
         >
           {drawing}
         </svg>
+        {animateMode.mode === "properties" ? (
+          <PropertyDisplay updateDrawData={updateDrawData} />
+        ) : null}
         {animateMode.mode === "record" && animateMode.status === "ready" ? (
           <AnimateControl />
         ) : null}
