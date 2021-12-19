@@ -9,6 +9,7 @@ import {
   rotate as rotateDispatch,
   liveUpdate as liveUpdateDispatch,
 } from "../redux/slices/drawEllipseSlice";
+import { add as addDispatch } from "../redux/slices/shapeFocusSlice";
 
 const usePrevious = (value) => {
   const ref = useRef();
@@ -83,11 +84,13 @@ const DrawEllipse = ({ id, x, y, radiusX, radiusY, deg }) => {
   const prevZooming8 = usePrevious(zooming8);
 
   const dispatch = useDispatch();
-  // statuses from redux store
+  // shape stats statuses from redux store
   const ellipseStats = useSelector((state) => state.drawEllipse);
   // tooltip shown when dragging and zooming
   const [tooltipOpen, setTooltipOpen] = useState(false);
   const [tooltipContent, setTooltipContent] = useState("");
+  // focus statuses from redux store
+  const focusedShapes = useSelector((state) => state.shapeFocus.hasFocus);
 
   /**
    * The callback function for listening mouse move on the whole screen
@@ -1152,186 +1155,193 @@ const DrawEllipse = ({ id, x, y, radiusX, radiusY, deg }) => {
         rx={radiusXCont}
         ry={radiusYCont}
         style={{ fill: "#FFFFFF", stroke: "#000000" }}
+        // onMouseDown={(e) => {
+        //   dispatch(addDispatch({ ids: [id] }));
+        // }}
       />
-      {radiusXCont.toFixed() === radiusYCont.toFixed() &&
-        (zooming1 ||
-          zooming2 ||
-          zooming3 ||
-          zooming4 ||
-          zooming5 ||
-          zooming6 ||
-          zooming7 ||
-          zooming8) && (
-          <line
-            x1={ellipseX}
-            y1={ellipseY}
-            x2={controlX2}
-            y2={controlY2}
-            stroke={pink[400]}
+      {focusedShapes.includes(id) ? (
+        <Fragment>
+          {radiusXCont.toFixed() === radiusYCont.toFixed() &&
+            (zooming1 ||
+              zooming2 ||
+              zooming3 ||
+              zooming4 ||
+              zooming5 ||
+              zooming6 ||
+              zooming7 ||
+              zooming8) && (
+              <line
+                x1={ellipseX}
+                y1={ellipseY}
+                x2={controlX2}
+                y2={controlY2}
+                stroke={pink[400]}
+              />
+            )}
+          {radiusXCont.toFixed() === radiusYCont.toFixed() &&
+            (zooming1 ||
+              zooming2 ||
+              zooming3 ||
+              zooming4 ||
+              zooming5 ||
+              zooming6 ||
+              zooming7 ||
+              zooming8) && (
+              <line
+                x1={ellipseX}
+                y1={ellipseY}
+                x2={controlX5}
+                y2={controlY5}
+                stroke={pink[400]}
+              />
+            )}
+          <Tooltip open={tooltipOpen} title={tooltipContent}>
+            <rect
+              x={rectX}
+              y={rectY}
+              width={radiusXCont * 2}
+              height={radiusYCont * 2}
+              style={{ fill: "transparent", stroke: blue[400], cursor: "grab" }}
+              onMouseDown={(e) => {
+                setDragging(true);
+                setPrevEllipseX(ellipseX);
+                setPrevEllipseY(ellipseY);
+              }}
+              onMouseUp={(e) => {
+                setDragging(false);
+              }}
+            />
+          </Tooltip>
+          <circle
+            cx={controlX1}
+            cy={controlY1}
+            r='4'
+            style={{ fill: blue[400], cursor: "nwse-resize" }}
+            onMouseDown={(e) => {
+              setZooming1(true);
+              setPrevEllipseX(ellipseX);
+              setPrevEllipseY(ellipseY);
+              setPrevRadiusX(radiusXCont);
+              setPrevRadiusY(radiusYCont);
+            }}
+            onMouseUp={(e) => {
+              setZooming1(false);
+            }}
           />
-        )}
-      {radiusXCont.toFixed() === radiusYCont.toFixed() &&
-        (zooming1 ||
-          zooming2 ||
-          zooming3 ||
-          zooming4 ||
-          zooming5 ||
-          zooming6 ||
-          zooming7 ||
-          zooming8) && (
-          <line
-            x1={ellipseX}
-            y1={ellipseY}
-            x2={controlX5}
-            y2={controlY5}
-            stroke={pink[400]}
+          <circle
+            cx={controlX2}
+            cy={controlY2}
+            r='4'
+            style={{ fill: blue[400], cursor: "ns-resize" }}
+            onMouseDown={(e) => {
+              setZooming2(true);
+              setPrevEllipseX(ellipseX);
+              setPrevEllipseY(ellipseY);
+              setPrevRadiusX(radiusXCont);
+              setPrevRadiusY(radiusYCont);
+            }}
+            onMouseUp={(e) => {
+              setZooming2(false);
+            }}
           />
-        )}
-      <Tooltip open={tooltipOpen} title={tooltipContent}>
-        <rect
-          x={rectX}
-          y={rectY}
-          width={radiusXCont * 2}
-          height={radiusYCont * 2}
-          style={{ fill: "transparent", stroke: blue[400], cursor: "grab" }}
-          onMouseDown={(e) => {
-            setDragging(true);
-            setPrevEllipseX(ellipseX);
-            setPrevEllipseY(ellipseY);
-          }}
-          onMouseUp={(e) => {
-            setDragging(false);
-          }}
-        />
-      </Tooltip>
-      <circle
-        cx={controlX1}
-        cy={controlY1}
-        r='4'
-        style={{ fill: blue[400], cursor: "nwse-resize" }}
-        onMouseDown={(e) => {
-          setZooming1(true);
-          setPrevEllipseX(ellipseX);
-          setPrevEllipseY(ellipseY);
-          setPrevRadiusX(radiusXCont);
-          setPrevRadiusY(radiusYCont);
-        }}
-        onMouseUp={(e) => {
-          setZooming1(false);
-        }}
-      />
-      <circle
-        cx={controlX2}
-        cy={controlY2}
-        r='4'
-        style={{ fill: blue[400], cursor: "ns-resize" }}
-        onMouseDown={(e) => {
-          setZooming2(true);
-          setPrevEllipseX(ellipseX);
-          setPrevEllipseY(ellipseY);
-          setPrevRadiusX(radiusXCont);
-          setPrevRadiusY(radiusYCont);
-        }}
-        onMouseUp={(e) => {
-          setZooming2(false);
-        }}
-      />
-      <circle
-        cx={controlX3}
-        cy={controlY3}
-        r='4'
-        style={{ fill: blue[400], cursor: "nesw-resize" }}
-        onMouseDown={(e) => {
-          setZooming3(true);
-          setPrevEllipseX(ellipseX);
-          setPrevEllipseY(ellipseY);
-          setPrevRadiusX(radiusXCont);
-          setPrevRadiusY(radiusYCont);
-        }}
-        onMouseUp={(e) => {
-          setZooming3(false);
-        }}
-      />
-      <circle
-        cx={controlX4}
-        cy={controlY4}
-        r='4'
-        style={{ fill: blue[400], cursor: "ew-resize" }}
-        onMouseDown={(e) => {
-          setZooming4(true);
-          setPrevEllipseX(ellipseX);
-          setPrevEllipseY(ellipseY);
-          setPrevRadiusX(radiusXCont);
-          setPrevRadiusY(radiusYCont);
-        }}
-        onMouseUp={(e) => {
-          setZooming4(false);
-        }}
-      />
-      <circle
-        cx={controlX5}
-        cy={controlY5}
-        r='4'
-        style={{ fill: blue[400], cursor: "ew-resize" }}
-        onMouseDown={(e) => {
-          setZooming5(true);
-          setPrevEllipseX(ellipseX);
-          setPrevEllipseY(ellipseY);
-          setPrevRadiusX(radiusXCont);
-          setPrevRadiusY(radiusYCont);
-        }}
-        onMouseUp={(e) => {
-          setZooming5(false);
-        }}
-      />
-      <circle
-        cx={controlX6}
-        cy={controlY6}
-        r='4'
-        style={{ fill: blue[400], cursor: "nesw-resize" }}
-        onMouseDown={(e) => {
-          setZooming6(true);
-          setPrevEllipseX(ellipseX);
-          setPrevEllipseY(ellipseY);
-          setPrevRadiusX(radiusXCont);
-          setPrevRadiusY(radiusYCont);
-        }}
-        onMouseUp={(e) => {
-          setZooming6(false);
-        }}
-      />
-      <circle
-        cx={controlX7}
-        cy={controlY7}
-        r='4'
-        style={{ fill: blue[400], cursor: "ns-resize" }}
-        onMouseDown={(e) => {
-          setZooming7(true);
-          setPrevEllipseX(ellipseX);
-          setPrevEllipseY(ellipseY);
-          setPrevRadiusX(radiusXCont);
-          setPrevRadiusY(radiusYCont);
-        }}
-        onMouseUp={(e) => {
-          setZooming7(false);
-        }}
-      />
-      <circle
-        cx={controlX8}
-        cy={controlY8}
-        r='4'
-        style={{ fill: blue[400], cursor: "nwse-resize" }}
-        onMouseDown={(e) => {
-          setZooming8(true);
-          setPrevEllipseX(ellipseX);
-          setPrevEllipseY(ellipseY);
-          setPrevRadiusX(radiusXCont);
-          setPrevRadiusY(radiusYCont);
-        }}
-        onMouseUp={(e) => {
-          setZooming8(false);
-        }}
-      />
+          <circle
+            cx={controlX3}
+            cy={controlY3}
+            r='4'
+            style={{ fill: blue[400], cursor: "nesw-resize" }}
+            onMouseDown={(e) => {
+              setZooming3(true);
+              setPrevEllipseX(ellipseX);
+              setPrevEllipseY(ellipseY);
+              setPrevRadiusX(radiusXCont);
+              setPrevRadiusY(radiusYCont);
+            }}
+            onMouseUp={(e) => {
+              setZooming3(false);
+            }}
+          />
+          <circle
+            cx={controlX4}
+            cy={controlY4}
+            r='4'
+            style={{ fill: blue[400], cursor: "ew-resize" }}
+            onMouseDown={(e) => {
+              setZooming4(true);
+              setPrevEllipseX(ellipseX);
+              setPrevEllipseY(ellipseY);
+              setPrevRadiusX(radiusXCont);
+              setPrevRadiusY(radiusYCont);
+            }}
+            onMouseUp={(e) => {
+              setZooming4(false);
+            }}
+          />
+          <circle
+            cx={controlX5}
+            cy={controlY5}
+            r='4'
+            style={{ fill: blue[400], cursor: "ew-resize" }}
+            onMouseDown={(e) => {
+              setZooming5(true);
+              setPrevEllipseX(ellipseX);
+              setPrevEllipseY(ellipseY);
+              setPrevRadiusX(radiusXCont);
+              setPrevRadiusY(radiusYCont);
+            }}
+            onMouseUp={(e) => {
+              setZooming5(false);
+            }}
+          />
+          <circle
+            cx={controlX6}
+            cy={controlY6}
+            r='4'
+            style={{ fill: blue[400], cursor: "nesw-resize" }}
+            onMouseDown={(e) => {
+              setZooming6(true);
+              setPrevEllipseX(ellipseX);
+              setPrevEllipseY(ellipseY);
+              setPrevRadiusX(radiusXCont);
+              setPrevRadiusY(radiusYCont);
+            }}
+            onMouseUp={(e) => {
+              setZooming6(false);
+            }}
+          />
+          <circle
+            cx={controlX7}
+            cy={controlY7}
+            r='4'
+            style={{ fill: blue[400], cursor: "ns-resize" }}
+            onMouseDown={(e) => {
+              setZooming7(true);
+              setPrevEllipseX(ellipseX);
+              setPrevEllipseY(ellipseY);
+              setPrevRadiusX(radiusXCont);
+              setPrevRadiusY(radiusYCont);
+            }}
+            onMouseUp={(e) => {
+              setZooming7(false);
+            }}
+          />
+          <circle
+            cx={controlX8}
+            cy={controlY8}
+            r='4'
+            style={{ fill: blue[400], cursor: "nwse-resize" }}
+            onMouseDown={(e) => {
+              setZooming8(true);
+              setPrevEllipseX(ellipseX);
+              setPrevEllipseY(ellipseY);
+              setPrevRadiusX(radiusXCont);
+              setPrevRadiusY(radiusYCont);
+            }}
+            onMouseUp={(e) => {
+              setZooming8(false);
+            }}
+          />
+        </Fragment>
+      ) : null}
     </Fragment>
   );
 };

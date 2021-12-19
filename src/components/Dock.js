@@ -24,6 +24,7 @@ import { v4 as uuidv4 } from "uuid";
 import { useDispatch } from "react-redux";
 import { changeMode } from "../redux/slices/animateModeSlice";
 import { newDraw as newDrawDispatch } from "../redux/slices/drawEllipseSlice";
+import { add as addDispatch } from "../redux/slices/shapeFocusSlice";
 
 const LargeTextTooltip = styled(({ className, ...props }) => (
   <Tooltip {...props} classes={{ popper: className }} />
@@ -126,6 +127,8 @@ export default function Dock(props) {
                       deg: 0,
                       code: "ellipse(width/2, height/2, 60, 30, 0);",
                     });
+                    // add the ellipse to focus array in store
+                    dispatch(addDispatch({ ids: [id] }));
                     // dispatch state to show snackbar info
                     dispatch(
                       newDrawDispatch({
