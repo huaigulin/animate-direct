@@ -21,17 +21,24 @@ const usePrevious = (value) => {
 };
 
 const DrawEllipse = ({ id, x, y, radiusX, radiusY, deg }) => {
+  // current ellipse coordinates
   const [ellipseX, setEllipseX] = useState(x);
   const [ellipseY, setEllipseY] = useState(y);
+  // ellipse coordinates before draggin or zooming
   const [prevEllipseX, setPrevEllipseX] = useState();
   const [prevEllipseY, setPrevEllipseY] = useState();
+  // current ellipse radii
   const [radiusXCont, setRadiusXCont] = useState(radiusX);
   const [radiusYCont, setRadiusYCont] = useState(radiusY);
+  // ellipse radii before zooming
   const [prevRadiusX, setPrevRadiusX] = useState();
   const [prevRadiusY, setPrevRadiusY] = useState();
+  // current ellipse degree
   const [degCont, setDegCont] = useState(deg);
+  // current reference rectangle coordinates
   const [rectX, setRectX] = useState(x - radiusX);
   const [rectY, setRectY] = useState(y - radiusY);
+  // current control points coordinates
   const [controlX1, setControlX1] = useState(x - radiusX);
   const [controlY1, setControlY1] = useState(y - radiusY);
   const [controlX2, setControlX2] = useState(x);
@@ -48,10 +55,15 @@ const DrawEllipse = ({ id, x, y, radiusX, radiusY, deg }) => {
   const [controlY7, setControlY7] = useState(y + radiusY);
   const [controlX8, setControlX8] = useState(x + radiusX);
   const [controlY8, setControlY8] = useState(y + radiusY);
+  // ratio x : y, used when shift key is down to keep ratio
   const [ratioXY, setRatioXY] = useState(0);
+  // is true when mouse is down within rectangle, change to false when mouse is up
   const [dragging, setDragging] = useState(false);
+  // previous dragging status, used to show notification when dragging is done
   const prevDragging = usePrevious(dragging);
+  // set to true if shift key is done to keep x : y ratio
   const [keepRatio, setKeepRatio] = useState(false);
+  // current zoom statuses for each control point
   const [zooming1, setZooming1] = useState(false);
   const [zooming2, setZooming2] = useState(false);
   const [zooming3, setZooming3] = useState(false);
@@ -60,6 +72,7 @@ const DrawEllipse = ({ id, x, y, radiusX, radiusY, deg }) => {
   const [zooming6, setZooming6] = useState(false);
   const [zooming7, setZooming7] = useState(false);
   const [zooming8, setZooming8] = useState(false);
+  // previous zoom statuses for each control point
   const prevZooming1 = usePrevious(zooming1);
   const prevZooming2 = usePrevious(zooming2);
   const prevZooming3 = usePrevious(zooming3);
@@ -68,8 +81,11 @@ const DrawEllipse = ({ id, x, y, radiusX, radiusY, deg }) => {
   const prevZooming6 = usePrevious(zooming6);
   const prevZooming7 = usePrevious(zooming7);
   const prevZooming8 = usePrevious(zooming8);
+
   const dispatch = useDispatch();
+  // statuses from redux store
   const ellipseStats = useSelector((state) => state.drawEllipse);
+  // tooltip shown when dragging and zooming
   const [tooltipOpen, setTooltipOpen] = useState(false);
   const [tooltipContent, setTooltipContent] = useState("");
 
