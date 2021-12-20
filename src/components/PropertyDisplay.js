@@ -25,7 +25,7 @@ import { makeStyles } from "@mui/styles";
 import { useDispatch, useSelector } from "react-redux";
 import CancelOutlinedIcon from "@mui/icons-material/CancelOutlined";
 import { tooltipClasses } from "@mui/material/Tooltip";
-import { changeMode } from "../redux/slices/animateModeSlice";
+import { changeMode } from "../redux/slices/mainModeSlice";
 
 /**
  * Custom hook to monitor window height and width
@@ -58,11 +58,11 @@ export default function PropertyDisplay({ updateDrawData }) {
   const dispatch = useDispatch();
   // The data from drawEllipse reducer, which is the shape data of ellipse
   const ellipseStats = useSelector((state) => state.drawEllipse);
-  const animateMode = useSelector((state) => state.animateMode);
+  const mainMode = useSelector((state) => state.mainMode);
   const [animationData, setAnimationData] = useState([]);
 
   useEffect(() => {
-    if (animateMode.mode === "properties") {
+    if (mainMode.mode === "animate" && mainMode.subMode === "properties") {
       const newData = {};
       Object.assign(newData, ellipseStats);
       if (animationData.length > 0) {
@@ -85,7 +85,7 @@ export default function PropertyDisplay({ updateDrawData }) {
         setAnimationData([...animationData, newData]);
       }
     }
-  }, [animateMode, ellipseStats]);
+  }, [mainMode, ellipseStats]);
 
   // useEffect(() => {
   //   const drawData = animationData.map((d) => ({
@@ -127,7 +127,9 @@ export default function PropertyDisplay({ updateDrawData }) {
                 <IconButton
                   size='small'
                   onClick={() => {
-                    dispatch(changeMode({ mode: null, status: null }));
+                    dispatch(
+                      changeMode({ mode: null, subMode: null, status: null })
+                    );
                   }}
                 >
                   <CancelOutlinedIcon />

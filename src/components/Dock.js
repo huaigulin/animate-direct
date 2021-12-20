@@ -23,8 +23,7 @@ import KeyboardIcon from "@mui/icons-material/Keyboard";
 import { v4 as uuidv4 } from "uuid";
 import { useDispatch, useSelector } from "react-redux";
 import { blue, grey } from "@mui/material/colors";
-import { changeMode as changeMainMode } from "../redux/slices/mainModeSlice";
-import { changeMode } from "../redux/slices/animateModeSlice";
+import { changeMode } from "../redux/slices/mainModeSlice";
 import { newDraw as newDrawDispatch } from "../redux/slices/drawEllipseSlice";
 import { add as addDispatch } from "../redux/slices/shapeFocusSlice";
 
@@ -67,6 +66,32 @@ export default function Dock({ updateDrawData, updateReferenceData }) {
       >
         <Toolbar style={{ padding: 16 }}>
           <Grid container direction='column' spacing={2}>
+            <Grid item>
+              <LargeTextTooltip title='Select' placement='left'>
+                <IconButton
+                  size='large'
+                  onClick={() => {
+                    // change main mode to select
+                    dispatch(changeMode({ mode: "select" }));
+                  }}
+                >
+                  <SvgIcon fontSize='large'>
+                    <path
+                      style={{
+                        stroke:
+                          mainMode.mode === "select" ? blue[500] : grey[600],
+                        fill:
+                          mainMode.mode === "select" ? blue[500] : grey[600],
+                        strokeWidth: "1px",
+                        strokeMiterlimit: 10,
+                      }}
+                      d='M18.9,15.4L5.7,2.2C5.6,2.1,5.4,2.1,5.3,2.1C5.1,2.2,5,2.4,5,2.5v18.9c0,0.2,0.1,0.3,0.3,0.4c0,0,0.1,0,0.1,0
+                      c0.1,0,0.2-0.1,0.3-0.1l4.8-5.6h8c0.2,0,0.3-0.1,0.4-0.3C19,15.7,19,15.5,18.9,15.4z'
+                    />
+                  </SvgIcon>
+                </IconButton>
+              </LargeTextTooltip>
+            </Grid>
             <Grid item>
               <LargeTextTooltip title='Brushes' placement='left'>
                 <IconButton size='large'>
@@ -161,9 +186,7 @@ s1.6-0.7,1.6-1.6c0-0.7-0.4-1.2-1-1.5c0.7-6.7,6.1-12.2,12.8-12.8c0.2,0.6,0.8,1,1.
                 <MenuItem
                   onClick={() => {
                     // change main mode to shape -> line
-                    dispatch(
-                      changeMainMode({ mode: "shape", subMode: "line" })
-                    );
+                    dispatch(changeMode({ mode: "shape", subMode: "line" }));
                     handleShapesClose();
                   }}
                 >
@@ -199,9 +222,7 @@ s1.6-0.7,1.6-1.6c0-0.7-0.4-1.2-1-1.5c0.7-6.7,6.1-12.2,12.8-12.8c0.2,0.6,0.8,1,1.
                       code: "ellipse(width/2, height/2, 60, 30, 0);",
                     });
                     // change main mode to shape -> ellipse
-                    dispatch(
-                      changeMainMode({ mode: "shape", subMode: "ellipse" })
-                    );
+                    dispatch(changeMode({ mode: "shape", subMode: "ellipse" }));
                     // add the ellipse to focus array in store
                     dispatch(addDispatch({ ids: [id] }));
                     // dispatch state to show snackbar info
@@ -238,9 +259,7 @@ s1.6-0.7,1.6-1.6c0-0.7-0.4-1.2-1-1.5c0.7-6.7,6.1-12.2,12.8-12.8c0.2,0.6,0.8,1,1.
                 <MenuItem
                   onClick={() => {
                     // change main mode to shape -> rect
-                    dispatch(
-                      changeMainMode({ mode: "shape", subMode: "rect" })
-                    );
+                    dispatch(changeMode({ mode: "shape", subMode: "rect" }));
                     handleShapesClose();
                   }}
                 >
@@ -257,9 +276,7 @@ s1.6-0.7,1.6-1.6c0-0.7-0.4-1.2-1-1.5c0.7-6.7,6.1-12.2,12.8-12.8c0.2,0.6,0.8,1,1.
                 <MenuItem
                   onClick={() => {
                     // change main mode to shape -> quad
-                    dispatch(
-                      changeMainMode({ mode: "shape", subMode: "quad" })
-                    );
+                    dispatch(changeMode({ mode: "shape", subMode: "quad" }));
                     handleShapesClose();
                   }}
                 >
@@ -284,7 +301,7 @@ s1.6-0.7,1.6-1.6c0-0.7-0.4-1.2-1-1.5c0.7-6.7,6.1-12.2,12.8-12.8c0.2,0.6,0.8,1,1.
                   onClick={() => {
                     // change main mode to shape -> triangle
                     dispatch(
-                      changeMainMode({ mode: "shape", subMode: "triangle" })
+                      changeMode({ mode: "shape", subMode: "triangle" })
                     );
                     handleShapesClose();
                   }}
@@ -311,8 +328,19 @@ s1.6-0.7,1.6-1.6c0-0.7-0.4-1.2-1-1.5c0.7-6.7,6.1-12.2,12.8-12.8c0.2,0.6,0.8,1,1.
             </Grid>
             <Grid item>
               <LargeTextTooltip title='Text' placement='left'>
-                <IconButton size='large'>
-                  <TextFieldsIcon fontSize='large' />
+                <IconButton
+                  size='large'
+                  onClick={() => {
+                    // change main mode to text
+                    dispatch(changeMode({ mode: "text" }));
+                  }}
+                >
+                  <TextFieldsIcon
+                    sx={{
+                      color: mainMode.mode === "text" ? blue[500] : grey[600],
+                    }}
+                    fontSize='large'
+                  />
                 </IconButton>
               </LargeTextTooltip>
             </Grid>
@@ -345,6 +373,14 @@ s1.6-0.7,1.6-1.6c0-0.7-0.4-1.2-1-1.5c0.7-6.7,6.1-12.2,12.8-12.8c0.2,0.6,0.8,1,1.
                 >
                   <SvgIcon fontSize='large'>
                     <path
+                      style={{
+                        stroke:
+                          mainMode.mode === "animate" ? blue[500] : grey[600],
+                        fill:
+                          mainMode.mode === "animate" ? blue[500] : grey[600],
+                        strokeWidth: "1px",
+                        strokeMiterlimit: 10,
+                      }}
                       d='M21.3,8.2c-0.6-0.9-1.6-2.1-2.7-2c-0.2-0.3-0.8-1.3-1.4-2.3c-0.6-1.1-1.8-2.1-2.2-1.4c-0.1,0.1-0.1,0.6,0.5,1.8
 				C15,3.7,14.6,3,14,2.8c-0.7-0.3-1.2,0.1-0.5,1.6c1.2,2.9,1.4,3.7,1.3,4.1c0,0.2-0.2,0.4-0.5,0.2c-1.1-0.5-3.6-1-4.5-1
 				c-4.3,0-5.5,2.8-6.2,4.3c0,0-0.6,1.5-0.6,4.2C2.5,15.7,2,15,1.6,15C1.2,15,1,15.3,1,16c0,0.7,0.8,2.1,1.9,2.8
@@ -374,7 +410,9 @@ s1.6-0.7,1.6-1.6c0-0.7-0.4-1.2-1-1.5c0.7-6.7,6.1-12.2,12.8-12.8c0.2,0.6,0.8,1,1.
               >
                 <MenuItem
                   onClick={() => {
-                    dispatch(changeMode({ mode: "properties" }));
+                    dispatch(
+                      changeMode({ mode: "animate", subMode: "properties" })
+                    );
                     handleAnimateClose();
                   }}
                 >
@@ -384,7 +422,13 @@ s1.6-0.7,1.6-1.6c0-0.7-0.4-1.2-1-1.5c0.7-6.7,6.1-12.2,12.8-12.8c0.2,0.6,0.8,1,1.
                 </MenuItem>
                 <MenuItem
                   onClick={() => {
-                    dispatch(changeMode({ mode: "record", status: "ready" }));
+                    dispatch(
+                      changeMode({
+                        mode: "animate",
+                        subMode: "record",
+                        status: "ready",
+                      })
+                    );
                     handleAnimateClose();
                   }}
                 >

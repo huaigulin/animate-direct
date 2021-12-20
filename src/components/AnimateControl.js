@@ -19,7 +19,7 @@ import { tooltipClasses } from "@mui/material/Tooltip";
 import CancelOutlinedIcon from "@mui/icons-material/CancelOutlined";
 import SpaceBarIcon from "@mui/icons-material/SpaceBar";
 import { useDispatch } from "react-redux";
-import { changeMode } from "../redux/slices/animateModeSlice";
+import { changeMode } from "../redux/slices/mainModeSlice";
 
 const LargeTextTooltip = styled(({ className, ...props }) => (
   <Tooltip {...props} classes={{ popper: className }} />
@@ -91,7 +91,9 @@ export default function AnimateControl() {
                 <IconButton
                   size='small'
                   onClick={() => {
-                    dispatch(changeMode({ mode: null, status: null }));
+                    dispatch(
+                      changeMode({ mode: null, subMode: null, status: null })
+                    );
                   }}
                 >
                   <CancelOutlinedIcon />
@@ -147,7 +149,13 @@ export default function AnimateControl() {
                 classes={{ root: classes.buttonBase }}
                 endIcon={<SpaceBarIcon />}
                 onClick={() => {
-                  dispatch(changeMode({ mode: "record", status: "yes" }));
+                  dispatch(
+                    changeMode({
+                      mode: "animate",
+                      subMode: "record",
+                      status: "yes",
+                    })
+                  );
                 }}
               >
                 <Typography>Record</Typography>

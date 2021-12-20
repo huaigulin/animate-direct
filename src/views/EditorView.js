@@ -45,7 +45,8 @@ export default function EditorView(props) {
   const [msg, setMsg] = useState();
   // The data from drawEllipse reducer, which is the shape data of ellipse
   const ellipseStats = useSelector((state) => state.drawEllipse);
-  const animateMode = useSelector((state) => state.animateMode);
+  // Main mode status
+  const mainMode = useSelector((state) => state.mainMode);
 
   /**
    * Callback to handle close msg bar
@@ -270,10 +271,12 @@ export default function EditorView(props) {
         >
           {drawing}
         </svg>
-        {animateMode.mode === "properties" ? (
+        {mainMode.mode === "animate" && mainMode.subMode === "properties" ? (
           <PropertyDisplay updateDrawData={updateDrawData} />
         ) : null}
-        {animateMode.mode === "record" && animateMode.status === "ready" ? (
+        {mainMode.mode === "animate" &&
+        mainMode.subMode === "record" &&
+        mainMode.status === "ready" ? (
           <AnimateControl />
         ) : null}
       </Canvas>
