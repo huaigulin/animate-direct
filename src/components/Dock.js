@@ -21,7 +21,9 @@ import TextFieldsIcon from "@mui/icons-material/TextFields";
 import MouseIcon from "@mui/icons-material/Mouse";
 import KeyboardIcon from "@mui/icons-material/Keyboard";
 import { v4 as uuidv4 } from "uuid";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { blue, grey } from "@mui/material/colors";
+import { changeMode as changeMainMode } from "../redux/slices/mainModeSlice";
 import { changeMode } from "../redux/slices/animateModeSlice";
 import { newDraw as newDrawDispatch } from "../redux/slices/drawEllipseSlice";
 import { add as addDispatch } from "../redux/slices/shapeFocusSlice";
@@ -34,9 +36,10 @@ const LargeTextTooltip = styled(({ className, ...props }) => (
   },
 }));
 
-export default function Dock(props) {
-  const { updateDrawData, updateReferenceData } = props;
+export default function Dock({ updateDrawData, updateReferenceData }) {
   const dispatch = useDispatch();
+  // main mode state selector
+  const mainMode = useSelector((state) => state.mainMode);
   // Shapes menu states and functions
   const [shapesMenuAnchorEl, setShapesMenuAnchorEl] = useState(null);
   const shapesMenuOpen = Boolean(shapesMenuAnchorEl);
@@ -80,8 +83,64 @@ export default function Dock(props) {
                   aria-haspopup='true'
                   aria-expanded={shapesMenuOpen ? "true" : undefined}
                   onClick={handleShapesClick}
+                  color={mainMode.mode === "shape" ? "primary" : "default"}
                 >
-                  <CropSquareIcon fontSize='large' />
+                  {mainMode.mode === "shape" ? (
+                    mainMode.subMode === "line" ? (
+                      <SvgIcon fontSize='large'>
+                        <path
+                          style={{
+                            stroke: blue[500],
+                            strokeWidth: "1px",
+                            strokeMiterlimit: 10,
+                          }}
+                          d='M19.5,3c-0.7,0-1.3,0.5-1.5,1.2C10.8,4.9,4.9,10.7,4.2,17.9c-0.7,0.2-1.2,0.8-1.2,1.5C3,20.3,3.7,21,4.5,21
+s1.6-0.7,1.6-1.6c0-0.7-0.4-1.2-1-1.5c0.7-6.7,6.1-12.2,12.8-12.8c0.2,0.6,0.8,1,1.5,1c0.9,0,1.6-0.7,1.6-1.6S20.3,3,19.5,3z'
+                        />
+                      </SvgIcon>
+                    ) : mainMode.subMode === "ellipse" ? (
+                      <SvgIcon fontSize='large'>
+                        <path
+                          style={{
+                            stroke: blue[500],
+                            strokeWidth: "1px",
+                            strokeMiterlimit: 10,
+                          }}
+                          d='M12,3.5c-4.7,0-8.5,3.8-8.5,8.5c0,4.7,3.8,8.5,8.5,8.5c4.7,0,8.5-3.8,8.5-8.5C20.5,7.3,16.7,3.5,12,3.5z
+			 M12,19.5c-4.1,0-7.5-3.4-7.5-7.5S7.9,4.5,12,4.5s7.5,3.4,7.5,7.5S16.1,19.5,12,19.5z'
+                        />
+                      </SvgIcon>
+                    ) : mainMode.subMode === "rect" ? (
+                      <CropSquareIcon fontSize='large' />
+                    ) : mainMode.subMode === "quad" ? (
+                      <SvgIcon fontSize='large'>
+                        <path
+                          style={{
+                            stroke: blue[500],
+                            strokeWidth: "1px",
+                            strokeMiterlimit: 10,
+                          }}
+                          d='M3.7,17h11.7l5-10H8.7L3.7,17z M15.6,17.9H3c-0.2,0-0.3-0.1-0.4-0.2c-0.1-0.1-0.1-0.3,0-0.4
+  L8,6.4c0.1-0.2,0.2-0.2,0.4-0.2H21c0.2,0,0.3,0.1,0.4,0.2c0.1,0.1,0.1,0.3,0,0.4L16,17.6C15.9,17.8,15.8,17.9,15.6,17.9z'
+                        />
+                      </SvgIcon>
+                    ) : (
+                      <SvgIcon fontSize='large'>
+                        <path
+                          style={{
+                            stroke: blue[500],
+                            strokeWidth: "1px",
+                            strokeMiterlimit: 10,
+                          }}
+                          d='M19.8,16.8l-6.6-11c-0.5-0.9-1.8-0.9-2.4,0l-6.6,11c0,0,0,0,0,0c-0.6,0.9,0.1,2.1,1.2,2.1h13.2
+			C19.7,18.9,20.4,17.7,19.8,16.8z M18.6,17.9H5.4c-0.3,0-0.6-0.4-0.4-0.7l6.6-11c0.2-0.3,0.6-0.3,0.8,0l6.6,11
+			C19.2,17.6,19,17.9,18.6,17.9z'
+                        />
+                      </SvgIcon>
+                    )
+                  ) : (
+                    <CropSquareIcon fontSize='large' />
+                  )}
                 </IconButton>
               </LargeTextTooltip>
               <Menu
@@ -99,11 +158,23 @@ export default function Dock(props) {
                   horizontal: "right",
                 }}
               >
-                <MenuItem>
+                <MenuItem
+                  onClick={() => {
+                    // change main mode to shape -> line
+                    dispatch(
+                      changeMainMode({ mode: "shape", subMode: "line" })
+                    );
+                    handleShapesClose();
+                  }}
+                >
                   <ListItemIcon>
                     <SvgIcon fontSize='large'>
                       <path
-                        style={{ stroke: "#000000", strokeMiterlimit: 10 }}
+                        style={{
+                          stroke: grey[600],
+                          strokeWidth: "1px",
+                          strokeMiterlimit: 10,
+                        }}
                         d='M19.5,3c-0.7,0-1.3,0.5-1.5,1.2C10.8,4.9,4.9,10.7,4.2,17.9c-0.7,0.2-1.2,0.8-1.2,1.5C3,20.3,3.7,21,4.5,21
 		s1.6-0.7,1.6-1.6c0-0.7-0.4-1.2-1-1.5c0.7-6.7,6.1-12.2,12.8-12.8c0.2,0.6,0.8,1,1.5,1c0.9,0,1.6-0.7,1.6-1.6S20.3,3,19.5,3z'
                       />
@@ -127,6 +198,10 @@ export default function Dock(props) {
                       deg: 0,
                       code: "ellipse(width/2, height/2, 60, 30, 0);",
                     });
+                    // change main mode to shape -> ellipse
+                    dispatch(
+                      changeMainMode({ mode: "shape", subMode: "ellipse" })
+                    );
                     // add the ellipse to focus array in store
                     dispatch(addDispatch({ ids: [id] }));
                     // dispatch state to show snackbar info
@@ -146,7 +221,11 @@ export default function Dock(props) {
                   <ListItemIcon>
                     <SvgIcon fontSize='large'>
                       <path
-                        style={{ stroke: "#000000", strokeMiterlimit: 10 }}
+                        style={{
+                          stroke: grey[600],
+                          strokeWidth: "1px",
+                          strokeMiterlimit: 10,
+                        }}
                         d='M12,3.5c-4.7,0-8.5,3.8-8.5,8.5c0,4.7,3.8,8.5,8.5,8.5c4.7,0,8.5-3.8,8.5-8.5C20.5,7.3,16.7,3.5,12,3.5z
 			 M12,19.5c-4.1,0-7.5-3.4-7.5-7.5S7.9,4.5,12,4.5s7.5,3.4,7.5,7.5S16.1,19.5,12,19.5z'
                       />
@@ -156,10 +235,18 @@ export default function Dock(props) {
                     <span style={{ fontSize: 16 }}>Ellipse</span>
                   </ListItemText>
                 </MenuItem>
-                <MenuItem>
+                <MenuItem
+                  onClick={() => {
+                    // change main mode to shape -> rect
+                    dispatch(
+                      changeMainMode({ mode: "shape", subMode: "rect" })
+                    );
+                    handleShapesClose();
+                  }}
+                >
                   <ListItemIcon>
                     <CropSquareIcon
-                      sx={{ color: "#000000" }}
+                      sx={{ color: grey[600] }}
                       fontSize='large'
                     />
                   </ListItemIcon>
@@ -167,11 +254,23 @@ export default function Dock(props) {
                     <span style={{ fontSize: 16 }}>Rectangle</span>
                   </ListItemText>
                 </MenuItem>
-                <MenuItem>
+                <MenuItem
+                  onClick={() => {
+                    // change main mode to shape -> quad
+                    dispatch(
+                      changeMainMode({ mode: "shape", subMode: "quad" })
+                    );
+                    handleShapesClose();
+                  }}
+                >
                   <ListItemIcon>
                     <SvgIcon fontSize='large'>
                       <path
-                        style={{ stroke: "#000000", strokeMiterlimit: 10 }}
+                        style={{
+                          stroke: grey[600],
+                          strokeWidth: "1px",
+                          strokeMiterlimit: 10,
+                        }}
                         d='M3.7,17h11.7l5-10H8.7L3.7,17z M15.6,17.9H3c-0.2,0-0.3-0.1-0.4-0.2c-0.1-0.1-0.1-0.3,0-0.4
 		L8,6.4c0.1-0.2,0.2-0.2,0.4-0.2H21c0.2,0,0.3,0.1,0.4,0.2c0.1,0.1,0.1,0.3,0,0.4L16,17.6C15.9,17.8,15.8,17.9,15.6,17.9z'
                       />
@@ -181,11 +280,23 @@ export default function Dock(props) {
                     <span style={{ fontSize: 16 }}>Quadrilateral</span>
                   </ListItemText>
                 </MenuItem>
-                <MenuItem>
+                <MenuItem
+                  onClick={() => {
+                    // change main mode to shape -> triangle
+                    dispatch(
+                      changeMainMode({ mode: "shape", subMode: "triangle" })
+                    );
+                    handleShapesClose();
+                  }}
+                >
                   <ListItemIcon>
                     <SvgIcon fontSize='large'>
                       <path
-                        style={{ stroke: "#000000", strokeMiterlimit: 10 }}
+                        style={{
+                          stroke: grey[600],
+                          strokeWidth: "1px",
+                          strokeMiterlimit: 10,
+                        }}
                         d='M19.8,16.8l-6.6-11c-0.5-0.9-1.8-0.9-2.4,0l-6.6,11c0,0,0,0,0,0c-0.6,0.9,0.1,2.1,1.2,2.1h13.2
 			C19.7,18.9,20.4,17.7,19.8,16.8z M18.6,17.9H5.4c-0.3,0-0.6-0.4-0.4-0.7l6.6-11c0.2-0.3,0.6-0.3,0.8,0l6.6,11
 			C19.2,17.6,19,17.9,18.6,17.9z'
