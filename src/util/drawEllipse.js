@@ -926,7 +926,7 @@ const DrawEllipse = ({ id, x, y, radiusX, radiusY, deg }) => {
    * The callback function to stop zooming once mouse is up. This one is necessary for control point 2, 4, 5, and 7 because mouse might move out of the control point during zooming
    * This is also necessary for all points when shift key is down
    */
-  const clearMouseMove = () => {
+  const onMouseUp = () => {
     setZooming1(false);
     setZooming2(false);
     setZooming3(false);
@@ -960,12 +960,12 @@ const DrawEllipse = ({ id, x, y, radiusX, radiusY, deg }) => {
   useEffect(() => {
     // register event listeners
     document.addEventListener("mousemove", onMouseMove);
-    document.addEventListener("mouseup", clearMouseMove);
+    document.addEventListener("mouseup", onMouseUp);
     document.addEventListener("keydown", onKeyDown);
     document.addEventListener("keyup", onKeyUp);
     return () => {
       document.removeEventListener("mousemove", onMouseMove);
-      document.removeEventListener("mouseup", clearMouseMove);
+      document.removeEventListener("mouseup", onMouseUp);
       document.removeEventListener("keydown", onKeyDown);
       document.removeEventListener("keyup", onKeyUp);
     };

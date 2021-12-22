@@ -102,6 +102,30 @@ export default function EditorView(props) {
     }
   };
 
+  /**
+   * Global mouse down event handler for the whole canvas
+   * @param {object} e mouse down event
+   */
+  const onMouseDown = (e) => {
+    console.log(e);
+  };
+
+  /**
+   * Global mouse move event handler for the whole canvas
+   * @param {object} e mouse move event
+   */
+  const onMouseMove = (e) => {
+    console.log(e);
+  };
+
+  /**
+   * Global mouse up event handler for the whole canvas
+   * @param {object} e mouse up event
+   */
+  const onMouseUp = (e) => {
+    console.log(e);
+  };
+
   useEffect(() => {
     // loops through drawData state and draws on canvas
     const shapes = [];
@@ -240,6 +264,18 @@ export default function EditorView(props) {
       }
     }
   }, [ellipseStats]);
+
+  useEffect(() => {
+    // register event listeners
+    document.addEventListener("mousedown", onMouseDown);
+    document.addEventListener("mousemove", onMouseMove);
+    document.addEventListener("mouseup", onMouseUp);
+    return () => {
+      document.removeEventListener("mousedown", onMouseDown);
+      document.removeEventListener("mousemove", onMouseMove);
+      document.removeEventListener("mouseup", onMouseUp);
+    };
+  }, []);
 
   return (
     <Grid container>
