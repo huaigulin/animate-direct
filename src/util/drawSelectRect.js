@@ -95,7 +95,6 @@ export default function DrawSelectRect() {
       style={{
         fill: "rgba(187, 222, 251, .5)", // blue[100] w/ .5 alpha
         stroke: blue[400],
-        cursor: "grab",
       }}
     />
   );
