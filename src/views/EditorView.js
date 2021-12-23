@@ -8,6 +8,7 @@ import Canvas from "../components/Canvas";
 import DrawEllipse from "../util/drawEllipse";
 import AnimateControl from "../components/AnimateControl";
 import PropertyDisplay from "../components/PropertyDisplay";
+import DrawSelectRect from "../util/drawSelectRect";
 
 /**
  * Custom hook to monitor window height and width
@@ -100,30 +101,6 @@ export default function EditorView(props) {
     } else {
       setReferenceData([data]);
     }
-  };
-
-  /**
-   * Global mouse down event handler for the whole canvas
-   * @param {object} e mouse down event
-   */
-  const onMouseDown = (e) => {
-    console.log(e);
-  };
-
-  /**
-   * Global mouse move event handler for the whole canvas
-   * @param {object} e mouse move event
-   */
-  const onMouseMove = (e) => {
-    console.log(e);
-  };
-
-  /**
-   * Global mouse up event handler for the whole canvas
-   * @param {object} e mouse up event
-   */
-  const onMouseUp = (e) => {
-    console.log(e);
   };
 
   useEffect(() => {
@@ -265,18 +242,6 @@ export default function EditorView(props) {
     }
   }, [ellipseStats]);
 
-  useEffect(() => {
-    // register event listeners
-    document.addEventListener("mousedown", onMouseDown);
-    document.addEventListener("mousemove", onMouseMove);
-    document.addEventListener("mouseup", onMouseUp);
-    return () => {
-      document.removeEventListener("mousedown", onMouseDown);
-      document.removeEventListener("mousemove", onMouseMove);
-      document.removeEventListener("mouseup", onMouseUp);
-    };
-  }, []);
-
   return (
     <Grid container>
       <Canvas ref={canvasRef}>
@@ -306,6 +271,7 @@ export default function EditorView(props) {
           xmlns='http://www.w3.org/2000/svg'
         >
           {drawing}
+          {mainMode.mode === "select" ? <DrawSelectRect /> : null}
         </svg>
         {mainMode.mode === "animate" && mainMode.subMode === "properties" ? (
           <PropertyDisplay updateDrawData={updateDrawData} />
