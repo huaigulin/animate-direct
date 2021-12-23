@@ -2,10 +2,13 @@ import React, { useEffect, useState } from "react";
 import { blue } from "@mui/material/colors";
 
 export default function DrawSelectRect() {
+  // the coordinates when mouse is clicked
   const [mouseDownX, setMouseDownX] = useState();
   const [mouseDownY, setMouseDownY] = useState();
+  // coordinates of the rect
   const [x, setX] = useState(0);
   const [y, setY] = useState(0);
+  // width and height of the rect
   const [width, setWidth] = useState(0);
   const [height, setHeight] = useState(0);
 
@@ -14,7 +17,7 @@ export default function DrawSelectRect() {
    * @param {object} e mouse down event
    */
   const onMouseDown = (e) => {
-    console.log(e);
+    // record the coordinates of the mouse click
     setMouseDownX(e.clientX);
     setMouseDownY(e.clientY);
   };
@@ -24,7 +27,7 @@ export default function DrawSelectRect() {
    * @param {object} e mouse move event
    */
   const onMouseMove = (e) => {
-    console.log(e);
+    // draw the rect only if mouse is down (i.e. mouseDownX and mouseDownY are valid)
     const { clientX, clientY } = e;
     setMouseDownX((mouseDownX) => {
       setMouseDownY((mouseDownY) => {
@@ -62,7 +65,7 @@ export default function DrawSelectRect() {
    * @param {object} e mouse up event
    */
   const onMouseUp = (e) => {
-    console.log(e);
+    // clear mouse down coordinates and rect values
     setMouseDownX(null);
     setMouseDownY(null);
     setX(0);
