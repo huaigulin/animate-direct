@@ -1,7 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { blue } from "@mui/material/colors";
+import { useDispatch } from "react-redux";
+import { select as selectDispatch } from "../redux/slices/selectRegionSlice";
 
 export default function DrawSelectRect() {
+  const dispatch = useDispatch();
   // the coordinates when mouse is clicked
   const [mouseDownX, setMouseDownX] = useState();
   const [mouseDownY, setMouseDownY] = useState();
@@ -66,6 +69,19 @@ export default function DrawSelectRect() {
    */
   const onMouseUp = (e) => {
     // clear mouse down coordinates and rect values
+    setX((x) => {
+      setY((y) => {
+        setWidth((width) => {
+          setHeight((height) => {
+            dispatch(selectDispatch({ x, y, width, height }));
+            return height;
+          });
+          return width;
+        });
+        return y;
+      });
+      return x;
+    });
     setMouseDownX(null);
     setMouseDownY(null);
     setX(0);
