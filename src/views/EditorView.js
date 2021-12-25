@@ -269,6 +269,9 @@ export default function EditorView(props) {
         <svg
           viewBox={`0 0 ${windowWidth} ${windowHeight}`}
           xmlns='http://www.w3.org/2000/svg'
+          style={{
+            cursor: mainMode.mode === "shape" ? "crosshair" : "default",
+          }}
         >
           {drawing}
           {mainMode.mode === "select" ? <DrawSelectRect /> : null}
