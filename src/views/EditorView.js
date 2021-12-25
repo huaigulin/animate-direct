@@ -273,8 +273,12 @@ export default function EditorView(props) {
             cursor: mainMode.mode === "shape" ? "crosshair" : "default",
           }}
         >
+          {mainMode.mode === "select" &&
+          ellipseStats.mode !== "liveZoom" &&
+          ellipseStats.mode !== "liveMove" ? (
+            <DrawSelectRect />
+          ) : null}
           {drawing}
-          {mainMode.mode === "select" ? <DrawSelectRect /> : null}
         </svg>
         {mainMode.mode === "animate" && mainMode.subMode === "properties" ? (
           <PropertyDisplay updateDrawData={updateDrawData} />
