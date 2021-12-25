@@ -1112,19 +1112,32 @@ const DrawEllipse = ({ id, x, y, radiusX, radiusY, deg }) => {
 
   useEffect(() => {
     // subscribe to tooltip data changes
-    const { mode, x, y, rx, ry, deg, xDiff, yDiff, rxDiff, ryDiff, degDiff } =
-      ellipseStats;
+    const {
+      id: currId,
+      mode,
+      x,
+      y,
+      rx,
+      ry,
+      deg,
+      xDiff,
+      yDiff,
+      rxDiff,
+      ryDiff,
+      degDiff,
+    } = ellipseStats;
     if (
-      x ||
-      y ||
-      rx ||
-      ry ||
-      deg ||
-      xDiff ||
-      yDiff ||
-      rxDiff ||
-      ryDiff ||
-      degDiff
+      currId === id &&
+      (x ||
+        y ||
+        rx ||
+        ry ||
+        deg ||
+        xDiff ||
+        yDiff ||
+        rxDiff ||
+        ryDiff ||
+        degDiff)
     ) {
       switch (mode) {
         case "liveMove":
