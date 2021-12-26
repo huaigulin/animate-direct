@@ -23,7 +23,6 @@ import KeyboardIcon from "@mui/icons-material/Keyboard";
 import { useDispatch, useSelector } from "react-redux";
 import { blue, grey } from "@mui/material/colors";
 import { changeMode } from "../redux/slices/mainModeSlice";
-import { add as addDispatch } from "../redux/slices/shapeFocusSlice";
 
 const LargeTextTooltip = styled(({ className, ...props }) => (
   <Tooltip {...props} classes={{ popper: className }} />
@@ -209,8 +208,6 @@ s1.6-0.7,1.6-1.6c0-0.7-0.4-1.2-1-1.5c0.7-6.7,6.1-12.2,12.8-12.8c0.2,0.6,0.8,1,1.
                   onClick={() => {
                     // change main mode to shape -> ellipse
                     dispatch(changeMode({ mode: "shape", subMode: "ellipse" }));
-                    // add the ellipse to focus array in store
-                    dispatch(addDispatch({ ids: [id] }));
                     // close the menu
                     handleShapesClose();
                   }}
