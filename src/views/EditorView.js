@@ -9,6 +9,7 @@ import DrawEllipse from "../util/drawEllipse";
 import AnimateControl from "../components/AnimateControl";
 import PropertyDisplay from "../components/PropertyDisplay";
 import DrawSelectRect from "../util/drawSelectRect";
+import DrawLiveEllipse from "../util/drawLiveEllipse";
 
 /**
  * Custom hook to monitor window height and width
@@ -38,7 +39,7 @@ export default function EditorView(props) {
   // Drawing data and reference data
   const [drawData, setDrawData] = useState([]);
   const [referenceData, setReferenceData] = useState([]);
-  // The actual shapes that goes into the <svg /> tag
+  // The finished drawing that goes into the <svg /> tag
   const [drawing, setDrawing] = useState();
   // Snackbar properties
   const [msgOpen, setMsgOpen] = useState(false);
@@ -81,7 +82,7 @@ export default function EditorView(props) {
         setDrawData([...newDrawData]);
         console.log("<-------Draw data updated!--------->");
       } else {
-        setDrawData([...drawData, data]);
+        setDrawData((drawData) => [...drawData, data]);
         console.log("<-------Draw data updated!--------->");
       }
     } else {
@@ -268,6 +269,7 @@ export default function EditorView(props) {
           }}
         >
           {drawing}
+          <DrawLiveEllipse updateDrawData={updateDrawData} />
           {(mainMode.mode === "select" || mainMode.mode === "animate") &&
           ellipseStats.mode !== "liveZoom" &&
           ellipseStats.mode !== "liveMove" ? (
