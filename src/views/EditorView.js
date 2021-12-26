@@ -268,7 +268,7 @@ export default function EditorView(props) {
           }}
         >
           {drawing}
-          {mainMode.mode === "select" &&
+          {(mainMode.mode === "select" || mainMode.mode === "animate") &&
           ellipseStats.mode !== "liveZoom" &&
           ellipseStats.mode !== "liveMove" ? (
             <DrawSelectRect />

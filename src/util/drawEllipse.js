@@ -1219,10 +1219,13 @@ const DrawEllipse = ({ id, x, y, radiusX, radiusY, deg }) => {
               style={{
                 fill: "transparent",
                 stroke: blue[400],
-                cursor: mainMode.mode === "select" ? "grab" : "inherit",
+                cursor:
+                  mainMode.mode === "select" || mainMode.mode === "animate"
+                    ? "grab"
+                    : "inherit",
               }}
               onMouseDown={(e) => {
-                if (mainMode.mode === "select") {
+                if (mainMode.mode === "select" || mainMode.mode === "animate") {
                   setDragging(true);
                   setPrevEllipseX(ellipseX);
                   setPrevEllipseY(ellipseY);
