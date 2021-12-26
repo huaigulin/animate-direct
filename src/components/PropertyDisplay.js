@@ -155,11 +155,11 @@ export default function PropertyDisplay({ updateDrawData }) {
                 {animationData.map((d, idx) => (
                   <TableRow key={idx}>
                     <TableCell>{d.time}</TableCell>
-                    <TableCell>{d.x}</TableCell>
-                    <TableCell>{d.y}</TableCell>
-                    <TableCell>{d.rx}</TableCell>
-                    <TableCell>{d.ry}</TableCell>
-                    <TableCell>{d.deg}</TableCell>
+                    <TableCell>{+d.x.toFixed(2)}</TableCell>
+                    <TableCell>{+d.y.toFixed(2)}</TableCell>
+                    <TableCell>{+d.rx.toFixed(2)}</TableCell>
+                    <TableCell>{+d.ry.toFixed(2)}</TableCell>
+                    <TableCell>{+d.deg.toFixed(2)}</TableCell>
                   </TableRow>
                 ))}
               </TableBody>
