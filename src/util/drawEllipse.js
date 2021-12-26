@@ -91,6 +91,8 @@ const DrawEllipse = ({ id, x, y, radiusX, radiusY, deg }) => {
   const [tooltipContent, setTooltipContent] = useState("");
   // focus statuses from redux store
   const focusedShapes = useSelector((state) => state.shapeFocus.hasFocus);
+  // Main mode status
+  const mainMode = useSelector((state) => state.mainMode);
 
   /**
    * The callback function for listening mouse move on the whole screen
@@ -1214,11 +1216,17 @@ const DrawEllipse = ({ id, x, y, radiusX, radiusY, deg }) => {
               y={rectY}
               width={radiusXCont * 2}
               height={radiusYCont * 2}
-              style={{ fill: "transparent", stroke: blue[400], cursor: "grab" }}
+              style={{
+                fill: "transparent",
+                stroke: blue[400],
+                cursor: mainMode.mode === "select" ? "grab" : "inherit",
+              }}
               onMouseDown={(e) => {
-                setDragging(true);
-                setPrevEllipseX(ellipseX);
-                setPrevEllipseY(ellipseY);
+                if (mainMode.mode === "select") {
+                  setDragging(true);
+                  setPrevEllipseX(ellipseX);
+                  setPrevEllipseY(ellipseY);
+                }
               }}
               onMouseUp={(e) => {
                 setDragging(false);
