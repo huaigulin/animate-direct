@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { v4 as uuidv4 } from "uuid";
+import { newDraw as newDrawDispatch } from "../redux/slices/drawEllipseSlice";
 
 export default function DrawLiveEllipse({ updateDrawData }) {
+  const dispatch = useDispatch();
   // Main mode status
   const mainMode = useSelector((state) => state.mainMode);
   // The coordinates when mouse is clicked
@@ -89,6 +91,17 @@ export default function DrawLiveEllipse({ updateDrawData }) {
               deg: 0,
               code: `ellipse(${cx}, ${cy}, ${rx}, ${ry}, 0);`,
             });
+            // dispatch state to show snackbar info
+            dispatch(
+              newDrawDispatch({
+                id,
+                x: cx,
+                y: cy,
+                rx,
+                ry,
+                deg: 0,
+              })
+            );
             setMouseDownX(null);
             setMouseDownY(null);
             return 0;
