@@ -102,16 +102,18 @@ export default function DrawLiveEllipse({ updateDrawData }) {
   };
 
   useEffect(() => {
-    // register event listeners, for the whole canvas
-    document.addEventListener("mousedown", onMouseDown);
-    document.addEventListener("mousemove", onMouseMove);
-    document.addEventListener("mouseup", onMouseUp);
-    return () => {
-      document.removeEventListener("mousedown", onMouseDown);
-      document.removeEventListener("mousemove", onMouseMove);
-      document.removeEventListener("mouseup", onMouseUp);
-    };
-  }, []);
+    if (mainMode.mode === "shape" && mainMode.subMode === "ellipse") {
+      // register event listeners for the whole canvas, only in ellipse mode
+      document.addEventListener("mousedown", onMouseDown);
+      document.addEventListener("mousemove", onMouseMove);
+      document.addEventListener("mouseup", onMouseUp);
+      return () => {
+        document.removeEventListener("mousedown", onMouseDown);
+        document.removeEventListener("mousemove", onMouseMove);
+        document.removeEventListener("mouseup", onMouseUp);
+      };
+    }
+  }, [mainMode]);
 
   if (mainMode.mode === "shape" && mainMode.subMode === "ellipse") {
     return (
