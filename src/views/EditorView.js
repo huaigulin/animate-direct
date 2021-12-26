@@ -250,13 +250,7 @@ export default function EditorView(props) {
           autoHideDuration={6000}
           onClose={handleMsgClose}
           anchorOrigin={{ vertical: "top", horizontal: "center" }}
-          key={
-            ellipseStats.mode +
-            ellipseStats.x +
-            ellipseStats.y +
-            ellipseStats.rx +
-            ellipseStats.ry
-          }
+          key={ellipseStats.id}
         >
           <Alert
             onClose={handleMsgClose}
