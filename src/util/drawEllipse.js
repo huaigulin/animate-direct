@@ -9,7 +9,7 @@ import {
   rotate as rotateDispatch,
   liveUpdate as liveUpdateDispatch,
 } from "../redux/slices/drawEllipseSlice";
-import { add as addDispatch } from "../redux/slices/shapeFocusSlice";
+import { changeMode as changeModeDispatch } from "../redux/slices/mainModeSlice";
 
 const usePrevious = (value) => {
   const ref = useRef();
@@ -93,6 +93,8 @@ const DrawEllipse = ({ id, x, y, radiusX, radiusY, deg }) => {
   const focusedShapes = useSelector((state) => state.shapeFocus.hasFocus);
   // Main mode status
   const mainMode = useSelector((state) => state.mainMode);
+  // The current main mode, before dragging or zooming
+  const [currMainMode, setCurrMainMode] = useState();
 
   /**
    * The callback function for listening mouse move on the whole screen
@@ -925,10 +927,11 @@ const DrawEllipse = ({ id, x, y, radiusX, radiusY, deg }) => {
   };
 
   /**
-   * The callback function to stop zooming once mouse is up. This one is necessary for control point 2, 4, 5, and 7 because mouse might move out of the control point during zooming
-   * This is also necessary for all points when shift key is down
+   * Mouse up callback
    */
   const onMouseUp = () => {
+    // Stop zooming once mouse is up. This one is necessary for control point 2, 4, 5, and 7 because mouse might move out of the control point during zooming
+    // This is also necessary for all points when shift key is down
     setZooming1(false);
     setZooming2(false);
     setZooming3(false);
@@ -1042,6 +1045,14 @@ const DrawEllipse = ({ id, x, y, radiusX, radiusY, deg }) => {
           ry: radiusYCont,
           rxDiff: radiusXCont - prevRadiusX,
           ryDiff: radiusYCont - prevRadiusY,
+        })
+      );
+      // switch back to current main mode
+      dispatch(
+        changeModeDispatch({
+          mode: currMainMode.mode,
+          subMode: currMainMode.subMode,
+          status: currMainMode.status,
         })
       );
     }
@@ -1229,6 +1240,9 @@ const DrawEllipse = ({ id, x, y, radiusX, radiusY, deg }) => {
                   setDragging(true);
                   setPrevEllipseX(ellipseX);
                   setPrevEllipseY(ellipseY);
+                  // Record current mode and switch to dragging mode
+                  setCurrMainMode(mainMode);
+                  dispatch(changeModeDispatch({ mode: "dragging" }));
                 }
               }}
               onMouseUp={(e) => {
@@ -1247,6 +1261,9 @@ const DrawEllipse = ({ id, x, y, radiusX, radiusY, deg }) => {
               setPrevEllipseY(ellipseY);
               setPrevRadiusX(radiusXCont);
               setPrevRadiusY(radiusYCont);
+              // Record current mode and switch to zooming mode
+              setCurrMainMode(mainMode);
+              dispatch(changeModeDispatch({ mode: "zooming" }));
             }}
             onMouseUp={(e) => {
               setZooming1(false);
@@ -1263,6 +1280,9 @@ const DrawEllipse = ({ id, x, y, radiusX, radiusY, deg }) => {
               setPrevEllipseY(ellipseY);
               setPrevRadiusX(radiusXCont);
               setPrevRadiusY(radiusYCont);
+              // Record current mode and switch to zooming mode
+              setCurrMainMode(mainMode);
+              dispatch(changeModeDispatch({ mode: "zooming" }));
             }}
             onMouseUp={(e) => {
               setZooming2(false);
@@ -1279,6 +1299,9 @@ const DrawEllipse = ({ id, x, y, radiusX, radiusY, deg }) => {
               setPrevEllipseY(ellipseY);
               setPrevRadiusX(radiusXCont);
               setPrevRadiusY(radiusYCont);
+              // Record current mode and switch to zooming mode
+              setCurrMainMode(mainMode);
+              dispatch(changeModeDispatch({ mode: "zooming" }));
             }}
             onMouseUp={(e) => {
               setZooming3(false);
@@ -1295,6 +1318,9 @@ const DrawEllipse = ({ id, x, y, radiusX, radiusY, deg }) => {
               setPrevEllipseY(ellipseY);
               setPrevRadiusX(radiusXCont);
               setPrevRadiusY(radiusYCont);
+              // Record current mode and switch to zooming mode
+              setCurrMainMode(mainMode);
+              dispatch(changeModeDispatch({ mode: "zooming" }));
             }}
             onMouseUp={(e) => {
               setZooming4(false);
@@ -1311,6 +1337,9 @@ const DrawEllipse = ({ id, x, y, radiusX, radiusY, deg }) => {
               setPrevEllipseY(ellipseY);
               setPrevRadiusX(radiusXCont);
               setPrevRadiusY(radiusYCont);
+              // Record current mode and switch to zooming mode
+              setCurrMainMode(mainMode);
+              dispatch(changeModeDispatch({ mode: "zooming" }));
             }}
             onMouseUp={(e) => {
               setZooming5(false);
@@ -1327,6 +1356,9 @@ const DrawEllipse = ({ id, x, y, radiusX, radiusY, deg }) => {
               setPrevEllipseY(ellipseY);
               setPrevRadiusX(radiusXCont);
               setPrevRadiusY(radiusYCont);
+              // Record current mode and switch to zooming mode
+              setCurrMainMode(mainMode);
+              dispatch(changeModeDispatch({ mode: "zooming" }));
             }}
             onMouseUp={(e) => {
               setZooming6(false);
@@ -1343,6 +1375,9 @@ const DrawEllipse = ({ id, x, y, radiusX, radiusY, deg }) => {
               setPrevEllipseY(ellipseY);
               setPrevRadiusX(radiusXCont);
               setPrevRadiusY(radiusYCont);
+              // Record current mode and switch to zooming mode
+              setCurrMainMode(mainMode);
+              dispatch(changeModeDispatch({ mode: "zooming" }));
             }}
             onMouseUp={(e) => {
               setZooming7(false);
@@ -1359,6 +1394,9 @@ const DrawEllipse = ({ id, x, y, radiusX, radiusY, deg }) => {
               setPrevEllipseY(ellipseY);
               setPrevRadiusX(radiusXCont);
               setPrevRadiusY(radiusYCont);
+              // Record current mode and switch to zooming mode
+              setCurrMainMode(mainMode);
+              dispatch(changeModeDispatch({ mode: "zooming" }));
             }}
             onMouseUp={(e) => {
               setZooming8(false);
