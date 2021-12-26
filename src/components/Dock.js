@@ -20,11 +20,9 @@ import CropSquareIcon from "@mui/icons-material/CropSquare";
 import TextFieldsIcon from "@mui/icons-material/TextFields";
 import MouseIcon from "@mui/icons-material/Mouse";
 import KeyboardIcon from "@mui/icons-material/Keyboard";
-import { v4 as uuidv4 } from "uuid";
 import { useDispatch, useSelector } from "react-redux";
 import { blue, grey } from "@mui/material/colors";
 import { changeMode } from "../redux/slices/mainModeSlice";
-import { newDraw as newDrawDispatch } from "../redux/slices/drawEllipseSlice";
 import { add as addDispatch } from "../redux/slices/shapeFocusSlice";
 
 const LargeTextTooltip = styled(({ className, ...props }) => (
@@ -209,33 +207,11 @@ s1.6-0.7,1.6-1.6c0-0.7-0.4-1.2-1-1.5c0.7-6.7,6.1-12.2,12.8-12.8c0.2,0.6,0.8,1,1.
                 </MenuItem>
                 <MenuItem
                   onClick={() => {
-                    const id = `ellipse-${uuidv4()}`;
-                    updateDrawData(true, {
-                      id,
-                      shape: "ellipse",
-                      position: `${window.innerWidth / 2}, ${
-                        window.innerHeight / 2
-                      }`,
-                      radiusX: 60,
-                      radiusY: 30,
-                      deg: 0,
-                      code: "ellipse(width/2, height/2, 60, 30, 0);",
-                    });
                     // change main mode to shape -> ellipse
                     dispatch(changeMode({ mode: "shape", subMode: "ellipse" }));
                     // add the ellipse to focus array in store
                     dispatch(addDispatch({ ids: [id] }));
-                    // dispatch state to show snackbar info
-                    dispatch(
-                      newDrawDispatch({
-                        id,
-                        x: window.innerWidth / 2,
-                        y: window.innerHeight / 2,
-                        rx: 60,
-                        ry: 30,
-                        deg: 0,
-                      })
-                    );
+                    // close the menu
                     handleShapesClose();
                   }}
                 >
