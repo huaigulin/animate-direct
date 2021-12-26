@@ -2,6 +2,10 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { v4 as uuidv4 } from "uuid";
 import { newDraw as newDrawDispatch } from "../redux/slices/drawEllipseSlice";
+import {
+  add as addDispatch,
+  clear as clearDispatch,
+} from "../redux/slices/shapeFocusSlice";
 
 export default function DrawLiveEllipse({ updateDrawData }) {
   const dispatch = useDispatch();
@@ -102,6 +106,10 @@ export default function DrawLiveEllipse({ updateDrawData }) {
                 deg: 0,
               })
             );
+            // clear the focus array in store
+            dispatch(clearDispatch());
+            // add the ellipse to focus array in store
+            dispatch(addDispatch({ ids: [id] }));
             setMouseDownX(null);
             setMouseDownY(null);
             return 0;
