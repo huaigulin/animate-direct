@@ -270,11 +270,7 @@ export default function EditorView(props) {
         >
           {drawing}
           <DrawLiveEllipse updateDrawData={updateDrawData} />
-          {(mainMode.mode === "select" || mainMode.mode === "animate") &&
-          ellipseStats.mode !== "liveZoom" &&
-          ellipseStats.mode !== "liveMove" ? (
-            <DrawSelectRect />
-          ) : null}
+          <DrawSelectRect />
         </svg>
         {mainMode.mode === "animate" && mainMode.subMode === "properties" ? (
           <PropertyDisplay updateDrawData={updateDrawData} />

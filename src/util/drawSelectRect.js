@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { blue } from "@mui/material/colors";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { select as selectDispatch } from "../redux/slices/selectRegionSlice";
 
 export default function DrawSelectRect() {
@@ -14,6 +14,8 @@ export default function DrawSelectRect() {
   // width and height of the rect
   const [width, setWidth] = useState(0);
   const [height, setHeight] = useState(0);
+  // Main mode state
+  const mainMode = useSelector((state) => state.mainMode);
 
   /**
    * Mouse down event handler
@@ -91,27 +93,33 @@ export default function DrawSelectRect() {
   };
 
   useEffect(() => {
-    // register event listeners
-    document.addEventListener("mousedown", onMouseDown);
-    document.addEventListener("mousemove", onMouseMove);
-    document.addEventListener("mouseup", onMouseUp);
-    return () => {
-      document.removeEventListener("mousedown", onMouseDown);
-      document.removeEventListener("mousemove", onMouseMove);
-      document.removeEventListener("mouseup", onMouseUp);
-    };
-  }, []);
+    if (mainMode.mode === "select" || mainMode.mode === "animate") {
+      // register event listeners
+      document.addEventListener("mousedown", onMouseDown);
+      document.addEventListener("mousemove", onMouseMove);
+      document.addEventListener("mouseup", onMouseUp);
+      return () => {
+        document.removeEventListener("mousedown", onMouseDown);
+        document.removeEventListener("mousemove", onMouseMove);
+        document.removeEventListener("mouseup", onMouseUp);
+      };
+    }
+  }, [mainMode]);
 
-  return (
-    <rect
-      x={x}
-      y={y}
-      width={width}
-      height={height}
-      style={{
-        fill: "rgba(187, 222, 251, .5)", // blue[100] w/ .5 alpha
-        stroke: blue[400],
-      }}
-    />
-  );
+  if (mainMode.mode === "select" || mainMode.mode === "animate") {
+    return (
+      <rect
+        x={x}
+        y={y}
+        width={width}
+        height={height}
+        style={{
+          fill: "rgba(187, 222, 251, .5)", // blue[100] w/ .5 alpha
+          stroke: blue[400],
+        }}
+      />
+    );
+  } else {
+    return null;
+  }
 }
