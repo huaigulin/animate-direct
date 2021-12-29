@@ -1,7 +1,17 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { blue } from "@mui/material/colors";
 import { useDispatch, useSelector } from "react-redux";
 import { select as selectDispatch } from "../redux/slices/selectRegionSlice";
+
+const usePrevious = (value) => {
+  const ref = useRef();
+
+  useEffect(() => {
+    ref.current = value;
+  }, [value]);
+
+  return ref.current;
+};
 
 export default function DrawSelectRect() {
   const dispatch = useDispatch();
@@ -16,12 +26,17 @@ export default function DrawSelectRect() {
   const [height, setHeight] = useState(0);
   // Main mode state
   const mainMode = useSelector((state) => state.mainMode);
+  // Flag state, true when mouse is up
+  const [mouseIsUp, setMouseIsUp] = useState(false);
+  // Previous mouse is up state
+  const prevMouseIsUp = usePrevious(mouseIsUp);
 
   /**
    * Mouse down event handler
    * @param {object} e mouse down event
    */
   const onMouseDown = (e) => {
+    setMouseIsUp(false);
     // record the coordinates of the mouse click
     setMouseDownX(e.clientX);
     setMouseDownY(e.clientY);
@@ -70,27 +85,22 @@ export default function DrawSelectRect() {
    * @param {object} e mouse up event
    */
   const onMouseUp = (e) => {
-    // clear mouse down coordinates and rect values
-    setX((x) => {
-      setY((y) => {
-        setWidth((width) => {
-          setHeight((height) => {
-            dispatch(selectDispatch({ x, y, width, height }));
-            return height;
-          });
-          return width;
-        });
-        return y;
-      });
-      return x;
-    });
-    setMouseDownX(null);
-    setMouseDownY(null);
-    setX(0);
-    setY(0);
-    setWidth(0);
-    setHeight(0);
+    setMouseIsUp(true);
   };
+
+  useEffect(() => {
+    if (mouseIsUp && !prevMouseIsUp) {
+      // dispatch select stats to redux store
+      dispatch(selectDispatch({ x, y, width, height }));
+      // clear mouse down coordinates and rect values
+      setMouseDownX(null);
+      setMouseDownY(null);
+      setX(0);
+      setY(0);
+      setWidth(0);
+      setHeight(0);
+    }
+  }, [mouseIsUp, prevMouseIsUp, x, y, width, height]);
 
   useEffect(() => {
     if (mainMode.mode === "select" || mainMode.mode === "animate") {
