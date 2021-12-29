@@ -16,8 +16,8 @@ const usePrevious = (value) => {
 export default function DrawSelectRect() {
   const dispatch = useDispatch();
   // the coordinates when mouse is clicked
-  const [mouseDownX, setMouseDownX] = useState();
-  const [mouseDownY, setMouseDownY] = useState();
+  const [, setMouseDownX] = useState();
+  const [, setMouseDownY] = useState();
   // coordinates of the rect
   const [x, setX] = useState(0);
   const [y, setY] = useState(0);

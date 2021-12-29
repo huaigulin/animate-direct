@@ -1169,6 +1169,7 @@ const DrawEllipse = ({ id, x, y, radiusX, radiusY, deg }) => {
           );
           setTooltipOpen(true);
           break;
+        default:
       }
     }
   }, [ellipseStats]);
