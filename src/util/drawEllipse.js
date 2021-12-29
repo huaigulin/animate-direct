@@ -995,6 +995,14 @@ const DrawEllipse = ({ id, x, y, radiusX, radiusY, deg }) => {
           yDiff: ellipseY - prevEllipseY,
         })
       );
+      // switch back to current main mode
+      dispatch(
+        changeModeDispatch({
+          mode: currMainMode.mode,
+          subMode: currMainMode.subMode,
+          status: currMainMode.status,
+        })
+      );
     }
   }, [dragging, prevDragging, ellipseX, ellipseY]);
 
