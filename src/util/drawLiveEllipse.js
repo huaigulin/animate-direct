@@ -22,8 +22,8 @@ export default function DrawLiveEllipse({ updateDrawData }) {
   // Main mode status
   const mainMode = useSelector((state) => state.mainMode);
   // The coordinates when mouse is clicked
-  const [mouseDownX, setMouseDownX] = useState();
-  const [mouseDownY, setMouseDownY] = useState();
+  const [, setMouseDownX] = useState();
+  const [, setMouseDownY] = useState();
   // The coordinates of the ellipse
   const [cx, setCx] = useState(0);
   const [cy, setCy] = useState(0);
@@ -32,9 +32,8 @@ export default function DrawLiveEllipse({ updateDrawData }) {
   const [ry, setRy] = useState(0);
   // Flag state, true when mouse is up
   const [mouseIsUp, setMouseIsUp] = useState(false);
+  // Previous mouse is up state
   const prevMouseIsUp = usePrevious(mouseIsUp);
-  // The data from drawEllipse reducer, which is the shape data of ellipse
-  const ellipseStats = useSelector((state) => state.drawEllipse);
 
   /**
    * Mouse down event handler
