@@ -22,8 +22,9 @@ export default function DrawLiveEllipse({ updateDrawData }) {
   // Main mode status
   const mainMode = useSelector((state) => state.mainMode);
   // The coordinates when mouse is clicked
-  const [, setMouseDownX] = useState();
-  const [, setMouseDownY] = useState();
+  const [mouseDownX, setMouseDownX] = useState();
+  const [mouseDownY, setMouseDownY] = useState();
+  console.log(mouseDownX, mouseDownY);
   // The coordinates of the ellipse
   const [cx, setCx] = useState(0);
   const [cy, setCy] = useState(0);
@@ -100,8 +101,8 @@ export default function DrawLiveEllipse({ updateDrawData }) {
   };
 
   useEffect(() => {
-    // only fires at the moment of mouse up
-    if (mouseIsUp && !prevMouseIsUp) {
+    // only fires at the moment of mouse up and at least one radius has to be non-zero
+    if (mouseIsUp && !prevMouseIsUp && (rx || ry)) {
       const id = `ellipse-${uuidv4()}`;
       updateDrawData(true, {
         id,
@@ -147,10 +148,17 @@ export default function DrawLiveEllipse({ updateDrawData }) {
         document.removeEventListener("mousemove", onMouseMove);
         document.removeEventListener("mouseup", onMouseUp);
       };
+    } else {
+      setMouseDownX(null);
+      setMouseDownY(null);
     }
   }, [mainMode]);
 
-  if (mainMode.mode === "shape" && mainMode.subMode === "ellipse") {
+  if (
+    mainMode.mode === "shape" &&
+    mainMode.subMode === "ellipse" &&
+    (rx || ry)
+  ) {
     return (
       <ellipse
         cx={cx}
