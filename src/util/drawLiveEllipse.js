@@ -173,8 +173,6 @@ export default function DrawLiveEllipse({ updateDrawData }) {
     mainMode.subMode === "ellipse" &&
     (rx || ry)
   ) {
-    console.log(rx, ry);
-    console.log(mouseIsUp);
     return (
       <Fragment>
         <Tooltip open={tooltipOpen} title={tooltipContent}>
