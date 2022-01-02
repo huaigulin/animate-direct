@@ -39,6 +39,7 @@ export default function DrawLiveEllipse({ updateDrawData }) {
   // tooltip shown when dragging and zooming
   const [tooltipOpen, setTooltipOpen] = useState(false);
   const [tooltipContent, setTooltipContent] = useState("");
+  const [circleMode, setCircleMode] = useState(false);
 
   /**
    * Mouse down event handler
@@ -62,41 +63,68 @@ export default function DrawLiveEllipse({ updateDrawData }) {
         if (mouseDownX && mouseDownY) {
           let rxComp;
           let ryComp;
-          if (clientX > mouseDownX && clientY > mouseDownY) {
-            rxComp = (clientX - mouseDownX) / 2;
-            ryComp = (clientY - mouseDownY) / 2;
-            setCx(mouseDownX + rxComp);
-            setCy(mouseDownY + ryComp);
-            setRx(rxComp);
-            setRy(ryComp);
-          } else if (clientX > mouseDownX) {
-            rxComp = (clientX - mouseDownX) / 2;
-            ryComp = (mouseDownY - clientY) / 2;
-            setCx(mouseDownX + rxComp);
-            setCy(clientY + ryComp);
-            setRx(rxComp);
-            setRy(ryComp);
-          } else if (clientY > mouseDownY) {
-            rxComp = (mouseDownX - clientX) / 2;
-            ryComp = (clientY - mouseDownY) / 2;
-            setCx(clientX + rxComp);
-            setCy(mouseDownY + ryComp);
-            setRx(rxComp);
-            setRy(ryComp);
-          } else {
-            rxComp = (mouseDownX - clientX) / 2;
-            ryComp = (mouseDownY - clientY) / 2;
-            setCx(clientX + rxComp);
-            setCy(clientY + ryComp);
-            setRx(rxComp);
-            setRy(ryComp);
-          }
-          setTooltipContent(
-            <span>
-              rX: {+rxComp.toFixed(2)}, rY: {+ryComp.toFixed(2)}
-            </span>
-          );
-          setTooltipOpen(true);
+          setCircleMode((circleMode) => {
+            if (clientX > mouseDownX && clientY > mouseDownY) {
+              rxComp = (clientX - mouseDownX) / 2;
+              ryComp = (clientY - mouseDownY) / 2;
+              setCx(mouseDownX + rxComp);
+              setCy(mouseDownY + ryComp);
+              if (circleMode) {
+                const rMax = Math.max(rxComp, ryComp);
+                setRx(rMax);
+                setRy(rMax);
+              } else {
+                setRx(rxComp);
+                setRy(ryComp);
+              }
+            } else if (clientX > mouseDownX) {
+              rxComp = (clientX - mouseDownX) / 2;
+              ryComp = (mouseDownY - clientY) / 2;
+              setCx(mouseDownX + rxComp);
+              setCy(clientY + ryComp);
+              if (circleMode) {
+                const rMax = Math.max(rxComp, ryComp);
+                setRx(rMax);
+                setRy(rMax);
+              } else {
+                setRx(rxComp);
+                setRy(ryComp);
+              }
+            } else if (clientY > mouseDownY) {
+              rxComp = (mouseDownX - clientX) / 2;
+              ryComp = (clientY - mouseDownY) / 2;
+              setCx(clientX + rxComp);
+              setCy(mouseDownY + ryComp);
+              if (circleMode) {
+                const rMax = Math.max(rxComp, ryComp);
+                setRx(rMax);
+                setRy(rMax);
+              } else {
+                setRx(rxComp);
+                setRy(ryComp);
+              }
+            } else {
+              rxComp = (mouseDownX - clientX) / 2;
+              ryComp = (mouseDownY - clientY) / 2;
+              setCx(clientX + rxComp);
+              setCy(clientY + ryComp);
+              if (circleMode) {
+                const rMax = Math.max(rxComp, ryComp);
+                setRx(rMax);
+                setRy(rMax);
+              } else {
+                setRx(rxComp);
+                setRy(ryComp);
+              }
+            }
+            setTooltipContent(
+              <span>
+                rX: {+rxComp.toFixed(2)}, rY: {+ryComp.toFixed(2)}
+              </span>
+            );
+            setTooltipOpen(true);
+            return circleMode;
+          });
         }
         return mouseDownY;
       });
@@ -112,6 +140,26 @@ export default function DrawLiveEllipse({ updateDrawData }) {
     setTooltipOpen(false);
     setTooltipContent("");
     setMouseIsUp(true);
+  };
+
+  /**
+   * Callback for listening to keydown event
+   * @param {object} event
+   */
+  const onKeyDown = (event) => {
+    if (event.key === "Shift") {
+      setCircleMode(true);
+    }
+  };
+
+  /**
+   * Callback for listening to keyup event
+   * @param {object} event
+   */
+  const onKeyUp = (event) => {
+    if (event.key === "Shift") {
+      setCircleMode(false);
+    }
   };
 
   useEffect(() => {
@@ -157,10 +205,14 @@ export default function DrawLiveEllipse({ updateDrawData }) {
       document.addEventListener("mousedown", onMouseDown);
       document.addEventListener("mousemove", onMouseMove);
       document.addEventListener("mouseup", onMouseUp);
+      document.addEventListener("keydown", onKeyDown);
+      document.addEventListener("keyup", onKeyUp);
       return () => {
         document.removeEventListener("mousedown", onMouseDown);
         document.removeEventListener("mousemove", onMouseMove);
         document.removeEventListener("mouseup", onMouseUp);
+        document.removeEventListener("keydown", onKeyDown);
+        document.removeEventListener("keyup", onKeyUp);
       };
     } else {
       setMouseDownX(null);
