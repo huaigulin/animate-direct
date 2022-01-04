@@ -281,10 +281,7 @@ export default function EditorView(props) {
           <AnimateControl />
         ) : null}
       </Canvas>
-      <Dock
-        updateDrawData={updateDrawData}
-        updateReferenceData={updateReferenceData}
-      />
+      <Dock />
     </Grid>
   );
 }

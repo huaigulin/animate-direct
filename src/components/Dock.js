@@ -32,7 +32,7 @@ const LargeTextTooltip = styled(({ className, ...props }) => (
   },
 }));
 
-export default function Dock({ updateDrawData, updateReferenceData }) {
+export default function Dock() {
   const dispatch = useDispatch();
   // main mode state selector
   const mainMode = useSelector((state) => state.mainMode);
