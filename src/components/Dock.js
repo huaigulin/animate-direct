@@ -23,7 +23,7 @@ import MouseIcon from "@mui/icons-material/Mouse";
 import KeyboardIcon from "@mui/icons-material/Keyboard";
 import { useDispatch, useSelector } from "react-redux";
 import { blue, grey } from "@mui/material/colors";
-import { changeMode } from "../redux/slices/mainModeSlice";
+import { changeMode as changeModeDispatch } from "../redux/slices/mainModeSlice";
 
 const LargeTextTooltip = styled(({ className, ...props }) => (
   <Tooltip {...props} classes={{ popper: className }} />
@@ -59,7 +59,7 @@ export default function Dock() {
   const showDock = useSelector((state) => state.showDock);
 
   return (
-    <Slide direction='left' in={showDock.show} mountOnEnter unmountOnExit>
+    <Slide direction='left' in={showDock.show} mountOnEnter>
       <Box sx={{ position: "absolute", right: 0 }}>
         <AppBar
           position='static'
@@ -73,7 +73,7 @@ export default function Dock() {
                     size='large'
                     onClick={() => {
                       // change main mode to select
-                      dispatch(changeMode({ mode: "select" }));
+                      dispatch(changeModeDispatch({ mode: "select" }));
                     }}
                   >
                     <SvgIcon fontSize='large'>
@@ -187,7 +187,9 @@ s1.6-0.7,1.6-1.6c0-0.7-0.4-1.2-1-1.5c0.7-6.7,6.1-12.2,12.8-12.8c0.2,0.6,0.8,1,1.
                   <MenuItem
                     onClick={() => {
                       // change main mode to shape -> line
-                      dispatch(changeMode({ mode: "shape", subMode: "line" }));
+                      dispatch(
+                        changeModeDispatch({ mode: "shape", subMode: "line" })
+                      );
                       handleShapesClose();
                     }}
                   >
@@ -212,7 +214,10 @@ s1.6-0.7,1.6-1.6c0-0.7-0.4-1.2-1-1.5c0.7-6.7,6.1-12.2,12.8-12.8c0.2,0.6,0.8,1,1.
                     onClick={() => {
                       // change main mode to shape -> ellipse
                       dispatch(
-                        changeMode({ mode: "shape", subMode: "ellipse" })
+                        changeModeDispatch({
+                          mode: "shape",
+                          subMode: "ellipse",
+                        })
                       );
                       // close the menu
                       handleShapesClose();
@@ -238,7 +243,9 @@ s1.6-0.7,1.6-1.6c0-0.7-0.4-1.2-1-1.5c0.7-6.7,6.1-12.2,12.8-12.8c0.2,0.6,0.8,1,1.
                   <MenuItem
                     onClick={() => {
                       // change main mode to shape -> rect
-                      dispatch(changeMode({ mode: "shape", subMode: "rect" }));
+                      dispatch(
+                        changeModeDispatch({ mode: "shape", subMode: "rect" })
+                      );
                       handleShapesClose();
                     }}
                   >
@@ -255,7 +262,9 @@ s1.6-0.7,1.6-1.6c0-0.7-0.4-1.2-1-1.5c0.7-6.7,6.1-12.2,12.8-12.8c0.2,0.6,0.8,1,1.
                   <MenuItem
                     onClick={() => {
                       // change main mode to shape -> quad
-                      dispatch(changeMode({ mode: "shape", subMode: "quad" }));
+                      dispatch(
+                        changeModeDispatch({ mode: "shape", subMode: "quad" })
+                      );
                       handleShapesClose();
                     }}
                   >
@@ -280,7 +289,10 @@ s1.6-0.7,1.6-1.6c0-0.7-0.4-1.2-1-1.5c0.7-6.7,6.1-12.2,12.8-12.8c0.2,0.6,0.8,1,1.
                     onClick={() => {
                       // change main mode to shape -> triangle
                       dispatch(
-                        changeMode({ mode: "shape", subMode: "triangle" })
+                        changeModeDispatch({
+                          mode: "shape",
+                          subMode: "triangle",
+                        })
                       );
                       handleShapesClose();
                     }}
@@ -311,7 +323,7 @@ s1.6-0.7,1.6-1.6c0-0.7-0.4-1.2-1-1.5c0.7-6.7,6.1-12.2,12.8-12.8c0.2,0.6,0.8,1,1.
                     size='large'
                     onClick={() => {
                       // change main mode to text
-                      dispatch(changeMode({ mode: "text" }));
+                      dispatch(changeModeDispatch({ mode: "text" }));
                     }}
                   >
                     <TextFieldsIcon
@@ -390,7 +402,10 @@ s1.6-0.7,1.6-1.6c0-0.7-0.4-1.2-1-1.5c0.7-6.7,6.1-12.2,12.8-12.8c0.2,0.6,0.8,1,1.
                   <MenuItem
                     onClick={() => {
                       dispatch(
-                        changeMode({ mode: "animate", subMode: "properties" })
+                        changeModeDispatch({
+                          mode: "animate",
+                          subMode: "properties",
+                        })
                       );
                       handleAnimateClose();
                     }}
@@ -402,7 +417,7 @@ s1.6-0.7,1.6-1.6c0-0.7-0.4-1.2-1-1.5c0.7-6.7,6.1-12.2,12.8-12.8c0.2,0.6,0.8,1,1.
                   <MenuItem
                     onClick={() => {
                       dispatch(
-                        changeMode({
+                        changeModeDispatch({
                           mode: "animate",
                           subMode: "record",
                           status: "ready",
