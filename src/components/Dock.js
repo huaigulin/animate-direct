@@ -59,7 +59,7 @@ export default function Dock() {
   const showDock = useSelector((state) => state.showDock);
 
   return (
-    <Slide direction='left' in={showDock.show} mountOnEnter>
+    <Slide direction='left' in={showDock.show} mountOnEnter unmountOnExit>
       <Box sx={{ position: "absolute", right: 0 }}>
         <AppBar
           position='static'

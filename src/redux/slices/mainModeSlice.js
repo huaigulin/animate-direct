@@ -6,7 +6,8 @@ export const mainModeSlice = createSlice({
     mode: null, // select, brush, shape, text, mouse, keyboard, animate, zooming. dragging
     subMode: null, // shape: line, ellipse, rect，quad, triangle;
     // animate: properties, record
-    status: null, // for animate mode record subMode only: yes, ready
+    status: null, // for animate mode record subMode: yes, ready
+    // for shape mode: drawing, null
   },
   reducers: {
     changeMode: (state, { payload }) => {

@@ -8,6 +8,7 @@ import {
   add as addDispatch,
   clear as clearDispatch,
 } from "../redux/slices/shapeFocusSlice";
+import { changeMode as changeModeDispatch } from "../redux/slices/mainModeSlice";
 
 const usePrevious = (value) => {
   const ref = useRef();
@@ -50,6 +51,14 @@ export default function DrawLiveEllipse({ updateDrawData }) {
     // record the coordinates of the mouse click
     setMouseDownX(e.clientX);
     setMouseDownY(e.clientY);
+    // set mode status to drawing to prevent dock from popping up
+    dispatch(
+      changeModeDispatch({
+        mode: "shape",
+        subMode: "ellipse",
+        status: "drawing",
+      })
+    );
   };
 
   /**
@@ -140,6 +149,14 @@ export default function DrawLiveEllipse({ updateDrawData }) {
     setTooltipOpen(false);
     setTooltipContent("");
     setMouseIsUp(true);
+    // set mode status back to null, so dock can slide
+    dispatch(
+      changeModeDispatch({
+        mode: "shape",
+        subMode: "ellipse",
+        status: null,
+      })
+    );
   };
 
   /**

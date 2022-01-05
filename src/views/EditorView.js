@@ -132,7 +132,8 @@ export default function EditorView(props) {
       mouseX > windowWidth - 8 &&
       mouseY < 576 &&
       mainMode.mode !== "zooming" &&
-      mainMode.mode !== "dragging"
+      mainMode.mode !== "dragging" &&
+      mainMode.status !== "drawing"
     ) {
       dispatch(setShowDispatch({ show: true }));
     } else if (showDock.show) {
