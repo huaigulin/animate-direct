@@ -129,14 +129,15 @@ export default function EditorView(props) {
 
   useEffect(() => {
     if (
-      mouseX > windowWidth - 8 &&
-      mouseY < 576 &&
-      mainMode.mode !== "zooming" &&
-      mainMode.mode !== "dragging" &&
-      mainMode.status !== "drawing"
+      (mouseX > windowWidth - 96 &&
+        mouseY < 576 &&
+        mainMode.mode !== "zooming" &&
+        mainMode.mode !== "dragging" &&
+        mainMode.status !== "drawing") ||
+      showDock.active
     ) {
       dispatch(setShowDispatch({ show: true }));
-    } else if (showDock.show) {
+    } else if (showDock.show && !showDock.active) {
       setTimeout(() => {
         dispatch(setShowDispatch({ show: false }));
       }, 3000);

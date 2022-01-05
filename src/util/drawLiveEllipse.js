@@ -1,4 +1,10 @@
-import React, { useEffect, useRef, useState, Fragment } from "react";
+import React, {
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+  Fragment,
+} from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { v4 as uuidv4 } from "uuid";
 import { Tooltip } from "@mui/material";
@@ -20,6 +26,23 @@ const usePrevious = (value) => {
   return ref.current;
 };
 
+/**
+ * Custom hook to monitor window height and width
+ * @returns [windowWidth, windowHeight]
+ */
+function useWindowSize() {
+  const [size, setSize] = useState([0, 0]);
+  useLayoutEffect(() => {
+    function updateSize() {
+      setSize([window.innerWidth, window.innerHeight]);
+    }
+    window.addEventListener("resize", updateSize);
+    updateSize();
+    return () => window.removeEventListener("resize", updateSize);
+  }, []);
+  return size;
+}
+
 export default function DrawLiveEllipse({ updateDrawData }) {
   const dispatch = useDispatch();
   // Main mode status
@@ -40,7 +63,15 @@ export default function DrawLiveEllipse({ updateDrawData }) {
   // tooltip shown when dragging and zooming
   const [tooltipOpen, setTooltipOpen] = useState(false);
   const [tooltipContent, setTooltipContent] = useState("");
+  // Flag state to draw circle
   const [circleMode, setCircleMode] = useState(false);
+  // Show or hide dock state
+  const showDock = useSelector((state) => state.showDock);
+  // Coordinates of mouse
+  const [mouseX, setMouseX] = useState(0);
+  const [mouseY, setMouseY] = useState(0);
+  // Window width and height states
+  const [windowWidth, windowHeight] = useWindowSize();
 
   /**
    * Mouse down event handler
@@ -67,6 +98,8 @@ export default function DrawLiveEllipse({ updateDrawData }) {
    */
   const onMouseMove = (e) => {
     const { clientX, clientY } = e;
+    setMouseX(clientX);
+    setMouseY(clientY);
     setMouseDownX((mouseDownX) => {
       setMouseDownY((mouseDownY) => {
         if (mouseDownX && mouseDownY) {
@@ -215,6 +248,32 @@ export default function DrawLiveEllipse({ updateDrawData }) {
       setRy(0);
     }
   }, [mouseIsUp, prevMouseIsUp, cx, cy, rx, ry]);
+
+  useEffect(() => {
+    if (
+      !mouseIsUp &&
+      showDock.show &&
+      mouseX > windowWidth - 96 &&
+      mouseY < 576
+    ) {
+      // if click is within the dock, do not draw the ellipse
+      setMouseIsUp(true);
+      // set mode status back to null, so dock can slide
+      dispatch(
+        changeModeDispatch({
+          mode: "shape",
+          subMode: "ellipse",
+          status: null,
+        })
+      );
+      setMouseDownX(null);
+      setMouseDownY(null);
+      setCx(0);
+      setCy(0);
+      setRx(0);
+      setRy(0);
+    }
+  }, [mouseIsUp, showDock, mouseX, mouseY, windowWidth]);
 
   useEffect(() => {
     if (mainMode.mode === "shape" && mainMode.subMode === "ellipse") {

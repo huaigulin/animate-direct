@@ -24,6 +24,7 @@ import KeyboardIcon from "@mui/icons-material/Keyboard";
 import { useDispatch, useSelector } from "react-redux";
 import { blue, grey } from "@mui/material/colors";
 import { changeMode as changeModeDispatch } from "../redux/slices/mainModeSlice";
+import { setActive as setActiveDispatch } from "../redux/slices/showDockSlice";
 
 const LargeTextTooltip = styled(({ className, ...props }) => (
   <Tooltip {...props} classes={{ popper: className }} />
@@ -57,6 +58,14 @@ export default function Dock() {
   };
   // Show or hide dock state
   const showDock = useSelector((state) => state.showDock);
+
+  useEffect(() => {
+    if (shapesMenuOpen || animateMenuOpen) {
+      dispatch(setActiveDispatch({ active: true }));
+    } else {
+      dispatch(setActiveDispatch({ active: false }));
+    }
+  }, [shapesMenuOpen, animateMenuOpen]);
 
   return (
     <Slide direction='left' in={showDock.show} mountOnEnter unmountOnExit>
