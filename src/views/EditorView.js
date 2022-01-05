@@ -1,7 +1,7 @@
 import React, { createRef, useEffect, useLayoutEffect, useState } from "react";
 import Grid from "@mui/material/Grid";
 import { Alert as MuiAlert, Snackbar } from "@mui/material";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { v4 as uuidv4 } from "uuid";
 import Dock from "../components/Dock";
 import Canvas from "../components/Canvas";
@@ -10,6 +10,7 @@ import AnimateControl from "../components/AnimateControl";
 import PropertyDisplay from "../components/PropertyDisplay";
 import DrawSelectRect from "../util/drawSelectRect";
 import DrawLiveEllipse from "../util/drawLiveEllipse";
+import { setShow as setShowDispatch } from "../redux/slices/showDockSlice";
 
 /**
  * Custom hook to monitor window height and width
@@ -33,6 +34,7 @@ const Alert = React.forwardRef(function Alert(props, ref) {
 });
 
 export default function EditorView(props) {
+  const dispatch = useDispatch();
   const canvasRef = createRef();
   // Window width and height states
   const [windowWidth, windowHeight] = useWindowSize();
@@ -49,6 +51,11 @@ export default function EditorView(props) {
   const ellipseStats = useSelector((state) => state.drawEllipse);
   // Main mode status
   const mainMode = useSelector((state) => state.mainMode);
+  // mouseX and mouseY state
+  const [mouseX, setMouseX] = useState(0);
+  const [mouseY, setMouseY] = useState(0);
+  // Show or hide dock state
+  const showDock = useSelector((state) => state.showDock);
 
   /**
    * Callback to handle close msg bar
@@ -103,6 +110,37 @@ export default function EditorView(props) {
       setReferenceData([data]);
     }
   };
+
+  /**
+   * Callback for mousemove event
+   * @param {object} e mousemove event object
+   */
+  const onMouseMove = (e) => {
+    setMouseX(e.clientX);
+    setMouseY(e.clientY);
+  };
+
+  useEffect(() => {
+    document.addEventListener("mousemove", onMouseMove);
+    return () => {
+      document.removeEventListener("mousemove", onMouseMove);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (
+      mouseX > windowWidth - 8 &&
+      mouseY < 576 &&
+      mainMode.mode !== "zooming" &&
+      mainMode.mode !== "dragging"
+    ) {
+      dispatch(setShowDispatch({ show: true }));
+    } else if (showDock.show) {
+      setTimeout(() => {
+        dispatch(setShowDispatch({ show: false }));
+      }, 3000);
+    }
+  }, [mouseX, mouseY, windowWidth, mainMode, showDock]);
 
   useEffect(() => {
     // loops through drawData state and draws on canvas
