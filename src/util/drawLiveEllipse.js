@@ -251,10 +251,11 @@ export default function DrawLiveEllipse({ updateDrawData }) {
 
   useEffect(() => {
     if (
-      !mouseIsUp &&
-      showDock.show &&
-      mouseX > windowWidth - 96 &&
-      mouseY < 576
+      (!mouseIsUp &&
+        showDock.show &&
+        mouseX > windowWidth - 96 &&
+        mouseY < 576) ||
+      showDock.active
     ) {
       // if click is within the dock, do not draw the ellipse
       setMouseIsUp(true);
