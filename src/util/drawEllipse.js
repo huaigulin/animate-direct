@@ -101,34 +101,35 @@ const DrawEllipse = ({ id, x, y, radiusX, radiusY, deg }) => {
    * @param {object} e The mouse move event
    */
   const onMouseMove = (e) => {
+    const { clientX, clientY } = e;
     setDragging((dragging) => {
       if (dragging) {
-        setEllipseX(e.clientX);
-        setEllipseY(e.clientY);
+        setEllipseX(clientX);
+        setEllipseY(clientY);
         setRadiusXCont((radiusXCont) => {
-          setRectX(e.clientX - radiusXCont);
-          setControlX1(e.clientX - radiusXCont);
-          setControlX3(e.clientX + radiusXCont);
-          setControlX4(e.clientX - radiusXCont);
-          setControlX5(e.clientX + radiusXCont);
-          setControlX6(e.clientX - radiusXCont);
-          setControlX8(e.clientX + radiusXCont);
+          setRectX(clientX - radiusXCont);
+          setControlX1(clientX - radiusXCont);
+          setControlX3(clientX + radiusXCont);
+          setControlX4(clientX - radiusXCont);
+          setControlX5(clientX + radiusXCont);
+          setControlX6(clientX - radiusXCont);
+          setControlX8(clientX + radiusXCont);
           return radiusXCont;
         });
         setRadiusYCont((radiusYCont) => {
-          setRectY(e.clientY - radiusYCont);
-          setControlY1(e.clientY - radiusYCont);
-          setControlY2(e.clientY - radiusYCont);
-          setControlY3(e.clientY - radiusYCont);
-          setControlY6(e.clientY + radiusYCont);
-          setControlY7(e.clientY + radiusYCont);
-          setControlY8(e.clientY + radiusYCont);
+          setRectY(clientY - radiusYCont);
+          setControlY1(clientY - radiusYCont);
+          setControlY2(clientY - radiusYCont);
+          setControlY3(clientY - radiusYCont);
+          setControlY6(clientY + radiusYCont);
+          setControlY7(clientY + radiusYCont);
+          setControlY8(clientY + radiusYCont);
           return radiusYCont;
         });
-        setControlX2(e.clientX);
-        setControlY4(e.clientY);
-        setControlY5(e.clientY);
-        setControlX7(e.clientX);
+        setControlX2(clientX);
+        setControlY4(clientY);
+        setControlY5(clientY);
+        setControlX7(clientX);
         return true;
       } else {
         return false;
@@ -141,8 +142,8 @@ const DrawEllipse = ({ id, x, y, radiusX, radiusY, deg }) => {
             // When shift key is down, keep aspect ratio of circle
             setControlX8((controlX8) => {
               setControlY8((controlY8) => {
-                const compX = Math.abs(controlX8 - e.clientX);
-                const compY = Math.abs(controlY8 - e.clientY);
+                const compX = Math.abs(controlX8 - clientX);
+                const compY = Math.abs(controlY8 - clientY);
                 setRatioXY((ratioXY) => {
                   let newRadiusX;
                   let newRadiusY;
@@ -156,72 +157,68 @@ const DrawEllipse = ({ id, x, y, radiusX, radiusY, deg }) => {
                   setRadiusYCont(newRadiusY);
                   setRadiusXCont(newRadiusX);
                   setEllipseX(
-                    e.clientX > controlX8
+                    clientX > controlX8
                       ? controlX8 + newRadiusX
                       : controlX8 - newRadiusX
                   );
                   setEllipseY(
-                    e.clientY > controlY8
+                    clientY > controlY8
                       ? controlY8 + newRadiusY
                       : controlY8 - newRadiusY
                   );
                   setRectX(
-                    e.clientX > controlX8
-                      ? controlX8
-                      : controlX8 - 2 * newRadiusX
+                    clientX > controlX8 ? controlX8 : controlX8 - 2 * newRadiusX
                   );
                   setRectY(
-                    e.clientY > controlY8
-                      ? controlY8
-                      : controlY8 - 2 * newRadiusY
+                    clientY > controlY8 ? controlY8 : controlY8 - 2 * newRadiusY
                   );
                   setControlX1(
-                    e.clientX > controlX8
+                    clientX > controlX8
                       ? controlX8 + 2 * newRadiusX
                       : controlX8 - 2 * newRadiusX
                   );
                   setControlX4(
-                    e.clientX > controlX8
+                    clientX > controlX8
                       ? controlX8 + 2 * newRadiusX
                       : controlX8 - 2 * newRadiusX
                   );
                   setControlX6(
-                    e.clientX > controlX8
+                    clientX > controlX8
                       ? controlX8 + 2 * newRadiusX
                       : controlX8 - 2 * newRadiusX
                   );
                   setControlY1(
-                    e.clientY > controlY8
+                    clientY > controlY8
                       ? controlY8 + 2 * newRadiusY
                       : controlY8 - 2 * newRadiusY
                   );
                   setControlX2(
-                    e.clientX > controlX8
+                    clientX > controlX8
                       ? controlX8 + newRadiusX
                       : controlX8 - newRadiusX
                   );
                   setControlX7(
-                    e.clientX > controlX8
+                    clientX > controlX8
                       ? controlX8 + newRadiusX
                       : controlX8 - newRadiusX
                   );
                   setControlY2(
-                    e.clientY > controlY8
+                    clientY > controlY8
                       ? controlY8 + 2 * newRadiusY
                       : controlY8 - 2 * newRadiusY
                   );
                   setControlY3(
-                    e.clientY > controlY8
+                    clientY > controlY8
                       ? controlY8 + 2 * newRadiusY
                       : controlY8 - 2 * newRadiusY
                   );
                   setControlY4(
-                    e.clientY > controlY8
+                    clientY > controlY8
                       ? controlY8 + newRadiusY
                       : controlY8 - newRadiusY
                   );
                   setControlY5(
-                    e.clientY > controlY8
+                    clientY > controlY8
                       ? controlY8 + newRadiusY
                       : controlY8 - newRadiusY
                   );
@@ -235,27 +232,27 @@ const DrawEllipse = ({ id, x, y, radiusX, radiusY, deg }) => {
           } else {
             // Just change the shape
             setControlX3((controlX3) => {
-              setEllipseX(Math.abs(e.clientX + (controlX3 - e.clientX) / 2));
-              setRadiusXCont(Math.abs((controlX3 - e.clientX) / 2));
-              setControlX2(Math.abs(e.clientX + (controlX3 - e.clientX) / 2));
-              setControlX7(Math.abs(e.clientX + (controlX3 - e.clientX) / 2));
-              setRectX(controlX3 - e.clientX < 0 ? controlX3 : e.clientX);
+              setEllipseX(Math.abs(clientX + (controlX3 - clientX) / 2));
+              setRadiusXCont(Math.abs((controlX3 - clientX) / 2));
+              setControlX2(Math.abs(clientX + (controlX3 - clientX) / 2));
+              setControlX7(Math.abs(clientX + (controlX3 - clientX) / 2));
+              setRectX(controlX3 - clientX < 0 ? controlX3 : clientX);
               return controlX3;
             });
             setControlY6((controlY6) => {
-              setEllipseY(Math.abs(e.clientY + (controlY6 - e.clientY) / 2));
-              setRadiusYCont(Math.abs((controlY6 - e.clientY) / 2));
-              setControlY4(Math.abs(e.clientY + (controlY6 - e.clientY) / 2));
-              setControlY5(Math.abs(e.clientY + (controlY6 - e.clientY) / 2));
-              setRectY(controlY6 - e.clientY < 0 ? controlY6 : e.clientY);
+              setEllipseY(Math.abs(clientY + (controlY6 - clientY) / 2));
+              setRadiusYCont(Math.abs((controlY6 - clientY) / 2));
+              setControlY4(Math.abs(clientY + (controlY6 - clientY) / 2));
+              setControlY5(Math.abs(clientY + (controlY6 - clientY) / 2));
+              setRectY(controlY6 - clientY < 0 ? controlY6 : clientY);
               return controlY6;
             });
-            setControlX1(e.clientX);
-            setControlY1(e.clientY);
-            setControlY2(e.clientY);
-            setControlY3(e.clientY);
-            setControlX4(e.clientX);
-            setControlX6(e.clientX);
+            setControlX1(clientX);
+            setControlY1(clientY);
+            setControlY2(clientY);
+            setControlY3(clientY);
+            setControlX4(clientX);
+            setControlX6(clientX);
             return false;
           }
         });
@@ -270,38 +267,38 @@ const DrawEllipse = ({ id, x, y, radiusX, radiusY, deg }) => {
           if (keepRatio) {
             setControlX7((controlX7) => {
               setControlY7((controlY7) => {
-                const compY = Math.abs(controlY7 - e.clientY);
+                const compY = Math.abs(controlY7 - clientY);
                 setRatioXY((ratioXY) => {
                   const newRadiusY = compY / 2;
                   const newRadiusX = (compY / 2) * ratioXY;
                   setRadiusYCont(newRadiusY);
                   setRadiusXCont(newRadiusX);
                   setControlX1(controlX7 - newRadiusX);
-                  setControlY1(e.clientY);
-                  setControlY2(e.clientY);
+                  setControlY1(clientY);
+                  setControlY2(clientY);
                   setControlX3(controlX7 + newRadiusX);
-                  setControlY3(e.clientY);
+                  setControlY3(clientY);
                   setControlX4(controlX7 - newRadiusX);
                   setControlY4(
-                    e.clientY > controlY7
+                    clientY > controlY7
                       ? controlY7 + newRadiusY
                       : controlY7 - newRadiusY
                   );
                   setControlX5(controlX7 + newRadiusX);
                   setControlY5(
-                    e.clientY > controlY7
+                    clientY > controlY7
                       ? controlY7 + newRadiusY
                       : controlY7 - newRadiusY
                   );
                   setControlX6(controlX7 - newRadiusX);
                   setControlX8(controlX7 + newRadiusX);
                   setEllipseY(
-                    e.clientY > controlY7
+                    clientY > controlY7
                       ? controlY7 + newRadiusY
                       : controlY7 - newRadiusY
                   );
                   setRectX(controlX7 - newRadiusX);
-                  setRectY(e.clientY > controlY7 ? controlY7 : e.clientY);
+                  setRectY(clientY > controlY7 ? controlY7 : clientY);
                   return ratioXY;
                 });
                 return controlY7;
@@ -310,15 +307,15 @@ const DrawEllipse = ({ id, x, y, radiusX, radiusY, deg }) => {
             });
             return true;
           } else {
-            setControlY2(e.clientY);
-            setControlY1(e.clientY);
-            setControlY3(e.clientY);
+            setControlY2(clientY);
+            setControlY1(clientY);
+            setControlY3(clientY);
             setControlY6((controlY6) => {
-              setControlY4(Math.abs(e.clientY + (controlY6 - e.clientY) / 2));
-              setControlY5(Math.abs(e.clientY + (controlY6 - e.clientY) / 2));
-              setRectY(controlY6 - e.clientY < 0 ? controlY6 : e.clientY);
-              setRadiusYCont(Math.abs((controlY6 - e.clientY) / 2));
-              setEllipseY(Math.abs(e.clientY + (controlY6 - e.clientY) / 2));
+              setControlY4(Math.abs(clientY + (controlY6 - clientY) / 2));
+              setControlY5(Math.abs(clientY + (controlY6 - clientY) / 2));
+              setRectY(controlY6 - clientY < 0 ? controlY6 : clientY);
+              setRadiusYCont(Math.abs((controlY6 - clientY) / 2));
+              setEllipseY(Math.abs(clientY + (controlY6 - clientY) / 2));
               return controlY6;
             });
             return false;
@@ -335,8 +332,8 @@ const DrawEllipse = ({ id, x, y, radiusX, radiusY, deg }) => {
           if (keepRatio) {
             setControlX6((controlX6) => {
               setControlY6((controlY6) => {
-                const compX = Math.abs(e.clientX - controlX6);
-                const compY = Math.abs(controlY6 - e.clientY);
+                const compX = Math.abs(clientX - controlX6);
+                const compY = Math.abs(controlY6 - clientY);
                 setRatioXY((ratioXY) => {
                   let newRadiusX;
                   let newRadiusY;
@@ -350,72 +347,68 @@ const DrawEllipse = ({ id, x, y, radiusX, radiusY, deg }) => {
                   setRadiusYCont(newRadiusY);
                   setRadiusXCont(newRadiusX);
                   setEllipseX(
-                    e.clientX > controlX6
+                    clientX > controlX6
                       ? controlX6 + newRadiusX
                       : controlX6 - newRadiusX
                   );
                   setEllipseY(
-                    e.clientY < controlY6
+                    clientY < controlY6
                       ? controlY6 - newRadiusY
                       : controlY6 + newRadiusY
                   );
                   setRectX(
-                    e.clientX > controlX6
-                      ? controlX6
-                      : controlX6 - 2 * newRadiusX
+                    clientX > controlX6 ? controlX6 : controlX6 - 2 * newRadiusX
                   );
                   setRectY(
-                    e.clientY < controlY6
-                      ? controlY6 - 2 * newRadiusY
-                      : controlY6
+                    clientY < controlY6 ? controlY6 - 2 * newRadiusY : controlY6
                   );
                   setControlY1(
-                    e.clientY < controlY6
+                    clientY < controlY6
                       ? controlY6 - 2 * newRadiusY
                       : controlY6 + 2 * newRadiusY
                   );
                   setControlX2(
-                    e.clientX > controlX6
+                    clientX > controlX6
                       ? controlX6 + newRadiusX
                       : controlX6 - newRadiusX
                   );
                   setControlY2(
-                    e.clientY < controlY6
+                    clientY < controlY6
                       ? controlY6 - 2 * newRadiusY
                       : controlY6 + 2 * newRadiusY
                   );
                   setControlX3(
-                    e.clientX > controlX6
+                    clientX > controlX6
                       ? controlX6 + 2 * newRadiusX
                       : controlX6 - 2 * newRadiusX
                   );
                   setControlY3(
-                    e.clientY < controlY6
+                    clientY < controlY6
                       ? controlY6 - 2 * newRadiusY
                       : controlY6 + 2 * newRadiusY
                   );
                   setControlY4(
-                    e.clientY < controlY6
+                    clientY < controlY6
                       ? controlY6 - newRadiusY
                       : controlY6 + newRadiusY
                   );
                   setControlX5(
-                    e.clientX > controlX6
+                    clientX > controlX6
                       ? controlX6 + 2 * newRadiusX
                       : controlX6 - 2 * newRadiusX
                   );
                   setControlY5(
-                    e.clientY < controlY6
+                    clientY < controlY6
                       ? controlY6 - newRadiusY
                       : controlY6 + newRadiusY
                   );
                   setControlX7(
-                    e.clientX > controlX6
+                    clientX > controlX6
                       ? controlX6 + newRadiusX
                       : controlX6 - newRadiusX
                   );
                   setControlX8(
-                    e.clientX > controlX6
+                    clientX > controlX6
                       ? controlX6 + 2 * newRadiusX
                       : controlX6 - 2 * newRadiusX
                   );
@@ -427,28 +420,28 @@ const DrawEllipse = ({ id, x, y, radiusX, radiusY, deg }) => {
             });
             return true;
           } else {
-            setControlX3(e.clientX);
-            setControlY3(e.clientY);
-            setControlY1(e.clientY);
-            setControlY2(e.clientY);
+            setControlX3(clientX);
+            setControlY3(clientY);
+            setControlY1(clientY);
+            setControlY2(clientY);
             setControlX1((controlX1) => {
-              setControlX2(Math.abs(e.clientX - (e.clientX - controlX1) / 2));
-              setRadiusXCont(Math.abs((e.clientX - controlX1) / 2));
-              setEllipseX(Math.abs(e.clientX - (e.clientX - controlX1) / 2));
-              setControlX7(Math.abs(e.clientX - (e.clientX - controlX1) / 2));
-              setRectX(e.clientX - controlX1 < 0 ? e.clientX : controlX1);
+              setControlX2(Math.abs(clientX - (clientX - controlX1) / 2));
+              setRadiusXCont(Math.abs((clientX - controlX1) / 2));
+              setEllipseX(Math.abs(clientX - (clientX - controlX1) / 2));
+              setControlX7(Math.abs(clientX - (clientX - controlX1) / 2));
+              setRectX(clientX - controlX1 < 0 ? clientX : controlX1);
               return controlX1;
             });
             setControlY6((controlY6) => {
-              setRadiusYCont(Math.abs((controlY6 - e.clientY) / 2));
-              setEllipseY(Math.abs(e.clientY + (controlY6 - e.clientY) / 2));
-              setControlY4(Math.abs(e.clientY + (controlY6 - e.clientY) / 2));
-              setControlY5(Math.abs(e.clientY + (controlY6 - e.clientY) / 2));
-              setRectY(controlY6 - e.clientY < 0 ? controlY6 : e.clientY);
+              setRadiusYCont(Math.abs((controlY6 - clientY) / 2));
+              setEllipseY(Math.abs(clientY + (controlY6 - clientY) / 2));
+              setControlY4(Math.abs(clientY + (controlY6 - clientY) / 2));
+              setControlY5(Math.abs(clientY + (controlY6 - clientY) / 2));
+              setRectY(controlY6 - clientY < 0 ? controlY6 : clientY);
               return controlY6;
             });
-            setControlX5(e.clientX);
-            setControlX8(e.clientX);
+            setControlX5(clientX);
+            setControlX8(clientX);
             return false;
           }
         });
@@ -463,37 +456,37 @@ const DrawEllipse = ({ id, x, y, radiusX, radiusY, deg }) => {
           if (keepRatio) {
             setControlX5((controlX5) => {
               setControlY5((controlY5) => {
-                const compX = Math.abs(controlX5 - e.clientX);
+                const compX = Math.abs(controlX5 - clientX);
                 setRatioXY((ratioXY) => {
                   const newRadiusX = compX / 2;
                   const newRadiusY = compX / 2 / ratioXY;
                   setRadiusXCont(newRadiusX);
                   setRadiusYCont(newRadiusY);
-                  setControlX1(e.clientX);
+                  setControlX1(clientX);
                   setControlY1(controlY5 - newRadiusY);
                   setControlX2(
-                    e.clientX < controlX5
+                    clientX < controlX5
                       ? controlX5 - newRadiusX
                       : controlX5 + newRadiusX
                   );
                   setControlY2(controlY5 - newRadiusY);
                   setControlY3(controlY5 - newRadiusY);
-                  setControlX4(e.clientX);
-                  setControlX6(e.clientX);
+                  setControlX4(clientX);
+                  setControlX6(clientX);
                   setControlY6(controlY5 + newRadiusY);
                   setControlX7(
-                    e.clientX < controlX5
+                    clientX < controlX5
                       ? controlX5 - newRadiusX
                       : controlX5 + newRadiusX
                   );
                   setControlY7(controlY5 + newRadiusY);
                   setControlY8(controlY5 + newRadiusY);
                   setEllipseX(
-                    e.clientX < controlX5
+                    clientX < controlX5
                       ? controlX5 - newRadiusX
                       : controlX5 + newRadiusX
                   );
-                  setRectX(e.clientX < controlX5 ? e.clientX : controlX5);
+                  setRectX(clientX < controlX5 ? clientX : controlX5);
                   setRectY(controlY5 - newRadiusY);
                   return ratioXY;
                 });
@@ -503,15 +496,15 @@ const DrawEllipse = ({ id, x, y, radiusX, radiusY, deg }) => {
             });
             return true;
           } else {
-            setControlX4(e.clientX);
-            setControlX1(e.clientX);
-            setControlX6(e.clientX);
+            setControlX4(clientX);
+            setControlX1(clientX);
+            setControlX6(clientX);
             setControlX3((controlX3) => {
-              setControlX2(Math.abs((controlX3 - e.clientX) / 2 + e.clientX));
-              setControlX7(Math.abs((controlX3 - e.clientX) / 2 + e.clientX));
-              setEllipseX(Math.abs((controlX3 - e.clientX) / 2 + e.clientX));
-              setRadiusXCont(Math.abs((controlX3 - e.clientX) / 2));
-              setRectX(controlX3 - e.clientX < 0 ? controlX3 : e.clientX);
+              setControlX2(Math.abs((controlX3 - clientX) / 2 + clientX));
+              setControlX7(Math.abs((controlX3 - clientX) / 2 + clientX));
+              setEllipseX(Math.abs((controlX3 - clientX) / 2 + clientX));
+              setRadiusXCont(Math.abs((controlX3 - clientX) / 2));
+              setRectX(controlX3 - clientX < 0 ? controlX3 : clientX);
               return controlX3;
             });
             return false;
@@ -528,7 +521,7 @@ const DrawEllipse = ({ id, x, y, radiusX, radiusY, deg }) => {
           if (keepRatio) {
             setControlX4((controlX4) => {
               setControlY4((controlY4) => {
-                const compX = Math.abs(e.clientX - controlX4);
+                const compX = Math.abs(clientX - controlX4);
                 setRatioXY((ratioXY) => {
                   const newRadiusX = compX / 2;
                   const newRadiusY = compX / 2 / ratioXY;
@@ -536,29 +529,29 @@ const DrawEllipse = ({ id, x, y, radiusX, radiusY, deg }) => {
                   setRadiusYCont(newRadiusY);
                   setControlY1(controlY4 - newRadiusY);
                   setControlX2(
-                    e.clientX > controlX4
+                    clientX > controlX4
                       ? controlX4 + newRadiusX
                       : controlX4 - newRadiusX
                   );
                   setControlY2(controlY4 - newRadiusY);
-                  setControlX3(e.clientX);
+                  setControlX3(clientX);
                   setControlY3(controlY4 - newRadiusY);
-                  setControlX5(e.clientX);
+                  setControlX5(clientX);
                   setControlY6(controlY4 + newRadiusY);
                   setControlX7(
-                    e.clientX > controlX4
+                    clientX > controlX4
                       ? controlX4 + newRadiusX
                       : controlX4 - newRadiusX
                   );
                   setControlY7(controlY4 + newRadiusY);
-                  setControlX8(e.clientX);
+                  setControlX8(clientX);
                   setControlY8(controlY4 + newRadiusY);
                   setEllipseX(
-                    e.clientX > controlX4
+                    clientX > controlX4
                       ? controlX4 + newRadiusX
                       : controlX4 - newRadiusX
                   );
-                  setRectX(e.clientX > controlX4 ? controlX4 : e.clientX);
+                  setRectX(clientX > controlX4 ? controlX4 : clientX);
                   setRectY(controlY4 - newRadiusY);
                   return ratioXY;
                 });
@@ -568,15 +561,15 @@ const DrawEllipse = ({ id, x, y, radiusX, radiusY, deg }) => {
             });
             return true;
           } else {
-            setControlX5(e.clientX);
-            setControlX3(e.clientX);
-            setControlX8(e.clientX);
+            setControlX5(clientX);
+            setControlX3(clientX);
+            setControlX8(clientX);
             setControlX1((controlX1) => {
-              setControlX2(Math.abs((e.clientX - controlX1) / 2 + controlX1));
-              setControlX7(Math.abs((e.clientX - controlX1) / 2 + controlX1));
-              setEllipseX(Math.abs((e.clientX - controlX1) / 2 + controlX1));
-              setRadiusXCont(Math.abs((e.clientX - controlX1) / 2));
-              setRectX(e.clientX - controlX1 < 0 ? e.clientX : controlX1);
+              setControlX2(Math.abs((clientX - controlX1) / 2 + controlX1));
+              setControlX7(Math.abs((clientX - controlX1) / 2 + controlX1));
+              setEllipseX(Math.abs((clientX - controlX1) / 2 + controlX1));
+              setRadiusXCont(Math.abs((clientX - controlX1) / 2));
+              setRectX(clientX - controlX1 < 0 ? clientX : controlX1);
               return controlX1;
             });
             return false;
@@ -593,8 +586,8 @@ const DrawEllipse = ({ id, x, y, radiusX, radiusY, deg }) => {
           if (keepRatio) {
             setControlX3((controlX3) => {
               setControlY3((controlY3) => {
-                const compX = Math.abs(controlX3 - e.clientX);
-                const compY = Math.abs(e.clientY - controlY3);
+                const compX = Math.abs(controlX3 - clientX);
+                const compY = Math.abs(clientY - controlY3);
                 setRatioXY((ratioXY) => {
                   let newRadiusX;
                   let newRadiusY;
@@ -608,74 +601,70 @@ const DrawEllipse = ({ id, x, y, radiusX, radiusY, deg }) => {
                   setRadiusYCont(newRadiusY);
                   setRadiusXCont(newRadiusX);
                   setEllipseX(
-                    e.clientX < controlX3
+                    clientX < controlX3
                       ? controlX3 - newRadiusX
                       : controlX3 + newRadiusX
                   );
                   setEllipseY(
-                    e.clientY > controlY3
+                    clientY > controlY3
                       ? controlY3 + newRadiusY
                       : controlY3 - newRadiusY
                   );
                   setControlX1(
-                    e.clientX < controlX3
+                    clientX < controlX3
                       ? controlX3 - 2 * newRadiusX
                       : controlX3 + 2 * newRadiusX
                   );
                   setControlX2(
-                    e.clientX < controlX3
+                    clientX < controlX3
                       ? controlX3 - newRadiusX
                       : controlX3 + newRadiusX
                   );
                   setControlX4(
-                    e.clientX < controlX3
+                    clientX < controlX3
                       ? controlX3 - 2 * newRadiusX
                       : controlX3 + 2 * newRadiusX
                   );
                   setControlY4(
-                    e.clientY > controlY3
+                    clientY > controlY3
                       ? controlY3 + newRadiusY
                       : controlY3 - newRadiusY
                   );
                   setControlY5(
-                    e.clientY > controlY3
+                    clientY > controlY3
                       ? controlY3 + newRadiusY
                       : controlY3 - newRadiusY
                   );
                   setControlX6(
-                    e.clientX < controlX3
+                    clientX < controlX3
                       ? controlX3 - 2 * newRadiusX
                       : controlX3 + 2 * newRadiusX
                   );
                   setControlY6(
-                    e.clientY > controlY3
+                    clientY > controlY3
                       ? controlY3 + 2 * newRadiusY
                       : controlY3 - 2 * newRadiusY
                   );
                   setControlX7(
-                    e.clientX < controlX3
+                    clientX < controlX3
                       ? controlX3 - newRadiusX
                       : controlX3 + newRadiusX
                   );
                   setControlY7(
-                    e.clientY > controlY3
+                    clientY > controlY3
                       ? controlY3 + 2 * newRadiusY
                       : controlY3 - 2 * newRadiusY
                   );
                   setControlY8(
-                    e.clientY > controlY3
+                    clientY > controlY3
                       ? controlY3 + 2 * newRadiusY
                       : controlY3 - 2 * newRadiusY
                   );
                   setRectX(
-                    e.clientX < controlX3
-                      ? controlX3 - 2 * newRadiusX
-                      : controlX3
+                    clientX < controlX3 ? controlX3 - 2 * newRadiusX : controlX3
                   );
                   setRectY(
-                    e.clientY > controlY3
-                      ? controlY3
-                      : controlY3 - 2 * newRadiusY
+                    clientY > controlY3 ? controlY3 : controlY3 - 2 * newRadiusY
                   );
                   return ratioXY;
                 });
@@ -685,28 +674,28 @@ const DrawEllipse = ({ id, x, y, radiusX, radiusY, deg }) => {
             });
             return true;
           } else {
-            setControlX6(e.clientX);
-            setControlY6(e.clientY);
-            setControlX1(e.clientX);
-            setControlX4(e.clientX);
+            setControlX6(clientX);
+            setControlY6(clientY);
+            setControlX1(clientX);
+            setControlX4(clientX);
             setControlY1((controlY1) => {
-              setControlY4(Math.abs(e.clientY - (e.clientY - controlY1) / 2));
-              setControlY5(Math.abs(e.clientY - (e.clientY - controlY1) / 2));
-              setRectY(e.clientY - controlY1 < 0 ? e.clientY : controlY1);
-              setEllipseY(Math.abs(e.clientY - (e.clientY - controlY1) / 2));
-              setRadiusYCont(Math.abs((e.clientY - controlY1) / 2));
+              setControlY4(Math.abs(clientY - (clientY - controlY1) / 2));
+              setControlY5(Math.abs(clientY - (clientY - controlY1) / 2));
+              setRectY(clientY - controlY1 < 0 ? clientY : controlY1);
+              setEllipseY(Math.abs(clientY - (clientY - controlY1) / 2));
+              setRadiusYCont(Math.abs((clientY - controlY1) / 2));
               return controlY1;
             });
             setControlX3((controlX3) => {
-              setControlX2(Math.abs(e.clientX + (controlX3 - e.clientX) / 2));
-              setControlX7(Math.abs(e.clientX + (controlX3 - e.clientX) / 2));
-              setRectX(controlX3 - e.clientX < 0 ? controlX3 : e.clientX);
-              setEllipseX(Math.abs(e.clientX + (controlX3 - e.clientX) / 2));
-              setRadiusXCont(Math.abs((controlX3 - e.clientX) / 2));
+              setControlX2(Math.abs(clientX + (controlX3 - clientX) / 2));
+              setControlX7(Math.abs(clientX + (controlX3 - clientX) / 2));
+              setRectX(controlX3 - clientX < 0 ? controlX3 : clientX);
+              setEllipseX(Math.abs(clientX + (controlX3 - clientX) / 2));
+              setRadiusXCont(Math.abs((controlX3 - clientX) / 2));
               return controlX3;
             });
-            setControlY7(e.clientY);
-            setControlY8(e.clientY);
+            setControlY7(clientY);
+            setControlY8(clientY);
             return false;
           }
         });
@@ -721,14 +710,14 @@ const DrawEllipse = ({ id, x, y, radiusX, radiusY, deg }) => {
           if (keepRatio) {
             setControlX2((controlX2) => {
               setControlY2((controlY2) => {
-                const compY = Math.abs(e.clientY - controlY2);
+                const compY = Math.abs(clientY - controlY2);
                 setRatioXY((ratioXY) => {
                   const newRadiusY = compY / 2;
                   const newRadiusX = (compY / 2) * ratioXY;
                   setRadiusYCont(newRadiusY);
                   setRadiusXCont(newRadiusX);
                   setEllipseY(
-                    e.clientY > controlY2
+                    clientY > controlY2
                       ? controlY2 + newRadiusY
                       : controlY2 - newRadiusY
                   );
@@ -736,38 +725,36 @@ const DrawEllipse = ({ id, x, y, radiusX, radiusY, deg }) => {
                   setControlX3(controlX2 + newRadiusX);
                   setControlX4(controlX2 - newRadiusX);
                   setControlY4(
-                    e.clientY > controlY2
+                    clientY > controlY2
                       ? controlY2 + newRadiusY
                       : controlY2 - newRadiusY
                   );
                   setControlX5(controlX2 + newRadiusX);
                   setControlY5(
-                    e.clientY > controlY2
+                    clientY > controlY2
                       ? controlY2 + newRadiusY
                       : controlY2 - newRadiusY
                   );
                   setControlX6(controlX2 - newRadiusX);
                   setControlY6(
-                    e.clientY > controlY2
+                    clientY > controlY2
                       ? controlY2 + 2 * newRadiusY
                       : controlY2 - 2 * newRadiusY
                   );
                   setControlY7(
-                    e.clientY > controlY2
+                    clientY > controlY2
                       ? controlY2 + 2 * newRadiusY
                       : controlY2 - 2 * newRadiusY
                   );
                   setControlX8(controlX2 + newRadiusX);
                   setControlY8(
-                    e.clientY > controlY2
+                    clientY > controlY2
                       ? controlY2 + 2 * newRadiusY
                       : controlY2 - 2 * newRadiusY
                   );
                   setRectX(controlX2 - newRadiusX);
                   setRectY(
-                    e.clientY > controlY2
-                      ? controlY2
-                      : controlY2 - 2 * newRadiusY
+                    clientY > controlY2 ? controlY2 : controlY2 - 2 * newRadiusY
                   );
                   return ratioXY;
                 });
@@ -777,15 +764,15 @@ const DrawEllipse = ({ id, x, y, radiusX, radiusY, deg }) => {
             });
             return true;
           } else {
-            setControlY7(e.clientY);
-            setControlY6(e.clientY);
-            setControlY8(e.clientY);
+            setControlY7(clientY);
+            setControlY6(clientY);
+            setControlY8(clientY);
             setControlY1((controlY1) => {
-              setControlY4(Math.abs(e.clientY - (e.clientY - controlY1) / 2));
-              setControlY5(Math.abs(e.clientY - (e.clientY - controlY1) / 2));
-              setEllipseY(Math.abs(e.clientY - (e.clientY - controlY1) / 2));
-              setRectY(e.clientY - controlY1 < 0 ? e.clientY : controlY1);
-              setRadiusYCont(Math.abs((e.clientY - controlY1) / 2));
+              setControlY4(Math.abs(clientY - (clientY - controlY1) / 2));
+              setControlY5(Math.abs(clientY - (clientY - controlY1) / 2));
+              setEllipseY(Math.abs(clientY - (clientY - controlY1) / 2));
+              setRectY(clientY - controlY1 < 0 ? clientY : controlY1);
+              setRadiusYCont(Math.abs((clientY - controlY1) / 2));
               return controlY1;
             });
             return false;
@@ -802,8 +789,8 @@ const DrawEllipse = ({ id, x, y, radiusX, radiusY, deg }) => {
           if (keepRatio) {
             setControlX1((controlX1) => {
               setControlY1((controlY1) => {
-                const compX = Math.abs(e.clientX - controlX1);
-                const compY = Math.abs(e.clientY - controlY1);
+                const compX = Math.abs(clientX - controlX1);
+                const compY = Math.abs(clientY - controlY1);
                 setRatioXY((ratioXY) => {
                   let newRadiusX;
                   let newRadiusY;
@@ -817,74 +804,70 @@ const DrawEllipse = ({ id, x, y, radiusX, radiusY, deg }) => {
                   setRadiusYCont(newRadiusY);
                   setRadiusXCont(newRadiusX);
                   setEllipseX(
-                    e.clientX > controlX1
+                    clientX > controlX1
                       ? controlX1 + newRadiusX
                       : controlX1 - newRadiusX
                   );
                   setEllipseY(
-                    e.clientY > controlY1
+                    clientY > controlY1
                       ? controlY1 + newRadiusY
                       : controlY1 - newRadiusY
                   );
                   setControlX2(
-                    e.clientX > controlX1
+                    clientX > controlX1
                       ? controlX1 + newRadiusX
                       : controlX1 - newRadiusX
                   );
                   setControlX3(
-                    e.clientX > controlX1
+                    clientX > controlX1
                       ? controlX1 + 2 * newRadiusX
                       : controlX1 - 2 * newRadiusX
                   );
                   setControlY4(
-                    e.clientY > controlY1
+                    clientY > controlY1
                       ? controlY1 + newRadiusY
                       : controlY1 - newRadiusY
                   );
                   setControlX5(
-                    e.clientX > controlX1
+                    clientX > controlX1
                       ? controlX1 + 2 * newRadiusX
                       : controlX1 - 2 * newRadiusX
                   );
                   setControlY5(
-                    e.clientY > controlY1
+                    clientY > controlY1
                       ? controlY1 + newRadiusY
                       : controlY1 - newRadiusY
                   );
                   setControlY6(
-                    e.clientY > controlY1
+                    clientY > controlY1
                       ? controlY1 + 2 * newRadiusY
                       : controlY1 - 2 * newRadiusY
                   );
                   setControlX7(
-                    e.clientX > controlX1
+                    clientX > controlX1
                       ? controlX1 + newRadiusX
                       : controlX1 - newRadiusX
                   );
                   setControlY7(
-                    e.clientY > controlY1
+                    clientY > controlY1
                       ? controlY1 + 2 * newRadiusY
                       : controlY1 - 2 * newRadiusY
                   );
                   setControlX8(
-                    e.clientX > controlX1
+                    clientX > controlX1
                       ? controlX1 + 2 * newRadiusX
                       : controlX1 - 2 * newRadiusX
                   );
                   setControlY8(
-                    e.clientY > controlY1
+                    clientY > controlY1
                       ? controlY1 + 2 * newRadiusY
                       : controlY1 - 2 * newRadiusY
                   );
                   setRectX(
-                    e.clientX > controlX1
-                      ? controlX1
-                      : controlX1 - 2 * newRadiusX
+                    clientX > controlX1 ? controlX1 : controlX1 - 2 * newRadiusX
                   );
                   setRectY(
-                    e.clientY > controlY1
-                      ? controlY1
-                      : controlY1 - 2 * newRadiusY
+                    clientY > controlY1 ? controlY1 : controlY1 - 2 * newRadiusY
                   );
                   return ratioXY;
                 });
@@ -894,26 +877,26 @@ const DrawEllipse = ({ id, x, y, radiusX, radiusY, deg }) => {
             });
             return true;
           } else {
-            setControlX8(e.clientX);
-            setControlY8(e.clientY);
-            setControlX3(e.clientX);
-            setControlX5(e.clientX);
-            setControlY6(e.clientY);
-            setControlY7(e.clientY);
+            setControlX8(clientX);
+            setControlY8(clientY);
+            setControlX3(clientX);
+            setControlX5(clientX);
+            setControlY6(clientY);
+            setControlY7(clientY);
             setControlX1((controlX1) => {
-              setRectX(e.clientX - controlX1 < 0 ? e.clientX : controlX1);
-              setControlX2(Math.abs(e.clientX - (e.clientX - controlX1) / 2));
-              setControlX7(Math.abs(e.clientX - (e.clientX - controlX1) / 2));
-              setEllipseX(Math.abs(e.clientX - (e.clientX - controlX1) / 2));
-              setRadiusXCont(Math.abs((e.clientX - controlX1) / 2));
+              setRectX(clientX - controlX1 < 0 ? clientX : controlX1);
+              setControlX2(Math.abs(clientX - (clientX - controlX1) / 2));
+              setControlX7(Math.abs(clientX - (clientX - controlX1) / 2));
+              setEllipseX(Math.abs(clientX - (clientX - controlX1) / 2));
+              setRadiusXCont(Math.abs((clientX - controlX1) / 2));
               return controlX1;
             });
             setControlY3((controlY3) => {
-              setRectY(e.clientY - controlY3 < 0 ? e.clientY : controlY3);
-              setControlY4(Math.abs(e.clientY - (e.clientY - controlY3) / 2));
-              setControlY5(Math.abs(e.clientY - (e.clientY - controlY3) / 2));
-              setEllipseY(Math.abs(e.clientY - (e.clientY - controlY3) / 2));
-              setRadiusYCont(Math.abs((e.clientY - controlY3) / 2));
+              setRectY(clientY - controlY3 < 0 ? clientY : controlY3);
+              setControlY4(Math.abs(clientY - (clientY - controlY3) / 2));
+              setControlY5(Math.abs(clientY - (clientY - controlY3) / 2));
+              setEllipseY(Math.abs(clientY - (clientY - controlY3) / 2));
+              setRadiusYCont(Math.abs((clientY - controlY3) / 2));
               return controlY3;
             });
             return false;
