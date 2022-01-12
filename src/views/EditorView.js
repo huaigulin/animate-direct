@@ -8,7 +8,7 @@ import Canvas from "../components/Canvas";
 import DrawEllipse from "../util/drawEllipse";
 import AnimateControl from "../components/AnimateControl";
 import PropertyDisplay from "../components/PropertyDisplay";
-import DrawSelectRect from "../util/drawSelectRect";
+import DrawSelectRect from "../util/selectOrDrawSelectRect";
 import DrawLiveEllipse from "../util/drawLiveEllipse";
 import { setShow as setShowDispatch } from "../redux/slices/showDockSlice";
 
