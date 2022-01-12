@@ -16,8 +16,8 @@ const usePrevious = (value) => {
 export default function DrawSelectRect() {
   const dispatch = useDispatch();
   // the coordinates when mouse is clicked
-  const [, setMouseDownX] = useState();
-  const [, setMouseDownY] = useState();
+  const [mouseDownX, setMouseDownX] = useState();
+  const [mouseDownY, setMouseDownY] = useState();
   // coordinates of the rect
   const [x, setX] = useState(0);
   const [y, setY] = useState(0);
@@ -90,8 +90,15 @@ export default function DrawSelectRect() {
 
   useEffect(() => {
     if (mouseIsUp && !prevMouseIsUp) {
-      // dispatch select stats to redux store
-      dispatch(selectDispatch({ x, y, width, height }));
+      if (x || y || width || height) {
+        // user is drawing select rect
+        // dispatch select stats to redux store
+        dispatch(selectDispatch({ x, y, width, height }));
+      } else {
+        // user is clicking shape
+        // dispatch only the mouse down coordinates
+        dispatch(selectDispatch({ x: mouseDownX, y: mouseDownY }));
+      }
       // clear mouse down coordinates and rect values
       setMouseDownX(null);
       setMouseDownY(null);
@@ -100,7 +107,7 @@ export default function DrawSelectRect() {
       setWidth(0);
       setHeight(0);
     }
-  }, [mouseIsUp, prevMouseIsUp, x, y, width, height]);
+  }, [mouseIsUp, prevMouseIsUp, x, y, width, height, mouseDownX, mouseDownY]);
 
   useEffect(() => {
     if (mainMode.mode === "select" || mainMode.mode === "animate") {
