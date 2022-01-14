@@ -56,8 +56,10 @@ export default function Dock() {
   const handleAnimateClose = () => {
     setAnimateMenuAnchorEl(null);
   };
-  // Show or hide dock state
+  // Show or hide dock state, from the store
   const showDock = useSelector((state) => state.showDock);
+  // Show or hide dock state on UI, with a delay
+  const [dockEnter, setDockEnter] = useState(true);
 
   useEffect(() => {
     if (shapesMenuOpen || animateMenuOpen) {
@@ -67,8 +69,18 @@ export default function Dock() {
     }
   }, [shapesMenuOpen, animateMenuOpen]);
 
+  useEffect(() => {
+    if (showDock.show) {
+      setDockEnter(true);
+    } else {
+      setTimeout(() => {
+        setDockEnter(false);
+      }, 3000);
+    }
+  }, [showDock.show]);
+
   return (
-    <Slide direction='left' in={showDock.show} mountOnEnter unmountOnExit>
+    <Slide direction='left' in={dockEnter} mountOnEnter unmountOnExit>
       <Box sx={{ position: "absolute", right: 0 }}>
         <AppBar
           position='static'

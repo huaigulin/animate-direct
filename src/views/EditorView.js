@@ -138,9 +138,7 @@ export default function EditorView(props) {
     ) {
       dispatch(setShowDispatch({ show: true }));
     } else if (showDock.show && !showDock.active) {
-      setTimeout(() => {
-        dispatch(setShowDispatch({ show: false }));
-      }, 3000);
+      dispatch(setShowDispatch({ show: false }));
     }
   }, [mouseX, mouseY, windowWidth, mainMode, showDock]);
 
