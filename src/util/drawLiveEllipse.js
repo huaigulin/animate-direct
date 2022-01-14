@@ -251,14 +251,17 @@ export default function DrawLiveEllipse({ updateDrawData }) {
 
   useEffect(() => {
     if (
-      (!mouseIsUp &&
+      mainMode.mode === "shape" &&
+      mainMode.subMode === "ellipse" &&
+      ((!mouseIsUp &&
         showDock.show &&
         mouseX > windowWidth - 96 &&
         mouseY < 576) ||
-      showDock.active
+        showDock.active)
     ) {
       // if click is within the dock, do not draw the ellipse
       setMouseIsUp(true);
+
       // set mode status back to null, so dock can slide
       dispatch(
         changeModeDispatch({
@@ -274,7 +277,7 @@ export default function DrawLiveEllipse({ updateDrawData }) {
       setRx(0);
       setRy(0);
     }
-  }, [mouseIsUp, showDock, mouseX, mouseY, windowWidth]);
+  }, [mainMode, mouseIsUp, showDock, mouseX, mouseY, windowWidth]);
 
   useEffect(() => {
     if (mainMode.mode === "shape" && mainMode.subMode === "ellipse") {
