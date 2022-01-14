@@ -30,6 +30,8 @@ export default function DrawSelectRect() {
   const [mouseIsUp, setMouseIsUp] = useState(false);
   // Previous mouse is up state
   const prevMouseIsUp = usePrevious(mouseIsUp);
+  // Selected region state from store
+  const selectedRegion = useSelector((state) => state.selectRegion);
 
   /**
    * Mouse down event handler
@@ -108,6 +110,10 @@ export default function DrawSelectRect() {
       setHeight(0);
     }
   }, [mouseIsUp, prevMouseIsUp, x, y, width, height, mouseDownX, mouseDownY]);
+
+  useEffect(() => {
+    console.log(selectedRegion);
+  }, [selectedRegion]);
 
   useEffect(() => {
     if (mainMode.mode === "select" || mainMode.mode === "animate") {
