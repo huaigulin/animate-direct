@@ -11,6 +11,11 @@ import PropertyDisplay from "../components/PropertyDisplay";
 import DrawSelectRect from "../util/selectOrDrawSelectRect";
 import DrawLiveEllipse from "../util/drawLiveEllipse";
 import { setShow as setShowDispatch } from "../redux/slices/showDockSlice";
+import {
+  append as appendDispatch,
+  replaceAll as replaceAllDispatch,
+  replaceOne as replaceOneDispatch,
+} from "../redux/slices/drawDataSlice";
 
 /**
  * Custom hook to monitor window height and width
@@ -39,7 +44,8 @@ export default function EditorView(props) {
   // Window width and height states
   const [windowWidth, windowHeight] = useWindowSize();
   // Drawing data and reference data
-  const [drawData, setDrawData] = useState([]);
+  const drawData = useSelector((state) => state.drawData.data);
+  // const [drawData, setDrawData] = useState([]);
   const [referenceData, setReferenceData] = useState([]);
   // The finished drawing that goes into the <svg /> tag
   const [drawing, setDrawing] = useState();
@@ -67,35 +73,6 @@ export default function EditorView(props) {
       return;
     }
     setMsgOpen(false);
-  };
-
-  /**
-   * Updates the draw data
-   * @param {boolean} appendMode if true append to current data, else replace it
-   * @param {object} data must contain "id" and "code" properties
-   * @param {string} replaceId the shape to replace with this draw, appendMode has to be true
-   */
-  const updateDrawData = (appendMode, data, replaceId) => {
-    if (appendMode) {
-      if (replaceId) {
-        const newDrawData = [];
-        drawData.forEach((shape) => {
-          if (shape.id === replaceId) {
-            newDrawData.push(data);
-          } else {
-            newDrawData.push(shape);
-          }
-        });
-        setDrawData([...newDrawData]);
-        console.log("<-------Draw data updated!--------->");
-      } else {
-        setDrawData((drawData) => [...drawData, data]);
-        console.log("<-------Draw data updated!--------->");
-      }
-    } else {
-      setDrawData(data);
-      console.log("<-------Draw data updated!--------->");
-    }
   };
 
   /**
@@ -219,18 +196,19 @@ export default function EditorView(props) {
           );
           setMsgOpen(true);
           // update draw data when move finishes
-          updateDrawData(
-            true,
-            {
+          dispatch(
+            replaceOneDispatch({
               id: ellipseStats.id,
-              shape: "ellipse",
-              position: `${x}, ${y}`,
-              radiusX: rx,
-              radiusY: ry,
-              deg: deg,
-              code: `ellipse(${x}, ${y}, ${rx}, ${ry}, ${deg})`,
-            },
-            ellipseStats.id
+              newShape: {
+                id: ellipseStats.id,
+                shape: "ellipse",
+                position: `${x}, ${y}`,
+                radiusX: rx,
+                radiusY: ry,
+                deg: deg,
+                code: `ellipse(${x}, ${y}, ${rx}, ${ry}, ${deg})`,
+              },
+            })
           );
           break;
         case "zoom":
@@ -249,18 +227,19 @@ export default function EditorView(props) {
           );
           setMsgOpen(true);
           // update draw data when zoom finishes
-          updateDrawData(
-            true,
-            {
+          dispatch(
+            replaceOneDispatch({
               id: ellipseStats.id,
-              shape: "ellipse",
-              position: `${x}, ${y}`,
-              radiusX: rx,
-              radiusY: ry,
-              deg: deg,
-              code: `ellipse(${x}, ${y}, ${rx}, ${ry}, ${deg})`,
-            },
-            ellipseStats.id
+              newShape: {
+                id: ellipseStats.id,
+                shape: "ellipse",
+                position: `${x}, ${y}`,
+                radiusX: rx,
+                radiusY: ry,
+                deg: deg,
+                code: `ellipse(${x}, ${y}, ${rx}, ${ry}, ${deg})`,
+              },
+            })
           );
           break;
         case "liveMove":
@@ -307,11 +286,11 @@ export default function EditorView(props) {
           }}
         >
           {drawing}
-          <DrawLiveEllipse updateDrawData={updateDrawData} />
+          <DrawLiveEllipse />
           <DrawSelectRect />
         </svg>
         {mainMode.mode === "animate" && mainMode.subMode === "properties" ? (
-          <PropertyDisplay updateDrawData={updateDrawData} />
+          <PropertyDisplay />
         ) : null}
         {mainMode.mode === "animate" &&
         mainMode.subMode === "record" &&

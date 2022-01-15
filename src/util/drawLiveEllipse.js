@@ -15,6 +15,11 @@ import {
   clear as clearDispatch,
 } from "../redux/slices/shapeFocusSlice";
 import { changeMode as changeModeDispatch } from "../redux/slices/mainModeSlice";
+import {
+  append as appendDispatch,
+  replaceAll as replaceAllDispatch,
+  replaceOne as replaceOneDispatch,
+} from "../redux/slices/drawDataSlice";
 
 const usePrevious = (value) => {
   const ref = useRef();
@@ -43,7 +48,7 @@ function useWindowSize() {
   return size;
 }
 
-export default function DrawLiveEllipse({ updateDrawData }) {
+export default function DrawLiveEllipse() {
   const dispatch = useDispatch();
   // Main mode status
   const mainMode = useSelector((state) => state.mainMode);
@@ -70,7 +75,7 @@ export default function DrawLiveEllipse({ updateDrawData }) {
   // Coordinates of mouse
   const [mouseX, setMouseX] = useState(0);
   const [mouseY, setMouseY] = useState(0);
-  // Window width and height states
+  // Window width and height statesbc
   const [windowWidth, windowHeight] = useWindowSize();
 
   /**
@@ -216,15 +221,21 @@ export default function DrawLiveEllipse({ updateDrawData }) {
     // only fires at the moment of mouse up and at least one radius has to be non-zero
     if (mouseIsUp && !prevMouseIsUp && (rx || ry)) {
       const id = `ellipse-${uuidv4()}`;
-      updateDrawData(true, {
-        id,
-        shape: "ellipse",
-        position: `${cx}, ${cy}`,
-        radiusX: rx,
-        radiusY: ry,
-        deg: 0,
-        code: `ellipse(${cx}, ${cy}, ${rx}, ${ry}, 0);`,
-      });
+      dispatch(
+        appendDispatch({
+          data: [
+            {
+              id,
+              shape: "ellipse",
+              position: `${cx}, ${cy}`,
+              radiusX: rx,
+              radiusY: ry,
+              deg: 0,
+              code: `ellipse(${cx}, ${cy}, ${rx}, ${ry}, 0);`,
+            },
+          ],
+        })
+      );
       // dispatch state to show snackbar info
       dispatch(
         newDrawDispatch({

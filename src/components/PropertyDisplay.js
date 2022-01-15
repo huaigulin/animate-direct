@@ -52,7 +52,7 @@ const LargeTextTooltip = styled(({ className, ...props }) => (
   },
 }));
 
-export default function PropertyDisplay({ updateDrawData }) {
+export default function PropertyDisplay() {
   // Window width and height states
   const [windowWidth, windowHeight] = useWindowSize();
   const dispatch = useDispatch();
