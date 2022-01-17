@@ -2,6 +2,11 @@ import React, { useEffect, useRef, useState } from "react";
 import { blue } from "@mui/material/colors";
 import { useDispatch, useSelector } from "react-redux";
 import { select as selectDispatch } from "../redux/slices/selectRegionSlice";
+import { ellipseCheck } from "./checkAPoint";
+import {
+  add as addDispatch,
+  clear as clearDispatch,
+} from "../redux/slices/shapeFocusSlice";
 
 const usePrevious = (value) => {
   const ref = useRef();
@@ -32,6 +37,10 @@ export default function DrawSelectRect() {
   const prevMouseIsUp = usePrevious(mouseIsUp);
   // Selected region state from store
   const selectedRegion = useSelector((state) => state.selectRegion);
+  // Previous selected region state
+  const prevSelectedRegion = usePrevious(selectedRegion);
+  // Drawing data
+  const drawData = useSelector((state) => state.drawData.data);
 
   /**
    * Mouse down event handler
@@ -112,8 +121,42 @@ export default function DrawSelectRect() {
   }, [mouseIsUp, prevMouseIsUp, x, y, width, height, mouseDownX, mouseDownY]);
 
   useEffect(() => {
-    console.log(selectedRegion);
-  }, [selectedRegion]);
+    const { x, y, width, height } = selectedRegion;
+    if (selectedRegion !== prevSelectedRegion && (x || y)) {
+      // only update shape focus if [selected region changes] and [x or y is valid]
+      if (width || height) {
+        // a select rect was drawn
+        console.log(selectedRegion, drawData);
+      } else {
+        // mouse was clicked
+        for (let i = drawData.length - 1; i >= 0; i--) {
+          const data = drawData[i];
+          if (data.shape === "ellipse") {
+            const { positionX, positionY, radiusX, radiusY, id } = data;
+            const checkRes = ellipseCheck(
+              positionX,
+              positionY,
+              radiusX,
+              radiusY,
+              x,
+              y
+            );
+            if (checkRes > 1) {
+              // no need to do anything
+            } else {
+              dispatch(clearDispatch());
+              dispatch(addDispatch({ ids: [id] }));
+              break;
+            }
+          } else {
+            console.log(
+              "<!!!!!!!!!!!!!!!Unrecognized shape in drawData!!!!!!!!!!!!!!!!!"
+            );
+          }
+        }
+      }
+    }
+  }, [selectedRegion, prevSelectedRegion, drawData]);
 
   useEffect(() => {
     if (mainMode.mode === "select" || mainMode.mode === "animate") {
