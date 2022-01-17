@@ -227,7 +227,8 @@ export default function DrawLiveEllipse() {
             {
               id,
               shape: "ellipse",
-              position: `${cx}, ${cy}`,
+              positionX: cx,
+              positionY: cy,
               radiusX: rx,
               radiusY: ry,
               deg: 0,

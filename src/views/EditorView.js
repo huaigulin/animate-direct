@@ -45,7 +45,6 @@ export default function EditorView(props) {
   const [windowWidth, windowHeight] = useWindowSize();
   // Drawing data and reference data
   const drawData = useSelector((state) => state.drawData.data);
-  // const [drawData, setDrawData] = useState([]);
   const [referenceData, setReferenceData] = useState([]);
   // The finished drawing that goes into the <svg /> tag
   const [drawing, setDrawing] = useState();
@@ -125,15 +124,12 @@ export default function EditorView(props) {
     drawData.forEach((data, idx) => {
       switch (data.shape) {
         case "ellipse":
-          const coordinates = data.position.split(", ");
-          const x = parseInt(coordinates[0]);
-          const y = parseInt(coordinates[1]);
           shapes.push(
             <DrawEllipse
               key={uuidv4()}
               id={data.id}
-              x={x}
-              y={y}
+              x={data.positionX}
+              y={data.positionY}
               radiusX={data.radiusX}
               radiusY={data.radiusY}
               deg={data.deg}
@@ -202,7 +198,8 @@ export default function EditorView(props) {
               newShape: {
                 id: ellipseStats.id,
                 shape: "ellipse",
-                position: `${x}, ${y}`,
+                positionX: x,
+                positionY: y,
                 radiusX: rx,
                 radiusY: ry,
                 deg: deg,
@@ -233,7 +230,8 @@ export default function EditorView(props) {
               newShape: {
                 id: ellipseStats.id,
                 shape: "ellipse",
-                position: `${x}, ${y}`,
+                positionX: x,
+                positionY: y,
                 radiusX: rx,
                 radiusY: ry,
                 deg: deg,
